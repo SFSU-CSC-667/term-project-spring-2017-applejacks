@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks#readme",
   "dependencies": {
+    "express": "^4.15.0",
     "express-handlebars": "^3.0.0"
   }
 }
