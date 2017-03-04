@@ -1,0 +1,22 @@
+{
+  "name": "applejacks",
+  "version": "1.0.0",
+  "description": "Multiplayer Blackjack game with chat interface",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git"
+  },
+  "author": "srbecker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks/issues"
+  },
+  "homepage": "https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks#readme",
+  "dependencies": {
+    "express-handlebars": "^3.0.0"
+  }
+}
