@@ -14,3 +14,11 @@ body, h1, h2, h3, h4, h5, ul, ol {
   display: flex;
   align-items: center;
 }
+
+.sr-only {
+  clip-path: inset(1px);
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
