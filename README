@@ -1,9 +1,0 @@
-```html
-<h1>How to run the app</h1>
-<ol>
-  <li>git clone https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git</li>
-  <li>cd term-project-spring-2017-applejacks</li>
-  <li>npm install</li>
-  <li>node server.js</li>
-</ol>
-```
