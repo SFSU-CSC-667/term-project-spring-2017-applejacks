@@ -1,11 +1,30 @@
-var express = require('express')
-var app = express()
+var express  = require('express'),
+  exphbs     = require('express-handlebars'),
+  bodyParser = require('body-parser'),
+  path       = require('path'),
+  app        = express(),
+  env        = process.env.NODE_ENV || 'production';
+
+app.set('env', env);
+
+app.engine('.hbs', exphbs({
+  extname: '.hbs',
+  defaultLayout: 'main'
+}));
+app.set('view engine', '.hbs');
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
-    res.send('Hello World!')
-})
+    res.render('home', {
 
-app.listen(5000, function () {
-    console.log('Example app listening on port 3000!');
-    console.log('test');
-})
+    });
+});
+
+app.listen(3000, function() {
+  console.log('Server started on 3000.');
+});
