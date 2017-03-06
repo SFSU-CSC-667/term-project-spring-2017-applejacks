@@ -7,11 +7,6 @@
 5. visit [localhost:3000](http://localhost:3000/)
 
 ### Markdown formatting and syntax
-(https://help.github.com/articles/basic-writing-and-formatting-syntax/)
+https://help.github.com/articles/basic-writing-and-formatting-syntax/
 
-### Open PRs
-1. #1
-2. #2
-3. #3
-4. #4
-5. #5
+### View the live heroku site [here](https://applejacks.herokuapp.com)
