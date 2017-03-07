@@ -32,31 +32,39 @@ https://jbt.github.io/markdown-editor/
 https://github.com/github/hub
 
 ## Git flow
-1. Get the latest code
+Get the latest code
 ```
 git co master
 git pull
 ```
 
-2. Creating a feature branch (needed for pull request)
-    - `git co -b feature-1`
-    - `git add .`
-    - `git commit -m "this is a commit message"`
+Creating a feature branch (needed for pull request)
+```
+git co -b feature-1
+git add .
+git commit -m "this is a commit message"
+```
 
-3. I want to create a pull request. What to do?
-    - `git co master`
-    - `git pull`
-    - `git co feature-1`
-    - `git rebase master`
-    - `git push origin feature-1`
-    - `hub pull-request`
+I want to create a pull request. What to do?
+```
+git co master
+git pull
+git co feature-1
+git rebase master
+git push origin feature-1
+hub pull-request
+```
 
-4. Remove feature branch after PR has been reviewed and merged
-    - `git co master`
-    - `git pull`
-    - `git branch -D feature-1`
+Remove feature branch after PR has been reviewed and merged
+```
+git co master
+git pull
+git branch -D feature-1
+```
 
-5. Small fix, no need for PR
-    - `## follow \"feature branch\" steps
-    - `git co master`
-    - `git merge --squash <branch name>`
+Small fix, no need for PR
+```
+## follow "feature branch" steps
+git co master
+git merge --squash <branch name>
+```
