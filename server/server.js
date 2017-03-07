@@ -66,6 +66,7 @@ app.get('/admin', function (req, res) {
     i,
     offset = new Date().getTimezoneOffset() / -60;
 
+    // TODO - move this under --mockdata flag when ready
     res.render('admin', {rows: [
       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},

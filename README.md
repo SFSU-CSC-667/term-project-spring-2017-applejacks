@@ -19,6 +19,7 @@ A multiplayer blackjack game with an integrated chat system.
 - [ ] Create signup flow
 - [ ] Asset compilation and page speed
 - [ ] Asset bundling
+- [ ] Add --mockdata as a flag during build for people who have no DB connection
 - [ ] Open database api to admin user for easier db testing
 - [ ] Set up basic socket.io framework for chat
 - [ ] Add middleware for handling HTTP response codes (500, 404, etc)
