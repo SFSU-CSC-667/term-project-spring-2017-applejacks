@@ -1,6 +1,6 @@
 ## `applejacks`
 
-A multiplayer blackjack game with an integrated chat system.
+A multiplayer blackjack game with an integrated chat system.  
 **View the live heroku site** [here](https://applejacks.herokuapp.com)
 
 [![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks "applejacks - blackjack game")
@@ -35,6 +35,7 @@ https://davidwalsh.name/upgrade-nodejs
 - https://help.github.com/articles/basic-writing-and-formatting-syntax/
 - https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 - https://stackedit.io/editor
+- https://daringfireball.net/projects/markdown/syntax
 
 
 ### How to install local Postgres
