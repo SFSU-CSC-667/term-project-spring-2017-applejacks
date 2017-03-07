@@ -20,11 +20,9 @@ A multiplayer blackjack game with an integrated chat system.
 https://davidwalsh.name/upgrade-nodejs
 
 ### Markdown formatting, syntax, editor
-https://help.github.com/articles/basic-writing-and-formatting-syntax/
-
-https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-
-https://jbt.github.io/markdown-editor/
+- https://help.github.com/articles/basic-writing-and-formatting-syntax/
+- https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+- https://jbt.github.io/markdown-editor/
 
 
 ### How to install local Postgres
