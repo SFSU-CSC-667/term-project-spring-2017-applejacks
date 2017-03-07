@@ -28,17 +28,22 @@ https://jbt.github.io/markdown-editor/
     - `select * from users;` to test newly added addition into table
     - `drop table users;` to remove table
 
-## Git flow
-1. `## get the latest code`
-    - `git co master`
-    - `git pull`
+### How to install "hub" - needed for pull requests
+https://github.com/github/hub
 
-2. `## creating a feature branch (needed for pull request)`
+## Git flow
+1. Get the latest code
+```
+git co master
+git pull
+```
+
+2. Creating a feature branch (needed for pull request)
     - `git co -b feature-1`
     - `git add .`
     - `git commit -m "this is a commit message"`
 
-3. `## I want to create a pull request. What to do?`
+3. I want to create a pull request. What to do?
     - `git co master`
     - `git pull`
     - `git co feature-1`
@@ -46,12 +51,12 @@ https://jbt.github.io/markdown-editor/
     - `git push origin feature-1`
     - `hub pull-request`
 
-4. `## Remove feature branch after PR has been reviewed and merged`
+4. Remove feature branch after PR has been reviewed and merged
     - `git co master`
     - `git pull`
     - `git branch -D feature-1`
 
-5. `## Small fix, no need for PR`
-    - `## follow "feature branch" steps
+5. Small fix, no need for PR
+    - `## follow \"feature branch\" steps
     - `git co master`
     - `git merge --squash <branch name>`
