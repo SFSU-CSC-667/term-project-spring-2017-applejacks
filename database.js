@@ -1,6 +1,6 @@
 var pg = require('pg');
 var url = require('url');
-var Promise = require("bluebird");
+var Promise = require("bluebird"); // clean up other `async` libraries
 
 var pgp = require('pg-promise')();
 
