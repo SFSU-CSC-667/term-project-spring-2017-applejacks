@@ -19,6 +19,9 @@ A multiplayer blackjack game with an integrated chat system.
 - [ ] Create signup flow
 - [ ] Open database api to admin user for easier db testing
 - [ ] Set up basic socket.io framework for chat
+- [ ] Add middleware for handling HTTP response codes (500, 404, etc)
+- [ ] Helper functions
+- [ ] Clean up Routing structure
 
 ### How to run the app
 
