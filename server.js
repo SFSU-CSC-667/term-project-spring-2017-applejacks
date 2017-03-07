@@ -39,7 +39,7 @@ app.get('/', function (req, res) {
 app.get('/admin', function (req, res) {
   var rows = [],
     i,
-    offset = -8;
+    offset = new Date().getTimezoneOffset() / -60;
 
   db.getTable('users')
     .then(function (rows) {
