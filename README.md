@@ -6,6 +6,18 @@ A multiplayer blackjack game with an integrated chat system.
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks/issues)
 [![codecov](https://codecov.io/gh/SFSU-CSC-667/term-project-spring-2017-applejacks/branch/master/graph/badge.svg)](https://codecov.io/gh/SFSU-CSC-667/term-project-spring-2017-applejacks)
 
+### Tasks and Issues
+
+- [x] Automated dev server redeployment
+- [x] README docs
+- [x] Basic nav
+- [x] Deployment and hosting to production environment (Heroku)
+- [x] Integration with Postgres (local and prod)
+- [ ] Finish database API
+- [ ] Create user sessions based on login credentials
+- [ ] Create signup flow
+- [ ] Open database api to admin user for easier db testing
+- [ ] Set up basic socket.io framework for chat
 
 **View the live heroku site** [here](https://applejacks.herokuapp.com)
 ### How to run the app
