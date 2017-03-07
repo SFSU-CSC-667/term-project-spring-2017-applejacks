@@ -1,6 +1,7 @@
 ## `applejacks`
 
 A multiplayer blackjack game with an integrated chat system.
+**View the live heroku site** [here](https://applejacks.herokuapp.com)
 
 [![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks "applejacks - blackjack game")
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks/issues)
@@ -19,7 +20,6 @@ A multiplayer blackjack game with an integrated chat system.
 - [ ] Open database api to admin user for easier db testing
 - [ ] Set up basic socket.io framework for chat
 
-**View the live heroku site** [here](https://applejacks.herokuapp.com)
 ### How to run the app
 
 1. `git clone https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git`
@@ -34,7 +34,7 @@ https://davidwalsh.name/upgrade-nodejs
 ### Markdown formatting, syntax, editor
 - https://help.github.com/articles/basic-writing-and-formatting-syntax/
 - https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-- https://jbt.github.io/markdown-editor/
+- https://stackedit.io/editor
 
 
 ### How to install local Postgres
