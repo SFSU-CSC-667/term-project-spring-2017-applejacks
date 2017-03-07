@@ -60,6 +60,32 @@ var db = {
     return this._pool;
   },
 
+  _getConfig: function () {
+    let str = process.env.DATABASE_URL || '';
+
+    if (str) {
+      const params = url.parse(str);
+      const auth = params.auth.split(':');
+
+      return {
+        user: auth[0],
+        password: auth[1],
+        host: params.hostname,
+        port: params.port,
+        database: params.pathname.split('/')[1],
+        ssl: true
+      };
+    } else {
+      return {
+        // user: auth[0],
+        // password: auth[1],
+        host: 'localhost',
+        port: 5432,
+        database: 'sambecker'
+      };
+    }
+  },
+
   createTable: function (tableSchema) {
     this._pool = this._pool || this._createPool();
 
