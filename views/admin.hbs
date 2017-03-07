@@ -5,15 +5,19 @@
       <th>Password</th>
       <th>Last Login</th>
       <th>isAdmin</th>
+      <th class=""></th>
     </tr>
   </thead>
-  <tbody>
+  <tbody>    
     {{#each rows}}
-      <tr class="record">
+      <tr class="record">        
         <td>{{email}}</td>
         <td>{{password}}</td>
         <td>{{lastlogin}}</td>
         <td class="is-admin-{{isadmin}}">{{isadmin}}</td>
+        <td class-"update">
+          <button type="button" class="record-update hidden">Update</button>
+        </td>
       </tr>
     {{/each}}
   </tbody>

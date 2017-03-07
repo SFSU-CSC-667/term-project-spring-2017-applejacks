@@ -19,3 +19,11 @@
 .record-edit-field {
   width: 100%;
 }
+
+.record-update {  
+  position: relative;  
+}
+
+.record-update.hidden {
+  display: none;
+}
