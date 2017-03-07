@@ -49,6 +49,10 @@ app.get('/', function (req, res) {
   });
 });
 
+app.get('/lobby', function (req, res) {
+  res.render('lobby', {});
+});
+
 function printlog (str) {
   var isDevMode = process.env.NODE_ENV === 'development';
   if (true || isDevMode) {
@@ -93,6 +97,9 @@ app.post('/login', function (req, res) {
     isAdmin: false,
     table: 'users'
   });
+
+  // redirect to lobby after user has logged in
+  res.render('lobby', {});
 });
 
 app.get('/signup', function (req, res) {
