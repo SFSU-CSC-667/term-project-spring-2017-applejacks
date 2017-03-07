@@ -124,15 +124,12 @@ var db = {
     // }); // connection end
 
     // return promise;
+    if (!this.datab) {
+      let config = this._getConfig();
+      this.datab = pgp(config);
+    }
 
-    var db = pgp({
-      // user: auth[0],
-      // password: auth[1],
-      host: 'localhost',
-      port: 5432,
-      database: 'sambecker'
-    });
-    return db.any("select * from users;");
+    return this.datab.any("select * from users;");
   },
 
   addUser: function (data) {
