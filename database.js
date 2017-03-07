@@ -1,5 +1,9 @@
 var pg = require('pg');
 var url = require('url');
+var Promise = require("bluebird");
+
+var pgp = require('pg-promise')();
+
 
 var db = {
   _pool: null,
@@ -57,7 +61,10 @@ var db = {
   },
 
   createTable: function (tableSchema) {
-    pg.connect(process.env.DATABASE_URL, function(err, client) {
+    this._pool = this._pool || this._createPool();
+
+    // pg.defaults.ssl = true;
+    this._pool.connect(function(err, client) {
       if (err) throw err;
       console.log('Connected to postgres! Creating new table... [' + tableSchema.name + ']');
 
@@ -72,6 +79,34 @@ var db = {
       query.on('end', () => { client.end(); });
       // after the above two comamnds, `sambecker-# \d items` will display the created table
     });
+  },
+
+  getTable: function (tableName) {
+    // var promise = new Promise();
+
+    // this._pool = this._pool || this._createPool();
+    // // pg.defaults.ssl = true;
+    // this._pool.connect(function(err, client, done) {
+    //   if (err) throw err;
+    //   console.log('Connected to postgres! Fetching table... ['+ tableName +']');
+
+    //    var query = client
+    //     .query("select * from " + tableName + ";", function (err, result) {
+    //       console.log('RESULTS of select * ---> ' + result);
+    //       promise.resolve(result.rows[0]);
+    //     });
+    // }); // connection end
+
+    // return promise;
+
+    var db = pgp({
+      // user: auth[0],
+      // password: auth[1],
+      host: 'localhost',
+      port: 5432,
+      database: 'sambecker'
+    });
+    return db.any("select * from users;");
   },
 
   addUser: function (data) {

@@ -1,0 +1,20 @@
+<table class="db-table">
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Last Login</th>
+      <th>isAdmin</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each rows}}
+      <tr>
+        <td>{{email}}</td>
+        <td>{{password}}</td>
+        <td>{{lastlogin}}</td>
+        <td>{{isadmin}}
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

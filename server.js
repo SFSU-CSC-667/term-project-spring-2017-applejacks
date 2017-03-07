@@ -28,11 +28,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 // db.createTable({name: 'users'});
 
 app.get('/', function (req, res) {
-    res.render('home', {
-      user: {
-        isAdmin: true,
-        username: 'admin'
+  res.render('home', {
+    user: {
+      isAdmin: true,
+      username: 'admin'
+    }
+  });
+});
+
+app.get('/admin', function (req, res) {
+  var rows = [],
+    i,
+    offset = -8;
+
+  db.getTable('users')
+    .then(function (rows) {
+      console.log(rows);
+      // I don't like looping through records here :(
+      for (i = 0, len = rows.length; i < len; i++) {
+        let unixval = parseInt(rows[i].lastlogin, 10);
+
+        // Stackoverflow - http://stackoverflow.com/questions/11124322/get-date-time-for-a-specific-time-zone-using-javascript
+        let today = new Date(unixval + offset * 3600 * 1000).toUTCString().replace( / GMT$/, "" );
+
+        rows[i].lastlogin = today.toString();
       }
+      res.render('admin', {rows: rows});
+    })
+    .catch(function (err) {
+      console.log('getTable() error ---> ' + err);
     });
 });
 
@@ -48,8 +72,6 @@ app.post('/login', function (req, res) {
     isAdmin: false,
     table: 'users'
   });
-
-
 });
 
 app.get('/signup', function (req, res) {
@@ -57,15 +79,6 @@ app.get('/signup', function (req, res) {
 
     });
 });
-
-// app.post('/login', function (req, res) {
-//   var body = req.body || {},
-//     email = body && body.email || '',
-//     pwd = body && body.email || '';
-
-
-//   res.send('posted');
-// });
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {

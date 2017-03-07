@@ -1,0 +1,12 @@
+.db-table {
+  margin: 20px;
+  border-spacing: 10px 4px;
+}
+
+.db-table tbody tr {
+  transition: background-color .1s ease-out;
+}
+
+.db-table tbody tr:hover {
+  background-color: #ddd;
+}
