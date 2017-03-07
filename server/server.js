@@ -2,7 +2,7 @@ var express  = require('express'),
   exphbs     = require('express-handlebars'),
   bodyParser = require('body-parser'),
   path       = require('path'),
-  db         = require('./database').db,
+  db         = require('./database').db, // ./database is the relative path
   session    = require('express-session'),
   // server variables
   app        = express(),
@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/../public')));
 
 sess = {
   secret: 'super secret session not being stored on github',
