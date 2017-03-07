@@ -1,4 +1,4 @@
-## `Applejacks`
+## `applejacks`
 
 A multiplayer blackjack game with an integrated chat system.
 
