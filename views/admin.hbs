@@ -1,24 +1,27 @@
-<table class="db-table">
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Password</th>
-      <th>Last Login</th>
-      <th>isAdmin</th>
-      <th class=""></th>
-    </tr>
-  </thead>
-  <tbody>    
-    {{#each rows}}
-      <tr class="record">        
-        <td>{{email}}</td>
-        <td>{{password}}</td>
-        <td>{{lastlogin}}</td>
-        <td class="is-admin-{{isadmin}}">{{isadmin}}</td>
-        <td class-"update">
-          <button type="button" class="record-update hidden">Update</button>
-        </td>
+<main id="admin-page">
+
+  <table class="db-table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Password</th>
+        <th>Last Login</th>
+        <th>isAdmin</th>
+        <th class=""></th>
       </tr>
-    {{/each}}
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      {{#each rows}}
+        <tr class="record">
+          <td>{{email}}</td>
+          <td>{{password}}</td>
+          <td>{{lastlogin}}</td>
+          <td class="is-admin-{{isadmin}}">{{isadmin}}</td>
+          <td class-"update">
+            <button type="button" class="record-update hidden">Update</button>
+          </td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</main>

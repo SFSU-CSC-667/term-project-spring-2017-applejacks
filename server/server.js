@@ -66,23 +66,48 @@ app.get('/admin', function (req, res) {
     i,
     offset = new Date().getTimezoneOffset() / -60;
 
-  db.getTable('users')
-    .then(function (rows) {
-      printlog(rows);
-      // I don't like looping through records here :(
-      for (i = 0, len = rows.length; i < len; i++) {
-        var unixval = parseInt(rows[i].lastlogin, 10);
+    res.render('admin', {rows: [
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+      {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false}
+    ]});
 
-        // Stackoverflow - http://stackoverflow.com/questions/11124322/get-date-time-for-a-specific-time-zone-using-javascript
-        var today = new Date(unixval + offset * 3600 * 1000).toUTCString().replace( / GMT$/, "" );
+  // db.getTable('users')
+  //   .then(function (rows) {
+  //     printlog(rows);
+  //     // I don't like looping through records here :(
+  //     for (i = 0, len = rows.length; i < len; i++) {
+  //       var unixval = parseInt(rows[i].lastlogin, 10);
 
-        rows[i].lastlogin = today.toString();
-      }
-      res.render('admin', {rows: rows});
-    })
-    .catch(function (err) {
-      printlog('getTable() error ---> ' + err);
-    });
+  //       // Stackoverflow - http://stackoverflow.com/questions/11124322/get-date-time-for-a-specific-time-zone-using-javascript
+  //       var today = new Date(unixval + offset * 3600 * 1000).toUTCString().replace( / GMT$/, "" );
+
+  //       rows[i].lastlogin = today.toString();
+  //     }
+  //     res.render('admin', {rows: rows});
+  //   })
+  //   .catch(function (err) {
+  //     res.render('admin', {rows: [
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false},
+  //       {email: 'sam@test.com', password: 'password', lastlogin: 'Jane 4, 2017, Monday', isadmin: false}
+  //     ]});
+  //     printlog('getTable() error ---> ' + err);
+  //   });
 });
 
 app.post('/login', function (req, res) {

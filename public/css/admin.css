@@ -1,3 +1,8 @@
+#admin-page {
+  font-family: initial;
+  padding: 12px 24px 0;
+}
+
 .db-table {
   margin: 20px;
   border-spacing: 10px 4px;
@@ -20,8 +25,8 @@
   width: 100%;
 }
 
-.record-update {  
-  position: relative;  
+.record-update {
+  position: relative;
 }
 
 .record-update.hidden {
