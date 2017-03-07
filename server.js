@@ -3,7 +3,8 @@ var express  = require('express'),
   bodyParser = require('body-parser'),
   path       = require('path'),
   app        = express(),
-  env        = process.env.NODE_ENV || 'production';
+  env        = process.env.NODE_ENV || 'production',
+  db         = require('./database').db;
 
 app.set('env', env);
 
@@ -19,10 +20,36 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+// init db
+// db.init();
+
+// already created
+// db.createTable({name: 'users'});
+
 app.get('/', function (req, res) {
     res.render('home', {
-
+      user: {
+        isAdmin: true,
+        username: 'admin'
+      }
     });
+});
+
+app.post('/login', function (req, res) {
+  var body = req.body || {};
+  if (!Object.keys(body).length) {
+    return;
+  }
+
+  db.addUser({
+    email: body.email || '',
+    password: body.pwd || '',
+    isAdmin: false,
+    table: 'users'
+  });
+
+
 });
 
 app.get('/signup', function (req, res) {
@@ -31,14 +58,14 @@ app.get('/signup', function (req, res) {
     });
 });
 
-app.post('/login', function (req, res) {
-  var body = req.body || {},
-    email = body && body.email || '',
-    pwd = body && body.email || '';
+// app.post('/login', function (req, res) {
+//   var body = req.body || {},
+//     email = body && body.email || '',
+//     pwd = body && body.email || '';
 
 
-  res.send('posted');
-});
+//   res.send('posted');
+// });
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
