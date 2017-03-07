@@ -7,6 +7,9 @@
 4. `npm run app #this will listen for server changes and redeploy`
 5. visit [localhost:3000](http://localhost:3000/)
 
+### Upgrading to latest version of Node via NPM
+https://davidwalsh.name/upgrade-nodejs
+
 ### Markdown formatting, syntax, editor
 https://help.github.com/articles/basic-writing-and-formatting-syntax/
 https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet

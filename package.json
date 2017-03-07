@@ -12,6 +12,9 @@
     "type": "git",
     "url": "git+https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git"
   },
+  "engines": { 
+    "node" : ">=7.2.1"
+  },
   "author": "srbecker",
   "license": "MIT",
   "bugs": {

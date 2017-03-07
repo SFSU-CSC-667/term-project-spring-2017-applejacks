@@ -14,7 +14,7 @@ var db = {
     // pg.defaults.ssl = true;
     this._pool.connect(function(err, client) {
       if (err) throw err;
-      console.log('Connected to postgres! Getting schemas...');
+      printlog('Connected to postgres! Getting schemas...');
 
       var query = client.query(
         'CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)');
@@ -25,7 +25,7 @@ var db = {
       client
         .query('SELECT table_schema,table_name FROM information_schema.tables;')
         .on('row', function(row) {
-          console.log(JSON.stringify(row));
+          printlog(JSON.stringify(row));
         });
     });
   },
@@ -92,7 +92,7 @@ var db = {
     // pg.defaults.ssl = true;
     this._pool.connect(function(err, client) {
       if (err) throw err;
-      console.log('Connected to postgres! Creating new table... [' + tableSchema.name + ']');
+      printlog('Connected to postgres! Creating new table... [' + tableSchema.name + ']');
 
       var query = client.query(
         'CREATE TABLE ' + tableSchema.name + '(' +
@@ -114,11 +114,11 @@ var db = {
     // // pg.defaults.ssl = true;
     // this._pool.connect(function(err, client, done) {
     //   if (err) throw err;
-    //   console.log('Connected to postgres! Fetching table... ['+ tableName +']');
+    //   printlog('Connected to postgres! Fetching table... ['+ tableName +']');
 
     //    var query = client
     //     .query("select * from " + tableName + ";", function (err, result) {
-    //       console.log('RESULTS of select * ---> ' + result);
+    //       printlog('RESULTS of select * ---> ' + result);
     //       promise.resolve(result.rows[0]);
     //     });
     // }); // connection end
@@ -137,7 +137,7 @@ var db = {
     // pg.defaults.ssl = true;
     this._pool.connect(function(err, client, done) {
       if (err) throw err;
-      console.log('Connected to postgres! Inserting user... ['+ data.email +']');
+      printlog('Connected to postgres! Inserting user... ['+ data.email +']');
 
        var q = client
         // .query("SELECT * from users where email = '" + data.email + "';")

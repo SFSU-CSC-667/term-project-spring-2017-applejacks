@@ -25,9 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 sess = {
   secret: 'super secret session not being stored on github',
+  resave: true,
+  saveUninitialized: false, // setting false for now. Need to look into this
   cookie: {}
-}
-console.log('app env ---> ' + app.get('env'));
+};
+
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
@@ -47,6 +49,14 @@ app.get('/', function (req, res) {
   });
 });
 
+function printlog (str) {
+  var isDevMode = process.env.NODE_ENV === 'development';
+  if (true || isDevMode) {
+    // do not change this to printlog() !!!!!
+    console.log(str);
+  }
+}
+
 app.get('/admin', function (req, res) {
   var rows = [],
     i,
@@ -54,7 +64,7 @@ app.get('/admin', function (req, res) {
 
   db.getTable('users')
     .then(function (rows) {
-      console.log(rows);
+      printlog(rows);
       // I don't like looping through records here :(
       for (i = 0, len = rows.length; i < len; i++) {
         let unixval = parseInt(rows[i].lastlogin, 10);
@@ -67,7 +77,7 @@ app.get('/admin', function (req, res) {
       res.render('admin', {rows: rows});
     })
     .catch(function (err) {
-      console.log('getTable() error ---> ' + err);
+      printlog('getTable() error ---> ' + err);
     });
 });
 
@@ -93,5 +103,8 @@ app.get('/signup', function (req, res) {
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
-  console.log('Server started on port ' + port);
+  printlog('Server started on port ' + port);
+  if (process.env.NODE_ENV === 'development') {
+    printlog('~~~~~  DEV MODE  ~~~~~');
+  }
 });
