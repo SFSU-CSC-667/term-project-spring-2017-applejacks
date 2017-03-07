@@ -9,6 +9,7 @@
     "build": "echo \"minify and compress...\"",
     "lint": "node_modules/.bin/goodparts server"
   },
+  "pre-commit": ["lint"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git"

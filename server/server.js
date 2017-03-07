@@ -67,10 +67,10 @@ app.get('/admin', function (req, res) {
       printlog(rows);
       // I don't like looping through records here :(
       for (i = 0, len = rows.length; i < len; i++) {
-        let unixval = parseInt(rows[i].lastlogin, 10);
+        var unixval = parseInt(rows[i].lastlogin, 10);
 
         // Stackoverflow - http://stackoverflow.com/questions/11124322/get-date-time-for-a-specific-time-zone-using-javascript
-        let today = new Date(unixval + offset * 3600 * 1000).toUTCString().replace( / GMT$/, "" );
+        var today = new Date(unixval + offset * 3600 * 1000).toUTCString().replace( / GMT$/, "" );
 
         rows[i].lastlogin = today.toString();
       }

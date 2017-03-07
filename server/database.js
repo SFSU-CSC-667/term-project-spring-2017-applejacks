@@ -1,8 +1,16 @@
 var pg = require('pg');
 var url = require('url');
-var Promise = require("bluebird"); // clean up other `async` libraries
+// var Promise = require("bluebird"); // clean up other `async` libraries
 
 var pgp = require('pg-promise')();
+
+function printlog (str) {
+  var isDevMode = process.env.NODE_ENV === 'development';
+  if (true || isDevMode) {
+    // do not change this to printlog() !!!!!
+    console.log(str);
+  }
+}
 
 
 var db = {
@@ -12,32 +20,35 @@ var db = {
     this._pool = this._pool || this._createPool();
 
     // pg.defaults.ssl = true;
-    this._pool.connect(function(err, client) {
-      if (err) throw err;
+    this._pool.connect(function (err, client) {
+      if (err) {
+        throw err;
+      }
+
       printlog('Connected to postgres! Getting schemas...');
 
       var query = client.query(
         'CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)');
 
-      query.on('end', () => { client.end(); });
+      query.on('end', function () { client.end(); });
       // after the above two comamnds, `sambecker-# \d items` will display the created table
 
       client
         .query('SELECT table_schema,table_name FROM information_schema.tables;')
-        .on('row', function(row) {
+        .on('row', function (row) {
           printlog(JSON.stringify(row));
         });
     });
   },
 
   _createPool: function () {
-    let str = process.env.DATABASE_URL || '';
+    var str = process.env.DATABASE_URL || '';
 
     if (str) {
-      const params = url.parse(str);
-      const auth = params.auth.split(':');
+      var params = url.parse(str);
+      var auth = params.auth.split(':');
 
-      const config = {
+      var config = {
         user: auth[0],
         password: auth[1],
         host: params.hostname,
@@ -61,11 +72,11 @@ var db = {
   },
 
   _getConfig: function () {
-    let str = process.env.DATABASE_URL || '';
+    var str = process.env.DATABASE_URL || '';
 
     if (str) {
-      const params = url.parse(str);
-      const auth = params.auth.split(':');
+      var params = url.parse(str);
+      var auth = params.auth.split(':');
 
       return {
         user: auth[0],
@@ -90,8 +101,11 @@ var db = {
     this._pool = this._pool || this._createPool();
 
     // pg.defaults.ssl = true;
-    this._pool.connect(function(err, client) {
-      if (err) throw err;
+    this._pool.connect(function (err, client) {
+      if (err) {
+        throw err;
+      }
+
       printlog('Connected to postgres! Creating new table... [' + tableSchema.name + ']');
 
       var query = client.query(
@@ -102,7 +116,7 @@ var db = {
           'isAdmin BOOLEAN)'
       );
 
-      query.on('end', () => { client.end(); });
+      query.on('end', function () { client.end(); });
       // after the above two comamnds, `sambecker-# \d items` will display the created table
     });
   },
@@ -125,7 +139,7 @@ var db = {
 
     // return promise;
     if (!this.datab) {
-      let config = this._getConfig();
+      var config = this._getConfig();
       this.datab = pgp(config);
     }
 
@@ -135,8 +149,11 @@ var db = {
   addUser: function (data) {
     this._pool = this._pool || this._createPool();
     // pg.defaults.ssl = true;
-    this._pool.connect(function(err, client, done) {
-      if (err) throw err;
+    this._pool.connect(function (err, client, done) {
+      if (err) {
+        throw err;
+      }
+
       printlog('Connected to postgres! Inserting user... ['+ data.email +']');
 
        var q = client
