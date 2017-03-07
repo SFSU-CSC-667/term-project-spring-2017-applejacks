@@ -21,7 +21,9 @@ https://davidwalsh.name/upgrade-nodejs
 
 ### Markdown formatting, syntax, editor
 https://help.github.com/articles/basic-writing-and-formatting-syntax/
+
 https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+
 https://jbt.github.io/markdown-editor/
 
 
