@@ -4,12 +4,16 @@
   "description": "Multiplayer Blackjack game with chat interface",
   "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "app": "npm run build && NODE_ENV=development nodemon --watch server server/server.js",
     "build": "echo \"minify and compress...\"",
-    "lint": "node_modules/.bin/goodparts server"
+    "lint": "node_modules/.bin/goodparts server",
+    "coverage": "istanbul cover test.js",
+    "test": "istanbul cover test.js"
   },
-  "pre-commit": ["lint"],
+  "pre-commit": [
+    "lint",
+    "coverage"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git"
@@ -36,6 +40,7 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
-    "goodparts": "^1.2.1"
+    "goodparts": "^1.2.1",
+    "istanbul": "^0.4.5"
   }
 }

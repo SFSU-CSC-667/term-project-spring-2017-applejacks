@@ -2,8 +2,9 @@
 
 A multiplayer blackjack game with an integrated chat system.
 
-[![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/dwyl/goodparts "JavaScript The Good Parts")
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/good-parts/issues)
+[![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks "applejacks - blackjack game")
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks/issues)
+[![codecov](https://codecov.io/gh/SFSU-CSC-667/term-project-spring-2017-applejacks/branch/master/graph/badge.svg)](https://codecov.io/gh/SFSU-CSC-667/term-project-spring-2017-applejacks)
 
 
 **View the live heroku site** [here](https://applejacks.herokuapp.com)
