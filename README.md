@@ -4,7 +4,7 @@
 1. `git clone https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git`
 2. `cd term-project-spring-2017-applejacks`
 3. `npm install`
-4. `node server.js`
+4. `npm run app #this will listen for server changes and redeploy`
 5. visit [localhost:3000](http://localhost:3000/)
 
 ### Markdown formatting, syntax, editor

@@ -157,8 +157,6 @@ var db = {
   deleteUser: function (email) {
 
   }
-
-
 };
 
 module.exports.db = db;

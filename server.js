@@ -2,9 +2,12 @@ var express  = require('express'),
   exphbs     = require('express-handlebars'),
   bodyParser = require('body-parser'),
   path       = require('path'),
+  db         = require('./database').db,
+  session    = require('express-session'),
+  // server variables
   app        = express(),
   env        = process.env.NODE_ENV || 'production',
-  db         = require('./database').db;
+  sess;
 
 app.set('env', env);
 
@@ -20,9 +23,17 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+sess = {
+  secret: 'super secret session not being stored on github',
+  cookie: {}
+}
+console.log('app env ---> ' + app.get('env'));
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
 
-// init db
-// db.init();
+app.use(session(sess))
 
 // already created
 // db.createTable({name: 'users'});
