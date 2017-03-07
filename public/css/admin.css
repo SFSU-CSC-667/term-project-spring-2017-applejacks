@@ -7,6 +7,15 @@
   transition: background-color .1s ease-out;
 }
 
-.db-table tbody tr:hover {
+.db-table tbody tr:not(.record-edit):hover {
   background-color: #ddd;
+}
+
+.is-admin-true {
+  font-weight: bold;
+  color: #08bf44;
+}
+
+.record-edit-field {
+  width: 100%;
 }

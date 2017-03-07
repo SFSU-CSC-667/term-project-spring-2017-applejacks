@@ -9,11 +9,11 @@
   </thead>
   <tbody>
     {{#each rows}}
-      <tr>
+      <tr class="record">
         <td>{{email}}</td>
         <td>{{password}}</td>
         <td>{{lastlogin}}</td>
-        <td>{{isadmin}}
+        <td class="is-admin-{{isadmin}}">{{isadmin}}</td>
       </tr>
     {{/each}}
   </tbody>
