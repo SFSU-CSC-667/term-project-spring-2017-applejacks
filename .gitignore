@@ -3,3 +3,4 @@ coverage
 .DS_Store
 temp
 *.log
+public/js/*.min.js
