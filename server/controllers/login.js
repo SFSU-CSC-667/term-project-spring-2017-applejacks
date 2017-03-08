@@ -1,7 +1,7 @@
 /* login routes */
 var express      = require('express'),
   router         = express.Router(),
-  db             = require('./database').db, // ./database is the relative path
+  db             = require('./../database').db, // ./database is the relative path
   printlog       = require('./../helpers').printlog;
 
 router.post('/', function (req, res) {

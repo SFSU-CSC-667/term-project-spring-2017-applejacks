@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.0",
     "express": "^4.15.0",

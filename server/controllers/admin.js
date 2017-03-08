@@ -1,5 +1,6 @@
 /* admin routes */
 var express      = require('express'),
+  db             = require('./../database').db, // ./database is the relative path
   router         = express.Router(),
   printlog       = require('./../helpers').printlog;
 

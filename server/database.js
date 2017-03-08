@@ -1,11 +1,11 @@
-var pg = require('pg'),
-  url = require('url'),
+var pg        = require('pg'),
+  url         = require('url'),
 // var Promise = require("bluebird"); // clean up other `async` libraries
-  printlog       = require('./helpers').printlog,
-  pgp = require('pg-promise')(),
+  printlog    = require('./helpers').printlog,
+  pgp         = require('pg-promise')(),
 
 
-    db = {
+  db = {
     _pool: null,
 
     init: function () {

@@ -2,7 +2,7 @@
 var express      = require('express'),
   bcrypt         = require('bcrypt'),
   router         = express.Router(),
-  db             = require('./database').db, // ./database is the relative path
+  db             = require('./../database').db, // ./database is the relative path
   printlog       = require('./../helpers').printlog;
 
 /*
