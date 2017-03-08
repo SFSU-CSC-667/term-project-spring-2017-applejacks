@@ -7,7 +7,7 @@
     "app": "npm run buildTemplates && NODE_ENV=development MD=false nodemon --watch server server/server.js",
     "mock": "npm run build && NODE_ENV=development MD=true nodemon --watch server server/server.js",
     "build": "echo \"minify and compress...\"",
-    "buildTemplates": "handlebars -m public/partials/*.hbs -f public/js/templates.min.js",
+    "buildTemplates": "handlebars -m views/clientPartials/*.hbs -f public/js/templates.min.js",
     "lint": "node_modules/.bin/goodparts server",
     "coverage": "istanbul cover test.js",
     "test": "istanbul cover test.js"
