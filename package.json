@@ -4,6 +4,7 @@
   "description": "Multiplayer Blackjack game with chat interface",
   "main": "server/server.js",
   "scripts": {
+    "start": "npm run buildTemplates && node server/server.js",
     "app": "npm run buildTemplates && NODE_ENV=development MD=false nodemon --watch server server/server.js",
     "mock": "npm run build && NODE_ENV=development MD=true nodemon --watch server server/server.js",
     "build": "echo \"minify and compress...\"",
