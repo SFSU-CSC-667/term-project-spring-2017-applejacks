@@ -29,6 +29,10 @@
   position: relative;
 }
 
+.hidden {
+  display: none;
+}
+
 .record-update.hidden {
   display: none;
 }

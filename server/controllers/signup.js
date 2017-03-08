@@ -42,26 +42,26 @@ router.post('/', function (req, res) {
     return;
   }
 
-  // uncomment when we are ready to start encryptingn passwords
-  // bcrypt.hash(body.pwd, saltRounds, function(err, hash) {
-  //   // Store hash in your password DB. 
-  //   db.addUser({
-  //     email: body.email || '',
-  //     password: hash
-  //     isAdmin: false,
-  //     table: 'users'
-  //   });
-  // });
-
-  db.addUser({
-    email: body.email || '',
-    password: body.pwd || '',
-    isAdmin: false,
-    table: 'users'
+  bcrypt.hash(body.pwd, saltRounds, function (err, hash) {
+    printlog('User generated hash -> ' + hash);    
+    
+    // Store hash in your password DB. 
+    db.addUser({
+      email: body.email || '',
+      hash: hash,
+      password: body.pwd || '',
+      isAdmin: false,
+      table: 'users'
+    }).then(function () {
+      // redirect to lobby after user has signed up
+      res.render('lobby', {});
+    }).catch(function (err) {
+      // if user sign up fails, send user the error
+      res.render('signup', {
+        err: err
+      });
+    });
   });
-
-  // redirect to lobby after user has logged in
-  res.render('lobby', {});
 });
 
 module.exports = router;

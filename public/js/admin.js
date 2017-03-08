@@ -1,10 +1,13 @@
 (function () {
   var AdminPageController = {
     _ui: {
-      dbTable: '.db-table'
+      dbTable: '.db-table',
+      updateBtn: '.record-update',
+      delBtn: '.record-delete'
     },
 
     init: function () {
+      this._recordToInitState();
       this._mapDOMElements();
       this._createEventListeners();
     },
@@ -32,12 +35,7 @@
       return (obj.constructor.name === 'Array' || obj.constructor.name === 'NodeList') && obj.length;
     },
 
-    _createEventListeners: function () {
-      if (!this._isNonEmptyArray(this._ui.dbTable)) {
-        console.log('UI hash error');
-        return;
-      }
-
+    _createTableListener: function () {
       this._ui.dbTable[0].addEventListener('click', function (event) {
         var target = event.target,
           parent = target.parentNode,
@@ -48,7 +46,8 @@
           input,
           td,
           node,
-          btn;
+          btn,
+          delBtn;
 
         if (parent.className !== 'record') {
           return;
@@ -75,6 +74,10 @@
         btn.classList.toggle('hidden');
         btn = btn.parentNode;
 
+        delBtn = parent.querySelector('.record-delete');
+        delBtn.classList.toggle('hidden');
+        btn.appendChild(delBtn);        
+
         docFrag = document.createDocumentFragment();
         for (i = 0; i < filteredArr.length; i++) {
           input = document.createElement('input');
@@ -85,13 +88,60 @@
           docFrag.appendChild(td);
         }
         docFrag.appendChild(btn);
+        docFrag.appendChild(btn);
 
         parent.innerHTML = '';
         parent.appendChild(docFrag);
       }, false);
+    },
+
+    _recordToInitState: function (node) {
+      node = node || document.createElement('div');
+      var i, len, hash = [], htmlOutput, template,
+        inputs = node.querySelectorAll('INPUT');
+
+      for (i = 0, len = inputs.length; i < len; i++) {
+
+      }
+      
+      // template system
+      template = Handlebars.templates['edit-record.hbs'];
+      htmlOutput = template({data: 'testing templates'});      
+
+    },
+
+    _createButtonListener: function () {
+      document.addEventListener('click', function (event) {
+        var target = event.target,
+          record;
+
+        if (target.tagName === 'BUTTON') {
+          record = target.parentNode.parentNode;
+
+          if (target.classList.contains('record-update')) {
+            console.log('delete update');
+          } else if (target.classList.contains('record-delete')) {
+            console.log('delete record');
+          }
+
+        }
+        
+
+      });      
+    },
+
+    _createEventListeners: function () {
+      if (this._isNonEmptyArray(this._ui.dbTable)) {
+        this._createTableListener();
+        this._createButtonListener();
+      } else {
+        console.log('UI hash error');
+        return;
+      }
+
+      
+
     }
-
-
   };
 
   // namespace

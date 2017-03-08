@@ -6,6 +6,9 @@ var express      = require('express'),
 
 router.get('/', function (req, res) {
   printlog('GET /admin', 'route');
+  
+  // db.deleteUser({table: 'users', email: 'sam@sam'}).catch(err => {console.log(err)});
+
   var rows = [],
     i,
     offset = new Date().getTimezoneOffset() / -60;
@@ -27,7 +30,7 @@ router.get('/', function (req, res) {
     
   db.getTable('users')
     .then(function (rows) {
-      printlog(rows);
+      // printlog(rows);
       // I don't like looping through records here :(
       for (i = 0, len = rows.length; i < len; i++) {
         var unixval = parseInt(rows[i].lastlogin, 10);
