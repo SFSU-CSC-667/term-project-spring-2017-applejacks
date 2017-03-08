@@ -64,8 +64,8 @@ https://github.com/github/hub
 
 ## Git flow
 #### Formatting commit messages
-`[feature|architecture|bug|docs]["name_of_feature"] - short description of the change you made`
-Example: `git commit -m "[feature][chatSystem] - added basic socket.io publish and subscribing"`
+`[feature|architecture|bug|docs]["name_of_feature"] - short description of the change you made`  
+**Example:** `git commit -m "[feature][chatSystem] - added basic socket.io publish and subscribing"`
 
 Get the latest code
 ```
