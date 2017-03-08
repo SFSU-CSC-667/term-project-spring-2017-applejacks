@@ -41,8 +41,10 @@ if (app.get('env') === 'production') {
 app.use(appRouter);
 app.use(session(sess))
 
-// already created
-// db.createTable({name: 'users'});
+db.createTable({name: 'users'})
+.catch(function (errObj) {  
+  printlog('createTable() -> ' + errObj);
+});
 
 app.listen(port, function() {
   printlog('Server started on port ' + port);

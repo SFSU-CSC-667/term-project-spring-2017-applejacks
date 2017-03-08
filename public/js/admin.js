@@ -126,6 +126,20 @@
             this._recordToInitState(record);
           } else if (target.classList.contains('record-delete')) {
             console.log('delete record');
+          } else if (target.classList.contains('mod-t-btn')) {
+            var val = document.querySelector('.mod-t').value;
+
+            if (!val) {
+              return;
+            }
+            
+            $.get({
+              url: '/admin/drop/' + val
+            }).then(function () {
+              console.log('success');
+            }).catch(function () {
+              console.log('err');
+            });
           }
 
         }

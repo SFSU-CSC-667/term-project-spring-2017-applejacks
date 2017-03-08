@@ -1,6 +1,7 @@
 var helpers = {
   printlog: function (str, type) {
-    var isDevMode = process.env.NODE_ENV === 'development';    
+    var isDevMode = process.env.NODE_ENV === 'development';  
+    str = str.toString();  
     if (true || isDevMode) {
       if (type === 'route') {
         // do not change this to printlog() !!!!!

@@ -4,6 +4,18 @@ var express      = require('express'),
   router         = express.Router(),
   printlog       = require('./../helpers').printlog;
 
+router.get('/drop/:table', function (req, res) {
+  printlog('GET /admin/drop/:table', 'route');
+  var tableName = req.params.table;
+  tableName = tableName || '';
+
+  db.dropTable(tableName).catch(function (err) {
+    res.render('signup', {
+      err: err
+    });
+  });
+});
+
 router.get('/', function (req, res) {
   printlog('GET /admin', 'route');
   

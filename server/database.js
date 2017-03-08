@@ -38,28 +38,16 @@ var pg        = require('pg'),
       }
     },
 
-    createTable: function (tableSchema) {
-      this._pool = this._pool || this._createPool();
+    createTable: function (tableSchema) {      
+      printlog('Connected to postgres! Creating new table... [' + tableSchema.name + ']');        
 
-      // pg.defaults.ssl = true;
-      this._pool.connect(function (err, client) {
-        if (err) {
-          throw err;
-        }
-
-        printlog('Connected to postgres! Creating new table... [' + tableSchema.name + ']');
-
-        var query = client.query(
-          'CREATE TABLE ' + tableSchema.name + '(' +
-            'email VARCHAR(60) PRIMARY KEY UNIQUE,' +
-            'password VARCHAR(100) not null,' +
-            'lastLogin BIGSERIAL,' +
-            'isAdmin BOOLEAN)'
-        );
-
-        query.on('end', function () { client.end(); });
-        // after the above two comamnds, `sambecker-# \d items` will display the created table
-      });
+      // `postgresdb-# \d <name>` will display the created table
+      return this._datab.none('CREATE TABLE ' + tableSchema.name + '(' +
+          'email VARCHAR(60) PRIMARY KEY UNIQUE,' +
+          'password VARCHAR(100) not null,' +
+          'lastlogin BIGSERIAL,' +
+          'isadmin BOOLEAN)'
+      );        
     },
 
     dropTable: function (tableName) {     
@@ -67,7 +55,7 @@ var pg        = require('pg'),
         return;
       }
 
-      return this._datab.none('drop table $1', [tableName]);
+      return this._datab.none('drop table ' + tableName);
     },
 
     getTable: function (tableName) {           
