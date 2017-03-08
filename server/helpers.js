@@ -1,9 +1,14 @@
 var helpers = {
-  printlog: function (str) {
-    var isDevMode = process.env.NODE_ENV === 'development';
+  printlog: function (str, type) {
+    var isDevMode = process.env.NODE_ENV === 'development';    
     if (true || isDevMode) {
-      // do not change this to printlog() !!!!!
-      console.log(str);
+      if (type === 'route') {
+        // do not change this to printlog() !!!!!
+        console.log('\x1b[36m%s\x1b[0m', str);
+      } else {
+        // do not change this to printlog() !!!!!
+        console.log(str);  
+      }      
     }
   }
 };

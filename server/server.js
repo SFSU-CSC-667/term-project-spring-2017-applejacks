@@ -10,7 +10,7 @@ var express  = require('express'),
   appRouter  = require('./controllers'),
   env        = process.env.NODE_ENV || 'production',
   port       = process.env.PORT || 3000,
-  sess;
+  sess; 
 
 app.set('env', env);
 
@@ -46,6 +46,7 @@ app.use(session(sess))
 
 app.listen(port, function() {
   printlog('Server started on port ' + port);
+  printlog('Using mockdata: ' + (process.env.MD === true ? 'TRUE' : 'FALSE'));
   if (process.env.NODE_ENV === 'development') {
     printlog('~~~~~  DEV MODE  ~~~~~');
   }

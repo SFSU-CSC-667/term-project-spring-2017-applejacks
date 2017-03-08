@@ -14,6 +14,8 @@ router.use('/lobby',  lobbyRoutes);
 
 // index route
 router.get('/', function (req, res) {
+  printlog('GET /', 'route');
+  
   res.render('home', {
     user: {
       isAdmin: true,

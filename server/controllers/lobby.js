@@ -4,6 +4,8 @@ var express      = require('express'),
   printlog       = require('./../helpers').printlog;
 
 router.get('/', function (req, res) {
+  printlog('GET /lobby', 'route');
+  
   res.render('lobby', {});
 });
 

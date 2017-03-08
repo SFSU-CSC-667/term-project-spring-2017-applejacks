@@ -5,6 +5,7 @@ var express      = require('express'),
   printlog       = require('./../helpers').printlog;
 
 router.post('/', function (req, res) {
+  printlog('POST /login', 'route');
   // TODO: add middleware auth here
   
   // Load hash from your password DB. 

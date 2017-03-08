@@ -9,6 +9,7 @@ var express      = require('express'),
  * GET - desktop route
  */
 router.get('/', function (req, res) {
+  printlog('GET /signup', 'route');
   res.render('signup', {
 
   });
@@ -18,6 +19,7 @@ router.get('/', function (req, res) {
  * POST - API
  */
 router.post('/', function (req, res) {
+  printlog('POST /signup', 'route');
   var body = req.body || {},    
 
   /*
