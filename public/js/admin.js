@@ -6,8 +6,7 @@
       delBtn: '.record-delete'
     },
 
-    init: function () {
-      this._recordToInitState();
+    init: function () {      
       this._mapDOMElements();
       this._createEventListeners();
     },
@@ -97,17 +96,21 @@
 
     _recordToInitState: function (node) {
       node = node || document.createElement('div');
-      var i, len, hash = [], htmlOutput, template,
+      var i, len, hash = {}, htmlOutput, template,
         inputs = node.querySelectorAll('INPUT');
 
-      for (i = 0, len = inputs.length; i < len; i++) {
-
-      }
+      hash = {
+        email: inputs[0].value,
+        password: inputs[1].value,
+        lastlogin: inputs[2].value,
+        isadmin: inputs[3].value,
+      };
       
       // template system
-      template = Handlebars.templates['edit-record.hbs'];
-      htmlOutput = template({data: 'testing templates'});      
-
+      template = Handlebars.templates['display-record.hbs'];
+      htmlOutput = template(hash);      
+      node.innerHTML = htmlOutput;
+      node.classList.toggle('record-edit');
     },
 
     _createButtonListener: function () {
@@ -120,6 +123,7 @@
 
           if (target.classList.contains('record-update')) {
             console.log('delete update');
+            this._recordToInitState(record);
           } else if (target.classList.contains('record-delete')) {
             console.log('delete record');
           }
@@ -127,7 +131,7 @@
         }
         
 
-      });      
+      }.bind(this));      
     },
 
     _createEventListeners: function () {
