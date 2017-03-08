@@ -4,17 +4,7 @@ var express      = require('express'),
   printlog       = require('./../helpers').printlog;
 
 router.post('/', function (req, res) {
-  var body = req.body || {};
-  if (!Object.keys(body).length) {
-    return;
-  }
-
-  db.addUser({
-    email: body.email || '',
-    password: body.pwd || '',
-    isAdmin: false,
-    table: 'users'
-  });
+  // TODO: add middleware auth here
 
   // redirect to lobby after user has logged in
   res.render('lobby', {});
