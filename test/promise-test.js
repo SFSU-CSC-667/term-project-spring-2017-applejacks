@@ -3,12 +3,12 @@ var db = require('./../server/database').db,
   // test vars
   TEST_TABLE = 'testtable';
 
-before(function() {
+before(function () {
   return db.createTable({name:TEST_TABLE});
 });
 
-describe('#addUser()', function() {
-  it('add new user to database', function() {
+describe('#addUser()', function () {
+  it('add new user to database', function () {
     db.addUser({
       table: 'testtable',
       columns: ['email','password','lastlogin','isadmin'],
@@ -19,6 +19,6 @@ describe('#addUser()', function() {
   });
 });
 
-after(function() {
+after(function () {
   return db.dropTable(TEST_TABLE);
 });
