@@ -13,7 +13,7 @@ var pg        = require('pg'),
     // add your own local postgres db name here
     _localDbName: 'sambecker', 
 
-    init: function () {
+    init: function () {      
       // create instance of db, one per application      
       this._datab = this._datab || pgp(this._getConfig());  
       this._dbAlive = this._datab.constructor.name === 'Database' ? true : false;
@@ -22,7 +22,7 @@ var pg        = require('pg'),
         printlog( ('Connected to postgres table ' + this._getDbName()) );
       } else {
         printlog('Failed to connect to db!');
-      }
+      }      
     },
 
     _getDbName: function () {
@@ -108,13 +108,15 @@ var pg        = require('pg'),
         return t.batch([q1, q2]); 
       });              
     },
-
-    updateUser: function (options) {
-      printlog('Attempting update user... ['+ options.email +']');
+    
+    updateUser: function (data) {
+      printlog('Attempting update user... ['+ data.oldval +']');
       return this._datab.tx(function (t) {
         // batch queries
-        var q1 = t.one('SELECT * FROM ' + data.table + ' WHERE email=$1', [data.email]),
-          q2 = t.none('DELETE FROM ' + data.table + ' WHERE email=$1', [data.email]);
+        var q1Str = `SELECT * FROM ${data.table} WHERE ${data.col}='${data.oldval}'`,         
+          q2Str = `UPDATE ${data.table} set ${data.col}='${data.newval}' where ${data.col}='${data.oldval}'`,          
+          q1 = t.one(q1Str),
+          q2 = t.none(q2Str);
     
         // will successfully resolve if each query resolves in succession        
         return t.batch([q1,q2]); 
