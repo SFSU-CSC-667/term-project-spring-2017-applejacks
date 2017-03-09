@@ -9,13 +9,12 @@
     "mock": "npm run build && NODE_ENV=development MD=true nodemon --watch server server/server.js",
     "build": "echo \"minify and compress...\"",
     "buildTemplates": "handlebars -m views/clientPartials/*.hbs -f public/js/templates.min.js",
-    "lint": "node_modules/.bin/goodparts server",
+    "lint": "jshint server",
     "coverage": "istanbul cover test.js",
     "test": "istanbul cover test.js"
   },
   "pre-commit": [
-    "lint",
-    "coverage"
+    "lint"    
   ],
   "repository": {
     "type": "git",
@@ -38,6 +37,7 @@
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.1",
     "handlebars": "^4.0.6",
+    "jshint": "^2.9.4",
     "nodemon": "^1.11.0",
     "path": "^0.12.7",
     "pg": "^6.1.2",
@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "goodparts": "^1.2.1",
-    "istanbul": "^0.4.5"
+    "istanbul": "^0.4.5",
+    "pre-commit": "^1.2.2"
   }
 }

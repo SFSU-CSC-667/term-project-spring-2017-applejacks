@@ -1,5 +1,4 @@
-var pg        = require('pg'),
-  url         = require('url'),
+var url       = require('url'),
   printlog    = require('./helpers').printlog,
   pgp         = require('pg-promise')(),
 

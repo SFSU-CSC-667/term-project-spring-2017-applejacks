@@ -1,0 +1,14 @@
+{
+  "curly": true,
+  "eqeqeq": true,
+  "esversion": 6,
+  "undef": true,
+  // "unused": true,
+  "node": true,
+  "forin": true,
+  "freeze": true,
+  "maxdepth": 4,
+  "globals": {
+    "jQuery": true
+  }
+}
