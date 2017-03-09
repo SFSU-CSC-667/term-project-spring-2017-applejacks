@@ -33,17 +33,17 @@ router.post('/', function (req, res) {
     saltRounds = 8;
 
   if (!Object.keys(body).length) {
-    printlog('Error --> POST data did not exist');
+    printlog('Error --> POST data did not exist', 'error');
     return;
   }
 
   if (body.pwd !== body.pwdConfirm) {
-    printlog('Error --> Confirm password did not match original');
+    printlog('Error --> Confirm password did not match original', 'error');
     return;
   }
 
   bcrypt.hash(body.pwd, saltRounds, function (err, hash) {
-    printlog('User generated hash -> ' + hash);    
+    printlog('bcrypt generated hash -> ' + hash);    
     
     // Store hash in your password DB. 
     db.addUser({

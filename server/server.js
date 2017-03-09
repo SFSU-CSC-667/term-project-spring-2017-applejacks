@@ -41,8 +41,11 @@ if (app.get('env') === 'development') {
   app.use(session(sess));
 }
 
-db.createTable({name: 'users'})
-  .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));
+// initialize database and create game tables if needed
+db.init().then(_ => {
+  db.createTable({name: 'users'})
+  .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));  
+});
 
 app.listen(port, function() {
   printlog('Server started on port ' + port, 'init');

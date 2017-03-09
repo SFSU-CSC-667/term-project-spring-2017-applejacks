@@ -15,12 +15,12 @@ var url       = require('url'),
     init: function () {      
       // create instance of db, one per application      
       this._datab = this._datab || pgp(this._getConfig());            
-      this._datab.connect()      
+      return this._datab.connect()      
         .then(obj => {            
             printlog('Connected to database [' + obj.client.database + ']');
             this._dbConnected = true;
             // release connection
-            obj.done();
+            return obj.done();
         })
         .catch(error => {
           printlog('Failed to connect to database', 'error');
@@ -61,7 +61,7 @@ var url       = require('url'),
       return {};
     },
 
-    createTable: function (tableSchema) {      
+    createTable: function (tableSchema) {         
       printlog('Attempting create table... [' + tableSchema.name + ']');        
 
       // `postgresdb-# \d <name>` will display the created table
@@ -216,9 +216,5 @@ var url       = require('url'),
       });  
     }
   };
-
-// create database instance
-// setup any configs
-db.init();
 
 module.exports.db = db;

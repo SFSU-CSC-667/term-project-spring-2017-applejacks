@@ -4,7 +4,9 @@ var db = require('./../server/database').db,
   TEST_TABLE = 'testtable';
 
 before(function () {
-  return db.createTable({name:TEST_TABLE});
+  return db.init().then(function () {
+    return db.createTable({name:TEST_TABLE});
+  });  
 });
 
 describe('#addUser()', function () {
