@@ -50,8 +50,7 @@ router.post('/', function (req, res) {
       table: 'users',
       columns: ['email','password','lastlogin','isadmin'],
       values: [body.email, hash, Date.now(), false],
-      key: 'email',
-      keyval: body.email
+      key: 'email'      
     })           
     .then(function () {
       // redirect to lobby after user has signed up

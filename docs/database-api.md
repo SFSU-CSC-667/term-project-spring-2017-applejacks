@@ -15,8 +15,8 @@
 ```
 {
   table: 'users',
-  col: 'email',
-  newval: 'myrealemail@gmail.com',
-  oldval: 'oopswrongemail@fake.com'        
+  columns: ['email','password','isadmin']
+  values: ['myrealemail@gmail.com', 'hash123', false],
+  key: 'email'  
 }
 ```

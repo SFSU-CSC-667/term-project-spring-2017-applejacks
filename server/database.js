@@ -161,21 +161,23 @@ var url       = require('url'),
      * @param {String} data.table - table name
      * @param {Array} data.values - array of values
      * @param {Array} data.columns - the table columns the values will map to
-     * @param {String} data.key - the column name that the INSERT is based on
-     * @param {String} data.keyval - the value used to determine if record exists
+     * @param {String} data.key - the unique column name 
      */
     addUser: function (data) {           
-      printlog('Attempting insert user... ['+ data.key +']');
-
+      printlog('Attempting insert user... ['+ data.key +']');      
+      
       return this._datab.tx(function (t) {
         var q2Str = this._buildInsertQuery({
           table: data.table,
           columns: data.columns,
           values: data.values
         }),
-          q1Str = `SELECT * FROM ${data.table} WHERE ${data.key}='${data.keyval}'`,               
-          q1 = t.none(q1Str),
-          q2 = t.any(q2Str);
+        q1Str, q1, q2;
+
+        data.keyval = data.values[data.columns.indexOf(data.key)];
+        q1Str = `SELECT * FROM ${data.table} WHERE ${data.key}='${data.keyval}'`;
+        q1 = t.none(q1Str);
+        q2 = t.any(q2Str);
 
         printlog(q1Str, 'db');
         printlog(q2Str, 'db');
