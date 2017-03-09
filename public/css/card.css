@@ -1,0 +1,34 @@
+.card {
+  height: 250px;
+  width: 150px;
+  border: 1px solid #222;
+  border-radius: 3px;
+  background-color: #fff;
+  padding: 15px;
+  margin: 8px;
+  box-sizing: border-box;
+  font-size: 18pt;
+  font-family: sans-serif;
+  position: relative;  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card.red {
+  color: #e60000;
+}
+
+.card .top {
+  align-self: flex-start;    
+}
+
+.card .suit {
+  font-size: 44pt;
+}
+
+.card .bottom {
+  align-self: flex-end;  
+  transform: rotate(180deg);
+}

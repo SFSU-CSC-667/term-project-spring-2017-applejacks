@@ -1,0 +1,10 @@
+<div class="card{{#if hearts}} red{{/if}}{{#if diamonds}} red{{/if}}">
+  <span class="top">{{value}}</span>
+  <span class="suit">
+    {{#if clubs}}&clubs;{{/if}}
+    {{#if hearts}}&hearts;{{/if}}
+    {{#if diamonds}}&diams;{{/if}}
+    {{#if spades}}&spades;{{/if}}
+  </span>
+  <span class="bottom">{{value}}</span>
+</div>

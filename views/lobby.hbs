@@ -1,5 +1,9 @@
 <main id="lobby-page">
   <h1>Lobby page</h1>
 
-
+  <div style="display:flex;flex-wrap:wrap;">
+    {{#each cards}}
+      {{>card}}
+    {{/each}}
+  </div>
 </main>
