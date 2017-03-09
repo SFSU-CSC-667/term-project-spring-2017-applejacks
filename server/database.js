@@ -120,7 +120,7 @@ var pg        = require('pg'),
       (accumulator, currObj, currentIndex, array) => {
         let str = '',
           type = typeof(currObj); 
-          console.log(type);
+          
         if (type === 'object') {
           if (currObj.type === 'postgres') {
             str = `${currObj.value}`;
