@@ -4,16 +4,22 @@ var pg        = require('pg'),
   pgp         = require('pg-promise')(),
 
   db = {
+    // instance of the pg-promise library object
     _datab: null,
 
+    // has a successful connection been made with postgres db
     _dbAlive: false,
+
+    // add your own local postgres db name here
+    _localDbName: 'sambecker', 
 
     init: function () {
       // create instance of db, one per application      
       this._datab = this._datab || pgp(this._getConfig());  
       this._dbAlive = this._datab.constructor.name === 'Database' ? true : false;
+      
       if (this._dbAlive) {
-        printlog( ('Connected to Postgres table ' + this._getDbName()) );
+        printlog( ('Connected to postgres table ' + this._getDbName()) );
       } else {
         printlog('Failed to connect to db!');
       }
@@ -23,7 +29,8 @@ var pg        = require('pg'),
       var str = process.env.DATABASE_URL || '',
         params = url.parse(str) || {};
       
-      return params.pathname ? params.pathname.split('/')[1] : '[sambecker]';
+      // es6 syntax for simplicity
+      return params.pathname ? params.pathname.split('/')[1] : `[${this._localDbName}]`;
     },
 
     _getConfig: function () {
@@ -42,12 +49,10 @@ var pg        = require('pg'),
           ssl: true
         };
       } else {
-        return {
-          // user: auth[0],
-          // password: auth[1],
+        return {          
           host: 'localhost',
           port: 5432,
-          database: 'sambecker'
+          database: this._localDbName
         };
       }
     },
