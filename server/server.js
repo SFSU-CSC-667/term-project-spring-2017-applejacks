@@ -42,9 +42,7 @@ if (app.get('env') === 'development') {
 }
 
 db.createTable({name: 'users'})
-.catch(function (errObj) {  
-  printlog('createTable() -> ' + errObj);
-});
+  .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));
 
 app.listen(port, function() {
   printlog('Server started on port ' + port, 'init');

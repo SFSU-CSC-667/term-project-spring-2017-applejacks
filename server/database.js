@@ -7,21 +7,26 @@ var url       = require('url'),
     _datab: null,
 
     // has a successful connection been made with postgres db
-    _dbAlive: false,
+    _dbConnected: false,
 
     // add your own local postgres db name here
     _localDbName: 'sambecker', 
 
     init: function () {      
       // create instance of db, one per application      
-      this._datab = this._datab || pgp(this._getConfig());  
-      this._dbAlive = this._datab.constructor.name === 'Database' ? true : false;
-      
-      if (this._dbAlive) {
-        printlog( ('Connected to postgres table ' + this._getDbName()) );
-      } else {
-        printlog('Failed to connect to db!');
-      }      
+      this._datab = this._datab || pgp(this._getConfig());            
+      this._datab.connect()      
+        .then(obj => {            
+            printlog('Connected to database [' + obj.client.database + ']');
+            this._dbConnected = true;
+            // release connection
+            obj.done();
+        })
+        .catch(error => {
+          printlog('Failed to connect to database', 'error');
+          printlog(error, 'error');
+        })
+      ;      
     },
 
     _getDbName: function () {
@@ -49,13 +54,11 @@ var url       = require('url'),
           database: params.pathname.split('/')[1],
           ssl: true
         };
-      } else {
-        return {          
-          host: 'localhost',
-          port: 5432,
-          database: this._localDbName
-        };
-      }
+      } 
+
+      // See documentation for default values
+      // https://github.com/brianc/node-postgres/wiki/Client
+      return {};
     },
 
     createTable: function (tableSchema) {      

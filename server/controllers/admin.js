@@ -5,23 +5,25 @@ var express      = require('express'),
   printlog       = require('./../helpers').printlog;
 
 router.get('/drop/:table', function (req, res) {
-  printlog('GET /admin/drop/:table', 'route');
   var tableName = req.params.table;
   tableName = tableName || '';
 
+  printlog('GET /admin/drop/:table', 'route');    
+
   db.dropTable(tableName).catch(function (err) {
+    printlog(err, 'error');
     res.render('signup', {
       err: err
     });
   });
 });
 
-router.get('/', function (req, res) {
-  printlog('GET /admin', 'route');
-      
+router.get('/', function (req, res) {      
   var offset = new Date().getTimezoneOffset() / -60, 
     i,
     len;
+
+    printlog('GET /admin', 'route');
     
     if (process.env.MD === 'true') {
       res.render('admin', {
@@ -56,7 +58,7 @@ router.get('/', function (req, res) {
       res.render('admin', {rows: rows});
     })
     .catch(function (err) {      
-      printlog('getTable() error ---> ' + err);
+      printlog('getTable() error ---> ' + err, 'error');
     });
 });
 
