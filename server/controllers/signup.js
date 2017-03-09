@@ -47,12 +47,13 @@ router.post('/', function (req, res) {
     
     // Store hash in your password DB. 
     db.addUser({
-      email: body.email || '',
-      hash: hash,
-      password: body.pwd || '',
-      isAdmin: false,
-      table: 'users'
-    }).then(function () {
+      table: 'users',
+      columns: ['email','password','lastlogin','isadmin'],
+      values: [body.email, hash, Date.now(), false],
+      key: 'email',
+      keyval: body.email
+    })           
+    .then(function () {
       // redirect to lobby after user has signed up
       res.render('lobby', {});
     }).catch(function (err) {
