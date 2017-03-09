@@ -14,7 +14,7 @@
     "istanbul": "istanbul cover test.js",
     "test": "mocha test"
   },
-  "pre-commit": [
+  "pre-push": [
     "lint",
     "test"
   ],
