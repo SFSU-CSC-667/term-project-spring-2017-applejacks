@@ -47,9 +47,9 @@ db.createTable({name: 'users'})
 });
 
 app.listen(port, function() {
-  printlog('Server started on port ' + port);
-  printlog('Using mockdata: ' + (process.env.MD === true ? 'TRUE' : 'FALSE'));
+  printlog('Server started on port ' + port, 'init');
+  printlog('Using mockdata: ' + (process.env.MD === true ? 'TRUE' : 'FALSE'), 'init');
   if (process.env.NODE_ENV === 'development') {
-    printlog('~~~~~  DEV MODE  ~~~~~');
+    printlog('~~~~~  DEV MODE  ~~~~~', 'init');
   }
 });

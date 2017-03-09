@@ -6,9 +6,24 @@ var pg        = require('pg'),
   db = {
     _datab: null,
 
+    _dbAlive: false,
+
     init: function () {
       // create instance of db, one per application      
-      this._datab = this._datab || pgp(this._getConfig());      
+      this._datab = this._datab || pgp(this._getConfig());  
+      this._dbAlive = this._datab.constructor.name === 'Database' ? true : false;
+      if (this._dbAlive) {
+        printlog( ('Connected to Postgres table ' + this._getDbName()) );
+      } else {
+        printlog('Failed to connect to db!');
+      }
+    },
+
+    _getDbName: function () {
+      var str = process.env.DATABASE_URL || '',
+        params = url.parse(str) || {};
+      
+      return params.pathname ? params.pathname.split('/')[1] : '[sambecker]';
     },
 
     _getConfig: function () {
@@ -38,7 +53,7 @@ var pg        = require('pg'),
     },
 
     createTable: function (tableSchema) {      
-      printlog('Connected to postgres! Creating new table... [' + tableSchema.name + ']');        
+      printlog('Attempting create table... [' + tableSchema.name + ']');        
 
       // `postgresdb-# \d <name>` will display the created table
       return this._datab.none('CREATE TABLE ' + tableSchema.name + '(' +
@@ -49,20 +64,31 @@ var pg        = require('pg'),
       );        
     },
 
-    dropTable: function (tableName) {     
-      if (tableName.indexOf(',') !== -1) {
+    dropTable: function (tableName) {           
+      // trying to prevent malicious attacks by not allowing ';drop table <name>;'
+      if (~tableName.indexOf(';')) {
         return;
       }
 
+      printlog('Attempting drop table... ['+ tableName +']');        
       return this._datab.none('drop table ' + tableName);
     },
 
-    getTable: function (tableName) {           
+    getTable: function (tableName) {   
+      printlog('Attempting get table... ['+ tableName +']');        
       return this._datab.any('select * from ' + tableName);
     },
 
+    /**
+     * Adding user to database
+
+     * @param {String} data.table - table name
+     * @param {String} data.email - unique email
+     * @param {String} data.hash - hashed password created in routing controller
+     * @param {Boolean} data.isadmin - is the user an admin
+     */
     addUser: function (data) {           
-      printlog('Connected to postgres! Inserting user... ['+ data.email +']');
+      printlog('Attempting insert user... ['+ data.email +']');
       return this._datab.tx(function (t) {
         // batch queries
         var q1 = t.none('SELECT * FROM ' + data.table + ' WHERE email=$1', [data.email]),
@@ -73,26 +99,38 @@ var pg        = require('pg'),
           isadmin: data.isAdmin
         });
      
-        // will successfully resolve if each query resolves in succession
-        // all of the queries are to be resolved; 
+        // will successfully resolve if each query resolves in succession        
         return t.batch([q1, q2]); 
       });              
     },
 
-    deleteUser: function (data) {
-      printlog('Connected to postgres! Removing user... ['+ data.email +']');
+    updateUser: function (options) {
+      printlog('Attempting update user... ['+ options.email +']');
       return this._datab.tx(function (t) {
         // batch queries
         var q1 = t.one('SELECT * FROM ' + data.table + ' WHERE email=$1', [data.email]),
           q2 = t.none('DELETE FROM ' + data.table + ' WHERE email=$1', [data.email]);
     
-        // will successfully resolve if each query resolves in succession
-        // all of the queries are to be resolved; 
+        // will successfully resolve if each query resolves in succession        
+        return t.batch([q1,q2]); 
+      });  
+    },
+
+    deleteUser: function (data) {
+      printlog('Attempting remove user... ['+ data.email +']');
+      return this._datab.tx(function (t) {
+        // batch queries
+        var q1 = t.one('SELECT * FROM ' + data.table + ' WHERE email=$1', [data.email]),
+          q2 = t.none('DELETE FROM ' + data.table + ' WHERE email=$1', [data.email]);
+    
+        // will successfully resolve if each query resolves in succession        
         return t.batch([q1,q2]); 
       });  
     }
   };
 
+// create database instance
+// setup any configs
 db.init();
 
 module.exports.db = db;
