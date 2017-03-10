@@ -54,7 +54,7 @@ router.post('/', function (req, res) {
     })           
     .then(function () {
       // redirect to lobby after user has signed up
-      res.render('lobby', {});
+      res.redirect('/lobby');
     }).catch(function (err) {
       // if user sign up fails, send user the error
       res.render('signup', {
