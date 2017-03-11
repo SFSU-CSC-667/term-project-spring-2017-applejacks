@@ -32,9 +32,9 @@ var url       = require('url'),
     _getDbName: function () {
       var str = process.env.DATABASE_URL || '',
         params = url.parse(str) || {};
-      
+            
       // es6 syntax for simplicity
-      return params.pathname ? params.pathname.split('/')[1] : `[${this._localDbName}]`;
+      return params.pathname ? `[${params.pathname.split('/')[1]}]` : `[${this._localDbName}]`;
     },
 
     _getConfig: function () {
