@@ -9,8 +9,8 @@ var url       = require('url'),
     // has a successful connection been made with postgres db
     _dbConnected: false,
 
-    // add your own local postgres db name here
-    _localDbName: 'sambecker', 
+    // This gets set in the init() after postgres looks for a database to connect with
+    _localDbName: null,
 
     init: function () {      
       // create instance of db, one per application      
@@ -19,8 +19,9 @@ var url       = require('url'),
         .then(obj => {            
             printlog('Connected to database [' + obj.client.database + ']');
             this._dbConnected = true;
+            this._localDbName = obj.client.database;
             // release connection
-            return obj.done();
+            return obj.done(); 
         })
         .catch(error => {
           printlog('Failed to connect to database', 'error');
@@ -32,10 +33,10 @@ var url       = require('url'),
     _getDbName: function () {
       var str = process.env.DATABASE_URL || '',
         params = url.parse(str) || {};
-            
+
       // es6 syntax for simplicity
       return params.pathname ? `[${params.pathname.split('/')[1]}]` : `[${this._localDbName}]`;
-    },
+    },    
 
     _getConfig: function () {
       var str = process.env.DATABASE_URL || '',
@@ -65,7 +66,7 @@ var url       = require('url'),
       printlog('Attempting create table... [' + tableSchema.name + ']');        
 
       // `postgresdb-# \d <name>` will display the created table
-      return this._datab.none('CREATE TABLE ' + tableSchema.name + '(' +
+      return this._datab.none('CREATE TABLE IF NOT EXISTS ' + tableSchema.name + '(' +
           'email VARCHAR(60) PRIMARY KEY UNIQUE,' +
           'password VARCHAR(100) not null,' +
           'lastlogin BIGSERIAL,' +

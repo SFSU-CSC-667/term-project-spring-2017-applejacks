@@ -44,7 +44,8 @@ if (app.get('env') === 'development') {
 // initialize database and create game tables if needed
 db.init().then(_ => {
   db.createTable({name: 'users'})
-  .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));  
+  .then(res => printlog('Table [users] created.'))
+  .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));
 });
 
 app.listen(port, function() {
