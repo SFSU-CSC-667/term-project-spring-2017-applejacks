@@ -159,7 +159,7 @@ var url       = require('url'),
      * INSERT INTO users (email,password,lastlogin,isadmin) VALUES
      *   ('testemail@gmail','$2a$08$sKQtgvGw3a8SujWUXqUFduesv',1489028533344,false)
      *
-     * @param {String} data.table - table name
+     * @param {String} data.tableName - table name
      * @param {Array} data.values - array of values
      * @param {Array} data.columns - the table columns the values will map to
      * @param {String} data.key - the unique column name
@@ -170,7 +170,7 @@ var url       = require('url'),
         return '';
       }
 
-      if (!data.table) {
+      if (!data.tableName) {
         printlog('Error: buildInsert() no table name', 'error');
         return '';
       }
@@ -215,7 +215,7 @@ var url       = require('url'),
 
         return accumulator + str;
       }, '(');
-      let baseStr = `INSERT INTO ${data.table} ${columnString} VALUES ${valueString}`;
+      let baseStr = `INSERT INTO ${data.tableName} ${columnString} VALUES ${valueString}`;
 
       return baseStr;
     },
@@ -223,25 +223,19 @@ var url       = require('url'),
     addUser: function (data) {
       printlog('Attempting insert user... ['+ data.key +']');
 
-      return this._datab.tx(function (t) {
-        var q2Str = this._buildInsertQuery({
-          table: data.table,
-          columns: data.columns,
-          values: data.values
-        }),
-        q1Str, q1, q2;
-
-        data.keyval = data.values[data.columns.indexOf(data.key)];
-        q1Str = `SELECT * FROM ${data.table} WHERE ${data.key}='${data.keyval}'`;
-        q1 = t.none(q1Str);
-        q2 = t.any(q2Str);
+      return this._datab.tx(t => {
+        let q2Str = this._buildInsertQuery(data);
+        let keyval = data.values[data.columns.indexOf(data.key)];
+        let q1Str = `SELECT * FROM ${data.tableName} WHERE ${data.key}='${keyval}'`;
+        let q1 = t.none(q1Str);
+        let q2 = t.any(q2Str);
 
         printlog(q1Str, 'db');
         printlog(q2Str, 'db');
 
         // will successfully resolve if each query resolves in succession
         return t.batch([q1, q2]);
-      }.bind(this));
+      });
     },
 
     updateUser: function (data) {

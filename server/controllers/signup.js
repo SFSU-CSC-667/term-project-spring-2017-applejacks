@@ -20,7 +20,7 @@ router.get('/', function (req, res) {
  */
 router.post('/', function (req, res) {
   printlog('POST /signup', 'route');
-  var body = req.body || {},    
+  var body = req.body || {},
 
   /*
    * Cost of increasing number of salt rounds
@@ -43,15 +43,15 @@ router.post('/', function (req, res) {
   }
 
   bcrypt.hash(body.pwd, saltRounds, function (err, hash) {
-    printlog('bcrypt generated hash -> ' + hash);    
-    
-    // Store hash in your password DB. 
+    printlog('bcrypt generated hash -> ' + hash);
+
+    // Store hash in your password DB.
     db.addUser({
-      table: 'users',
+      tableName: 'users',
       columns: ['email','password','lastlogin','isadmin'],
       values: [body.email, hash, Date.now(), false],
-      key: 'email'      
-    })           
+      key: 'email'
+    })
     .then(function () {
       // redirect to lobby after user has signed up
       res.redirect('/lobby');
