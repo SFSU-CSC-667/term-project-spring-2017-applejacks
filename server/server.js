@@ -10,7 +10,7 @@ var express  = require('express'),
   appRouter  = require('./controllers'),
   env        = process.env.NODE_ENV || 'production',
   port       = process.env.PORT || 3000,
-  sess; 
+  sess;
 
 app.set('env', env);
 
@@ -43,7 +43,13 @@ if (app.get('env') === 'development') {
 
 // initialize database and create game tables if needed
 db.init().then(_ => {
-  db.createTable({name: 'users'})
+  db.createTable({
+    ifNotExists: true,
+    tableName: 'users',
+    uniqueId: false,
+    columns: ['email', 'password', 'lastlogin', 'isadmin'],
+    types: ['vc-60 u nn pk', 'vc-100 nn', 'bs', 'bool']
+  })
   .then(res => printlog('Table [users] created.'))
   .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));
 });
