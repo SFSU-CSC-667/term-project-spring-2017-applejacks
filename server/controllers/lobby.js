@@ -1,13 +1,13 @@
 /* signup routes */
-var express      = require('express'),
-  router         = express.Router(),
-  printlog       = require('./../helpers').printlog;
+const router = require('express').Router();
+const db = require('./../database');
+const printlog = require('./../helpers').printlog;
 
 
-function outputDeck () {
-    var values = [1,2,3,4,5,6,7,8,9,10,'J','Q','K','A'],
-  suits = ['spades', 'diamonds', 'clubs', 'hearts'],
-   cards = [];
+const outputDeck = () => {
+  const values = [1,2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
+  const suits = ['spades', 'diamonds', 'clubs', 'hearts'];
+  let cards = [];
 
   for (var i=0; i<suits.length; i++) {
     for (var k=0; k<values.length; k++) {
@@ -20,13 +20,13 @@ function outputDeck () {
       });
     }
   }
-  
-  return cards;
-}
 
-router.get('/', function (req, res) {
+  return cards;
+};
+
+router.get('/', (req, res) => {
   printlog('GET /lobby', 'route');
-  
+
   res.render('lobby', {
     cards: outputDeck()
   });

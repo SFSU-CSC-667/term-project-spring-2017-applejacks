@@ -1,16 +1,15 @@
 /* login routes */
-var express      = require('express'),
-  router         = express.Router(),
-  db             = require('./../database').db, // ./database is the relative path
-  printlog       = require('./../helpers').printlog;
+const router = require('express').Router();
+const db = require('./../database');
+const printlog = require('./../helpers').printlog;
 
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
   printlog('POST /login', 'route');
   // TODO: add middleware auth here
-  
-  // Load hash from your password DB. 
+
+  // Load hash from your password DB.
   // bcrypt.compare(myPlaintextPassword, hash, function(err, res) {
-  //     // res == true 
+  //     // res == true
   // });
 
   // redirect to lobby after user has logged in

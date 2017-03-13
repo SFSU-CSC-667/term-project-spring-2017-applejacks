@@ -1,21 +1,16 @@
-var express      = require('express'),
-  router         = express.Router(),
-  signUpRoutes   = require('./signup'),
-  loginRoutes    = require('./login'),
-  adminRoutes    = require('./admin'),
-  lobbyRoutes    = require('./lobby'),
-  printlog       = require('./../helpers').printlog;
+const router = require('express').Router();
+const printlog = require('./../helpers').printlog;
 
 // load all App routes
-router.use('/signup', signUpRoutes);
-router.use('/login',  loginRoutes);
-router.use('/admin',  adminRoutes);
-router.use('/lobby',  lobbyRoutes);
+router.use('/signup', require('./signup'));
+router.use('/login',  require('./login'));
+router.use('/admin',  require('./admin'));
+router.use('/lobby',  require('./lobby'));
 
 // index route
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   printlog('GET /', 'route');
-  
+
   res.render('home', {
     user: {
       isAdmin: true,

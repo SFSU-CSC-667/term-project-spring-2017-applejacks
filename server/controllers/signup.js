@@ -1,26 +1,22 @@
 /* signup routes */
-var express      = require('express'),
-  bcrypt         = require('bcrypt'),
-  router         = express.Router(),
-  db             = require('./../database').db, // ./database is the relative path
-  printlog       = require('./../helpers').printlog;
+const router = require('express').Router();
+const bcrypt = require('bcrypt');
+const db = require('./../database');
+const printlog = require('./../helpers').printlog;
 
 /*
  * GET - desktop route
  */
-router.get('/', function (req, res) {
+router.get('/', (req, res) => {
   printlog('GET /signup', 'route');
-  res.render('signup', {
-
-  });
+  res.render('signup', {});
 });
 
 /*
  * POST - API
  */
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
   printlog('POST /signup', 'route');
-  var body = req.body || {},
 
   /*
    * Cost of increasing number of salt rounds
@@ -30,7 +26,8 @@ router.post('/', function (req, res) {
    * rounds=10: ~10 hashes/sec
    * rounds=11: ~5  hashes/sec
    */
-    saltRounds = 8;
+  const saltRounds = 8;
+  const body = req.body || {};
 
   if (!Object.keys(body).length) {
     printlog('Error --> POST data did not exist', 'error');
@@ -42,7 +39,7 @@ router.post('/', function (req, res) {
     return;
   }
 
-  bcrypt.hash(body.pwd, saltRounds, function (err, hash) {
+  bcrypt.hash(body.pwd, saltRounds, (err, hash) => {
     printlog('bcrypt generated hash -> ' + hash);
 
     // Store hash in your password DB.
@@ -52,10 +49,11 @@ router.post('/', function (req, res) {
       values: [body.email, hash, Date.now(), false],
       key: 'email'
     })
-    .then(function () {
+    .then(() => {
       // redirect to lobby after user has signed up
       res.redirect('/lobby');
-    }).catch(function (err) {
+    })
+    .catch((err) => {
       // if user sign up fails, send user the error
       res.render('signup', {
         err: err
