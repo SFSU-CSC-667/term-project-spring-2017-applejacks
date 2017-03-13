@@ -18,7 +18,7 @@ before(function () {
 describe('#addUser()', function () {
   it('add new user to database', function () {
     db.addUser({
-      table: 'testtable',
+      tableName: 'testtable',
       columns: ['email','password','lastlogin','isadmin'],
       values: ['tester@gmail.com', 'hash123', 1489039539666, false],
       key: 'email',
