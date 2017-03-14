@@ -2,9 +2,11 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
-const session = require('express-session');
 const printlog = require('./helpers').printlog;
-// const session = require('express-session');
+const SessionAuthentication = require('./session-auth');
+
+const app = express();
+const sessionAuth = new SessionAuthentication();
 
 function ServerController () {
 
@@ -25,7 +27,6 @@ ServerController.prototype.getPort = (port) => {
 };
 
 ServerController.prototype.createServer = (routers) => {
-  const app = express();
   app.set('env', process.env.NODE_ENV || 'production');
   app.set('view engine', '.hbs');
 
@@ -39,6 +40,10 @@ ServerController.prototype.createServer = (routers) => {
   }));
   app.use(bodyParser.json());
   app.use(express.static(path.join(__dirname, '/../public')));
+
+  sessionAuth.newSession({
+    app: app
+  });
 
   // load routes
   routers.forEach((val) => {

@@ -192,6 +192,20 @@ function DatabaseController () {
     return _datab.none(query);
   };
 
+  /**
+   * data.tableName, data.key, data.val
+   */
+  this.getPassword = (data) => {
+    data = data || {};
+    printlog(`Attempting get... [${data.key}=${data.val}]`);
+
+    // `postgresdb-# \d <name>` will display the created table
+    const query = `select password from ${data.tableName} where ${data.key}='${data.val}'`;
+    printlog(query, 'db');
+
+    return _datab.one(query);
+  };
+
   this.dropTable = (tableName) => {
     const queryString = `drop table ${tableName}`;
     // trying to prevent malicious attacks by not allowing ';drop table <name>;'
@@ -217,7 +231,9 @@ function DatabaseController () {
 
   this.addUser = (data) => {
     printlog('Attempting insert user... ['+ data.key +']');
-
+    // ****
+    // ON CONFLICT DO NOTHING
+    // ****
     return _datab.tx((t) => {
       const q2Str = _buildInsertQuery(data);
       const keyval = data.values[data.columns.indexOf(data.key)];

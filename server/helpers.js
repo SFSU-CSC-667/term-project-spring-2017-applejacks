@@ -32,8 +32,8 @@ var helpers = {
       pref = '->  ',
       dbPref = '    ';
 
-    str = str.toString();  
-    
+    // str = str.toString();
+
     if (true || isDevMode) {
       switch (type) {
         case 'route':
@@ -46,17 +46,17 @@ var helpers = {
           break;
         case 'init':
           // do not change this to printlog() !!!!!
-          console.log(str);  
+          console.log(str);
           break;
         case 'db':
           // do not change this to printlog() !!!!!
-          console.log(dbPref + '\x1b[34m%s\x1b[0m',str);  
+          console.log(dbPref + '\x1b[34m%s\x1b[0m',str);
           break;
-        default: 
+        default:
           // do not change this to printlog() !!!!!
-          console.log(pref + str);  
+          console.log(pref + str);
           break;
-      }      
+      }
     }
   }
 };

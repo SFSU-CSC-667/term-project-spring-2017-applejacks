@@ -13,8 +13,8 @@ router.get('/', (req, res) => {
 
   res.render('home', {
     user: {
-      isAdmin: true,
-      username: 'admin'
+      isAdmin: req.session.isAdmin,
+      username: req.session.name
     }
   });
 });
