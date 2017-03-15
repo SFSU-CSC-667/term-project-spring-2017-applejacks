@@ -19,6 +19,10 @@ function DatabaseController () {
     return params.pathname ? `[${params.pathname.split('/')[1]}]` : `[${_localDbName}]`;
   };
 
+  this.getDbInstance = () => {
+    return _datab;
+  };
+
   /**
    * Create CREATE query string
    * CREATE TABLE IF NOT EXISTS users (
@@ -162,6 +166,18 @@ function DatabaseController () {
     // See documentation for default values
     // https://github.com/brianc/node-postgres/wiki/Client
     return {};
+  };
+
+  this.createSessionTable = () => {
+    const query = `CREATE TABLE IF NOT EXISTS "session" (
+       "sid" varchar NOT NULL COLLATE "default",
+       "sess" json NOT NULL,
+       "expire" timestamp(6) NOT NULL
+     )
+     WITH (OIDS=FALSE);
+     ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE`;
+
+     return _datab.none(query);
   };
 
   this.init = () => {

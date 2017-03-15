@@ -29,7 +29,11 @@ router.get('/', (req, res) => {
   printlog('GET /lobby', 'route');
 
   res.render('lobby', {
-    cards: outputDeck()
+    cards: outputDeck(),
+    user: {
+      isAdmin: req.session.isAdmin,
+      username: req.session.name
+    }
   });
 });
 

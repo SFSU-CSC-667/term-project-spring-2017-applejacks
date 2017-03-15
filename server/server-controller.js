@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const printlog = require('./helpers').printlog;
 const SessionAuthentication = require('./session-auth');
+const db = require('./database');
 
 const app = express();
 const sessionAuth = new SessionAuthentication();
@@ -41,6 +42,10 @@ ServerController.prototype.createServer = (routers) => {
   app.use(bodyParser.json());
   app.use(express.static(path.join(__dirname, '/../public')));
 
+  db.createSessionTable()
+  .catch((err) => {
+    printlog(err);
+  });
   sessionAuth.newSession({
     app: app
   });

@@ -6,6 +6,7 @@ router.use('/signup', require('./signup'));
 router.use('/login',  require('./login'));
 router.use('/admin',  require('./admin'));
 router.use('/lobby',  require('./lobby'));
+router.use('/logout',  require('./logout'));
 
 // index route
 router.get('/', (req, res) => {

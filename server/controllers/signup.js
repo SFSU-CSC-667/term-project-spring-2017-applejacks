@@ -9,7 +9,12 @@ const printlog = require('./../helpers').printlog;
  */
 router.get('/', (req, res) => {
   printlog('GET /signup', 'route');
-  res.render('signup', {});
+  res.render('signup', {
+    user: {
+      isAdmin: req.session.isAdmin,
+      username: req.session.name
+    }
+  });
 });
 
 /*

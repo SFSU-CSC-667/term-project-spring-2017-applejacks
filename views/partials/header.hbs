@@ -10,6 +10,9 @@
     <li class="header-link"><a href="/">Home</a></li>
     <li class="header-link"><a href="/signup">Sign Up</a></li>
     <li class="header-link"><a href="/lobby">Lobby</a></li>
+    {{#if user.username}}
+      <li class="header-link"><a href="/logout">Log out</a></li>
+    {{/if}}
   </ul>
 
   <!-- Login button -->
