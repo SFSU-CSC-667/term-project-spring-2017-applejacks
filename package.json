@@ -5,13 +5,14 @@
   "main": "server/server.js",
   "scripts": {
     "start": "npm run buildTemplates && node server/server.js",
-    "app": "npm run buildTemplates && NODE_ENV=development MD=false nodemon --watch server --watch databse.js server/server.js",
+    "app": "npm run verify && npm run buildTemplates && NODE_ENV=development MD=false nodemon --watch server --watch databse.js server/server.js",
     "mock": "npm run build && NODE_ENV=development MD=true nodemon --watch server server/server.js",
     "build": "echo \"minify and compress...\"",
     "buildTemplates": "handlebars -m views/clientPartials/*.hbs -f public/js/templates.min.js",
     "lint": "jshint server",
     "coverage": "istanbul cover test.js",
     "istanbul": "istanbul cover test.js",
+    "verify": "npm-check -s --no-emoji || true",
     "test": "mocha test"
   },
   "pre-push": [
@@ -34,17 +35,18 @@
   "dependencies": {
     "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
-    "body-parser": "^1.17.0",
+    "body-parser": "^1.17.1",
     "connect-pg-simple": "^3.1.2",
-    "express": "^4.15.0",
+    "express": "^4.15.2",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.1",
     "handlebars": "^4.0.6",
     "jshint": "^2.9.4",
     "nodemon": "^1.11.0",
+    "npm-check": "^5.4.0",
     "path": "^0.12.7",
-    "pg": "^6.1.2",
-    "pg-promise": "^5.6.3",
+    "pg": "^6.1.4",
+    "pg-promise": "^5.6.4",
     "url": "^0.11.0"
   },
   "devDependencies": {
