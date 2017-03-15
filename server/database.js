@@ -293,11 +293,11 @@ function DatabaseController () {
 
     return _datab.tx(function (t) {
       // batch queries
-      let q1 = t.one('SELECT * FROM ' + data.table + ' WHERE email=$1', [data.email]);
-      let q2 = t.none('DELETE FROM ' + data.table + ' WHERE email=$1', [data.email]);
+      let q1 = t.one('SELECT * FROM ${table~} WHERE email = ${email}', data);
+      let q2 = t.none('DELETE FROM ${table~} WHERE email = ${email}', data);
 
       // will successfully resolve if each query resolves in succession
-      return t.batch([q1,q2]);
+      return t.batch([q1, q2]);
     });
   };
 }
