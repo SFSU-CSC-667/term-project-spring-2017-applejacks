@@ -277,7 +277,7 @@ function DatabaseController () {
 
     return _datab.tx((t) => {
       // batch queries
-      let q1 = t.one('SELECT * FROM ${tableName~} WHERE ${col~} = ${oldval}');
+      let q1 = t.one('SELECT * FROM ${tableName~} WHERE ${col~} = ${oldval}', data);
       let q2 = t.none('UPDATE ${tableName~} SET ${col~} = ${newval} WHERE ${col~} = ${oldval}', data);
 
       printlog(q1Str, 'db');
