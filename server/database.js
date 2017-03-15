@@ -253,8 +253,7 @@ function DatabaseController () {
     return _datab.tx((t) => {
       const q2Str = _buildInsertQuery(data);
       const keyval = data.values[data.columns.indexOf(data.key)];
-      const q1Str = `SELECT * FROM ${data.tableName} WHERE ${data.key}='${keyval}'`;
-      const q1 = t.none(q1Str);
+      const q1 = t.none('SELECT * FROM $1~ WHERE $2~ = $3', [data.tableName, data.key, keyval]);
       const q2 = t.any(q2Str);
 
       printlog(q1Str, 'db');
@@ -278,16 +277,14 @@ function DatabaseController () {
 
     return _datab.tx((t) => {
       // batch queries
-      let q1Str = `SELECT * FROM ${data.tableName} WHERE ${data.col}='${data.oldval}'`;
-      let q2Str = `UPDATE ${data.tableName} set ${data.col}='${data.newval}' where ${data.col}='${data.oldval}'`;
-      let q1 = t.one(q1Str);
-      let q2 = t.none(q2Str);
+      let q1 = t.one('SELECT * FROM ${tableName~} WHERE ${col~} = ${oldval}');
+      let q2 = t.none('UPDATE ${tableName~} SET ${col~} = ${newval} WHERE ${col~} = ${oldval}', data);
 
       printlog(q1Str, 'db');
       printlog(q2Str, 'db');
 
       // will successfully resolve if each query resolves in succession
-      return t.batch([q1,q2]);
+      return t.batch([q1, q2]);
     });
   };
 
