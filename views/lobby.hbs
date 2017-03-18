@@ -1,9 +1,29 @@
 <main id="lobby-page">
   <h1>Lobby page</h1>
 
-  <div style="display:flex;flex-wrap:wrap;">
-    {{#each cards}}
-      {{>card}}
-    {{/each}}
-  </div>
+  <table class="lobby-page--table">
+    <tbody>
+      {{!-- Example data --}}
+      <tr class="lobby-page--table-item">
+        <td>Game 1</td>
+        <td>1/4</td>
+      </tr>
+      <tr class="lobby-page--table-item__full">
+        <td>Game 2</td>
+        <td>4/4</td>
+      </tr>
+      {{!-- Loop over each game and display as a row in lobby table --}}
+      {{#each games}}
+        <tr>
+          <td>{{name}}</td>
+          <td>{{count}}/{{maxCapacity}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+
 </main>
+
+<!-- add js files here -->
+<script src="js/lobby.js"></script>

@@ -1,3 +1,22 @@
 #lobby-page {
   padding: 12px 24px 0;
 }
+
+.lobby-page--table {
+  margin: 20px;
+  border: 1px solid #aaa;
+  width: 300px;
+}
+
+.lobby-page--table-item {
+  cursor: pointer;
+}
+
+.lobby-page--table-item:hover {
+  background-color: lightblue;
+}
+
+.lobby-page--table-item__full {
+  opacity: .3;
+  cursor: initial;
+}
