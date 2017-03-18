@@ -1,6 +1,13 @@
 const url = require('url');
 const printlog = require('./helpers').printlog;
-const pgp = require('pg-promise')();
+
+var options = {
+  query: function(e){
+    console.log('QUERY', e.query);
+  }
+};
+
+const pgp = require('pg-promise')(options);
 
 function DatabaseController () {
   // instance of the pg-promise library object
