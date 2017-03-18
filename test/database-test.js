@@ -1,4 +1,4 @@
-const db = require('./../server/database');
+const db = require('./../database/database');
 const should = require('chai').should();
 // test vars
 const TEST_TABLE = 'testtable';
