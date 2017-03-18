@@ -3,7 +3,7 @@ const printlog = require('./helpers').printlog;
 
 var options = {
   query: function(e){
-    console.log('QUERY', e.query);
+    console.log('QUERY:', e.query);
   }
 };
 
