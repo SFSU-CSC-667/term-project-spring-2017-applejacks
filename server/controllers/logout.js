@@ -1,8 +1,8 @@
 /* log out routes */
 const express = require('express');
 const router = require('express').Router();
-const db = require('./../database');
-const printlog = require('./../helpers').printlog;
+const db = require('./../../database/database');
+const printlog = require('./../../utils/helpers').printlog;
 
 
 router.get('/', (req, res) => {

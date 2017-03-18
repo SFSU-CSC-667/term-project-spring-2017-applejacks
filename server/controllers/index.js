@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const printlog = require('./../helpers').printlog;
+const printlog = require('./../../utils/helpers').printlog;
 
 // load all App routes
 router.use('/signup', require('./signup'));

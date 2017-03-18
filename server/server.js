@@ -1,6 +1,6 @@
-const db = require('./database');
+const db = require('./../database/database');
 const serverController = require('./server-controller');
-const printlog = require('./helpers').printlog;
+const printlog = require('./../utils/helpers').printlog;
 
 // initialize database and create game tables if needed
 db.init().then(() => {

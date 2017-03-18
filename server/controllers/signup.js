@@ -1,8 +1,8 @@
 /* signup routes */
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
-const db = require('./../database');
-const printlog = require('./../helpers').printlog;
+const db = require('./../../database/database');
+const printlog = require('./../../utils/helpers').printlog;
 
 /*
  * GET - desktop route

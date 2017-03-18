@@ -1,5 +1,5 @@
 const url = require('url');
-const printlog = require('./helpers').printlog;
+const printlog = require('./../utils/helpers').printlog;
 const pgp = require('pg-promise')();
 
 function DatabaseController () {
