@@ -1,7 +1,7 @@
 /* login routes */
 const router = require('express').Router();
-const db = require('./../database');
-const printlog = require('./../helpers').printlog;
+const db = require('./../../database/database');
+const printlog = require('./../../utils/helpers').printlog;
 const bcrypt = require('bcrypt');
 
 router.post('/', (req, res) => {

@@ -2,9 +2,9 @@ const express = require('express');
 const exphbs = require('express-handlebars');
 const bodyParser = require('body-parser');
 const path = require('path');
-const printlog = require('./helpers').printlog;
+const printlog = require('./../utils/helpers').printlog;
 const SessionAuthentication = require('./session-auth');
-const db = require('./database');
+const db = require('./../database/database');
 
 const app = express();
 const sessionAuth = new SessionAuthentication();

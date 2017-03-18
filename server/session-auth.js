@@ -1,5 +1,5 @@
 const session = require('express-session');
-const db = require('./database');
+const db = require('./../database/database');
 
 function SessionAuthentication (options) {
   // run this query if getting "relation does not exist" error
