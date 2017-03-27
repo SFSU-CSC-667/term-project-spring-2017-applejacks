@@ -7,6 +7,7 @@ router.use('/login',  require('./login'));
 router.use('/admin',  require('./admin'));
 router.use('/lobby',  require('./lobby'));
 router.use('/logout',  require('./logout'));
+router.use('/chat',  require('./chat'));
 
 // index route
 router.get('/', (req, res) => {
