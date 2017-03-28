@@ -13,7 +13,7 @@ router.use('/chat',  require('./chat'));
 router.get('/', (req, res) => {
   printlog('GET /', 'route');
 
-  res.render('home', {
+  res.render('signup', {
     user: {
       isAdmin: req.session.isAdmin,
       username: req.session.name

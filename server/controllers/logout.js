@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
     if (err) {
       printlog(err);
     } else {
-      res.redirect(200, '/');
+      res.redirect('/');
     }
   });
 });

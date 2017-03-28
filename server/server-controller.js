@@ -5,8 +5,12 @@ const path = require('path');
 const printlog = require('./../utils/helpers').printlog;
 const SessionAuthentication = require('./session-auth');
 const db = require('./../database/database');
-
 const app = express();
+
+// socket.io setup
+app.io = require('socket.io')();
+
+// session authentication setup
 const sessionAuth = new SessionAuthentication();
 
 function ServerController () {
@@ -55,6 +59,7 @@ ServerController.prototype.createServer = (routers) => {
     app.use(val);
   });
 
+  
   return app;
 };
 
