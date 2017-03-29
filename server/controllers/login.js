@@ -24,7 +24,7 @@ router.post('/', (req, res) => {
 
         printlog(`${pwd}=${hash} -> ${resp}`);
         // redirect to lobby after user has logged in
-        res.redirect(200, '/');
+        res.redirect('/lobby');
       } else {
         printlog(`Password '${pwd}' does not match.`, 'error');
         res.redirect(401, '/signup');

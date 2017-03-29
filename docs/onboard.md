@@ -42,22 +42,22 @@ https://github.com/github/hub
 
 Get the latest code
 ```
-git co master
+git checkout master
 git pull
 ```
 
 Creating a feature branch (needed for pull request)
 ```
-git co -b feature-1
+git checkout -b feature-1
 git add .
 git commit -m "this is a commit message"
 ```
 
 I want to create a pull request. What to do?
 ```
-git co master
+git checkout master
 git pull
-git co feature-1
+git checkout feature-1
 git rebase master
 git push origin feature-1
 hub pull-request
@@ -65,7 +65,7 @@ hub pull-request
 
 Remove feature branch after PR has been reviewed and merged
 ```
-git co master
+git checkout master
 git pull
 git branch -D feature-1
 ```
@@ -73,6 +73,6 @@ git branch -D feature-1
 Small fix, no need for PR
 ```
 ## follow "feature branch" steps
-git co master
+git checkout master
 git merge --squash <branch name>
 ```

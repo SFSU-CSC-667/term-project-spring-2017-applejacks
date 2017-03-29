@@ -1,0 +1,55 @@
+<main id="chat-page">
+  <h1>Chat page</h1>
+  <style>
+      #chat{
+         height: 350px;
+         width: 350px;
+         border: 1px solid #aaa;
+      }
+  </style>
+  <body>
+    <div id="chat"></div>
+    <form id="send-message" method="post" action="/chat2">
+      <input size="35" id="message" name="message"></input>
+      <input type="submit"></input>
+    </form>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.runtime.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js'></script>
+    <script>
+      var socket = io.connect('http://localhost:3000/');
+      socket.on('news', function (data) {
+        console.log('DATA RECEIVED', data);
+        $('#chat').append('<p>' + data.hello + '</p>');
+        socket.emit('my other event', { my: 'data' });
+      });
+
+      //
+    </script>
+
+   <!--  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+       jQuery(function($){
+         var socket = io.connect();
+         var $messageForm = $('#send-message');
+         var $messageBox = $('#message');
+         var $chat = $('#chat');
+
+         $messageForm.submit(function(e){
+            e.preventDefault();
+            socket.emit('send message', $messageBox.val());
+            $messageBox.val('');
+         });
+
+         socket.on('new message', function(data){
+           $chat.append(data + "<br/>");
+         });
+       });
+
+      </script>  -->
+
+  </body>
+</main>

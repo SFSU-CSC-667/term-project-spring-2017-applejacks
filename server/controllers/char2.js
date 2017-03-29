@@ -4,17 +4,16 @@ const router = require('express').Router();
 const db = require('./../../database/database');
 const printlog = require('./../../utils/helpers').printlog;
 
-
 router.get('/', (req, res) => {
-  printlog('GET /logout', 'route');
+  printlog('GET /chat2', 'route');
+  res.render('chat')
 
-  req.session.destroy((err) => {
-    if (err) {
-      printlog(err);
-    } else {
-      res.redirect('/');
-    }
-  });
+});
+
+router.post('/', (req, res) => {
+  const {body} = req;
+  console.log('POST body -> ', body);
+  res.io.emit('news', { hello: body.message });
 });
 
 module.exports = router;

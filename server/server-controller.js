@@ -5,8 +5,9 @@ const path = require('path');
 const printlog = require('./../utils/helpers').printlog;
 const SessionAuthentication = require('./session-auth');
 const db = require('./../database/database');
-
 const app = express();
+
+// session authentication setup
 const sessionAuth = new SessionAuthentication();
 
 function ServerController () {
@@ -27,7 +28,9 @@ ServerController.prototype.getPort = (port) => {
   return process.env.PORT;
 };
 
-ServerController.prototype.createServer = (routers) => {
+ServerController.prototype.getApp = () => app;
+
+ServerController.prototype.createServer = (routers, app) => {
   app.set('env', process.env.NODE_ENV || 'production');
   app.set('view engine', '.hbs');
 

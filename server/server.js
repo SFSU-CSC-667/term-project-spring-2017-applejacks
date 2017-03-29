@@ -17,11 +17,40 @@ db.init().then(() => {
 
 const appRouter = require('./controllers');
 const port = serverController.getPort(3000);
-const app = serverController.createServer([appRouter]).listen(port, () => {
-  printlog('Server started on port ' + app.address().port, 'init');
+let app = serverController.getApp();
+
+// create express erver
+const appServer = app.listen(port, () => {
+  printlog('Server started on port ' + appServer.address().port, 'init');
   printlog('Using mockdata: ' + (process.env.MD === true ? 'TRUE' : 'FALSE'), 'init');
 
   if (process.env.NODE_ENV === 'development') {
     printlog('~~~~~  DEV MODE  ~~~~~', 'init');
   }
 });
+
+// Socket.io setup
+const io = require('socket.io')(appServer);
+let chatSocket = null;
+
+io.on('connection', function (socket) {
+  // chatSocket = chatSocket || socket;
+  chatSocket = socket;
+
+  console.log('connected');
+  chatSocket.emit('news', { hello: 'User joined' });
+  chatSocket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
+
+// middlewar to add "io" to response object
+app.use(function(req, res, next){
+  res.io = io;
+  next();
+});
+
+
+// setting up server
+app = serverController.createServer([appRouter], app);
