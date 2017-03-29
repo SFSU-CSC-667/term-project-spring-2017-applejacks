@@ -14,15 +14,15 @@ function SessionAuthentication (options) {
 }
 
 SessionAuthentication.prototype.newSession = (options) => {
-  // options.app.use(session({
-  //   name: 'null',
-  //   store: new (require('connect-pg-simple')(session))(),
-  //   secret: 'some other secret',
-  //   resave: false,
-  //   // tableName : 'sessions',
-  //   // schemaName: 'sambecker',
-  //   cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
-  // }));
+  options.app.use(session({
+    name: 'null',
+    store: new (require('connect-pg-simple')(session))(),
+    secret: 'some other secret',
+    resave: false,
+    // tableName : 'sessions',
+    // schemaName: 'sambecker',
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  }));
 };
 
 module.exports = SessionAuthentication;

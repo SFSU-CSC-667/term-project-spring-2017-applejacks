@@ -6,8 +6,7 @@ const printlog = require('./../../utils/helpers').printlog;
 
 router.get('/', (req, res) => {
   printlog('GET /chat2', 'route');
-  res.render('chat')
-
+  res.render('chat');
 });
 
 router.post('/', (req, res) => {
