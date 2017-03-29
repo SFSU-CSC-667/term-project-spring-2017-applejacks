@@ -8,7 +8,7 @@ db.init().then(() => {
   db.loadAndExecute(file)
   .then((query) => printlog(`${file} queried successfully.`))
   .catch((err) => printlog(err, 'error'));
-
+/*
   db.createTable({
     ifNotExists: true,
     tableName: 'users',
@@ -18,6 +18,7 @@ db.init().then(() => {
   })
   .then(res => printlog('Table [users] created.'))
   .catch(errObj => printlog('createTable() -> ' + errObj, 'error'));
+  */
 });
 
 const appRouter = require('./controllers');
