@@ -303,6 +303,20 @@ function DatabaseController () {
       return t.batch([q1,q2]);
     });
   };
+
+  // use this function to load a file to intialize all dataabase tables
+  // this will a good way to intialize the static "deck" and "card" tables
+  this.loadAndExecute = (file) => {
+    const loadedQuery = new pgp.QueryFile(file, {minify: true});
+
+    // Execute pre loaded queries
+    return _datab.one(loadedQuery)
+    .catch(error=> {
+      if (error instanceof pgp.errors.QueryFileError) {
+        console.log('Error in ' + file + '. Double check your queries');
+      }
+    });
+  };
 }
 
 module.exports = new DatabaseController();

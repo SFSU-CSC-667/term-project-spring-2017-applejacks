@@ -4,6 +4,11 @@ const printlog = require('./../utils/helpers').printlog;
 
 // initialize database and create game tables if needed
 db.init().then(() => {
+  const file = './../database/setup-queries.sql';
+  db.loadAndExecute(file)
+  .then((query) => printlog(`${file} queried successfully.`))
+  .catch((err) => printlog(err, 'error'));
+
   db.createTable({
     ifNotExists: true,
     tableName: 'users',
