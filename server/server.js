@@ -29,7 +29,6 @@ const appServer = app.listen(port, () => {
   }
 });
 
-
 // Socket.io setup
 const io = require('socket.io')(appServer);
 let chatSocket = null;
@@ -55,6 +54,3 @@ app.use(function(req, res, next){
 
 // setting up server
 app = serverController.createServer([appRouter], app);
-
-
-

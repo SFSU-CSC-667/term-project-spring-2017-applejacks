@@ -58,7 +58,6 @@ ServerController.prototype.createServer = (routers, app) => {
     app.use(val);
   });
 
-
   return app;
 };
 
