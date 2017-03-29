@@ -7,9 +7,6 @@ const SessionAuthentication = require('./session-auth');
 const db = require('./../database/database');
 const app = express();
 
-// socket.io setup
-app.io = require('socket.io')();
-
 // session authentication setup
 const sessionAuth = new SessionAuthentication();
 
@@ -31,7 +28,9 @@ ServerController.prototype.getPort = (port) => {
   return process.env.PORT;
 };
 
-ServerController.prototype.createServer = (routers) => {
+ServerController.prototype.getApp = () => app;
+
+ServerController.prototype.createServer = (routers, app) => {
   app.set('env', process.env.NODE_ENV || 'production');
   app.set('view engine', '.hbs');
 
@@ -59,7 +58,7 @@ ServerController.prototype.createServer = (routers) => {
     app.use(val);
   });
 
-  
+
   return app;
 };
 

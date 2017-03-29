@@ -8,6 +8,7 @@ router.use('/admin',  require('./admin'));
 router.use('/lobby',  require('./lobby'));
 router.use('/logout',  require('./logout'));
 router.use('/chat',  require('./chat'));
+router.use('/chat2',  require('./char2'));
 
 // index route
 router.get('/', (req, res) => {
