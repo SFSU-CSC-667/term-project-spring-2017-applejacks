@@ -38,7 +38,6 @@ io.on('connection', function (socket) {
   chatSocket = socket;
 
   console.log('connected');
-  chatSocket.emit('news', { hello: 'User joined' });
   chatSocket.on('my other event', function (data) {
     console.log(data);
   });

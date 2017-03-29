@@ -18,6 +18,44 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.runtime.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js'></script>
     <script>
+      /**
+       * A function to abstract away the native fetch()
+       *
+       * @param {String} url The url string being accessed
+       * @param {Object} data The options data used to create a Request
+       *
+       * @returns {Promise} A promise that resolves a server or api response as json
+       */
+      const makeAPICall = (url, data) => {
+        let options = {method, headers, mode, cache} = data;
+
+        options.mode = options.mode || 'same-origin';
+        if (options.headers === undefined) {
+          options.headers = new Headers();
+          options.headers.append("Content-type", "application/json");
+          options.headers.append("Accept", "application/json, text/plain");
+        }
+
+        let request = new Request(url, options);
+
+        return fetch(request).then((response) => response.json());
+      };
+
+      const messageForm = document.querySelector('#send-message');
+      messageForm.addEventListener('submit', (evt) => {
+        evt.preventDefault();
+        const message =  document.querySelector('#message');
+        const form = {
+          message: message.value || ''
+        };
+
+        makeAPICall('/chat2', {
+          "method": "post",
+          "body": JSON.stringify(form)
+        }).then(() => message.value = '');
+      });
+
+
       var socket = io.connect('http://localhost:3000/');
       socket.on('news', function (data) {
         console.log('DATA RECEIVED', data);
@@ -27,29 +65,6 @@
 
       //
     </script>
-
-   <!--  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-
-    <script>
-       jQuery(function($){
-         var socket = io.connect();
-         var $messageForm = $('#send-message');
-         var $messageBox = $('#message');
-         var $chat = $('#chat');
-
-         $messageForm.submit(function(e){
-            e.preventDefault();
-            socket.emit('send message', $messageBox.val());
-            $messageBox.val('');
-         });
-
-         socket.on('new message', function(data){
-           $chat.append(data + "<br/>");
-         });
-       });
-
-      </script>  -->
 
   </body>
 </main>
