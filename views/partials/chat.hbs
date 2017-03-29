@@ -1,10 +1,16 @@
+{{!--
+
+    PARTIAL
+
+--}}
+
 <main id="chat-page">
   <h1>Chat page</h1>
   <style>
       #chat{
          height: 350px;
-         width: 350px;
          border: 1px solid #aaa;
+         background-color: white;
       }
   </style>
   <body>
@@ -18,6 +24,8 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.runtime.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.6/handlebars.min.js'></script>
     <script>
+      const socket = io.connect('http://localhost:3000/');
+
       /**
        * A function to abstract away the native fetch()
        *
@@ -49,21 +57,21 @@
           message: message.value || ''
         };
 
+        if (!message.value) {
+          return;
+        }
+
         makeAPICall('/chat2', {
           "method": "post",
           "body": JSON.stringify(form)
         }).then(() => message.value = '');
+
       });
 
-
-      var socket = io.connect('http://localhost:3000/');
       socket.on('news', function (data) {
         console.log('DATA RECEIVED', data);
         $('#chat').append('<p>' + data.hello + '</p>');
-        socket.emit('my other event', { my: 'data' });
       });
-
-      //
     </script>
 
   </body>

@@ -1,0 +1,71 @@
+/*  margin-top: calc(var(--gap) * 1px); /* niiiiice */
+:root {
+  --user-section-height: 220px;
+  --card-width: calc(var(--user-section-height) * 3 / 5);
+}
+
+#game-page {
+  width: 75%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-section {
+  display: block;
+  clear: both;
+  border: 1px solid #bbb;
+  height: var(--user-section-height);
+  width: 90%;
+  position: relative;
+}
+
+.clearfix:after {
+  display: block;
+  width: 0;
+  clear: both;
+  content: "";
+}
+
+.user-section--actions {
+  display: flex;
+  float: right;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50%;
+  height: var(--user-section-height);
+}
+
+.user-section--hand {
+  display: inline-block;
+  height: 100%;
+}
+
+.user-section--card {
+  margin: 0;
+  height: 100%;
+  width: var(--card-width);
+}
+
+.user-secction--action__btn {
+  flex: .3;
+  background-color: #fff;
+  border: 1px solid #aaa;
+}
+
+.user-secction--action__btn:active {
+  background-color: #ddd;
+}
+
+.chat-section {
+  background-color: lightblue;
+  height: calc(100% - 65px);
+  width: 25%;
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  top: 65px;
+  right: 0;
+}

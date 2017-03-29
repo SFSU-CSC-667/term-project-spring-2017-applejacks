@@ -1,0 +1,34 @@
+
+<main id="game-page">
+
+  {{!-- Because card is a property of the root object,
+        there is no need to use this.card --}}
+  <div>
+    {{> card card }}
+  </div>
+
+   {{!-- {{mock.card.value}} --}}
+  <div>
+    {{#each dealerHand}}
+      <span style="float:left;">{{> card card=this}}</span>
+    {{/each}}
+  </div>
+
+  <div class="user-section">
+    <div class="user-section--hand">
+      {{#each userHand}}
+        <span style="float:left;height:100%;margin-right:8px;">{{> card card=this class="user-section--card"}}</span>
+      {{/each}}
+    </div>
+
+    <div class="user-section--actions">
+      <button class="user-secction--action__btn" type="button" data-action-place-bet >Place bet</button>
+      <button class="user-secction--action__btn" type="button" data-action-hit >Hit</button>
+      <button class="user-secction--action__btn" type="button" data-action-stay >Stay</button>
+    </div>
+  </div>
+</main>
+
+<aside id="chat-section" class="chat-section">
+  {{> chat}}
+</aside>

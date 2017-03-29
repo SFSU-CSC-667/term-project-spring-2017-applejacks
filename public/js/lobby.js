@@ -1,6 +1,7 @@
 /**
  * Lobby View for handling UI interactions of lobby page
  */
+
 const Lobby = () => {
     const PAGE_KEY = '#lobby-page';
     const page = document.querySelector(PAGE_KEY);
@@ -73,9 +74,8 @@ const Lobby = () => {
 // Create Lobby view controller
 const lobby = Lobby();
 
-// Call init to setup view
-lobby.init();
 
-// Example
-lobby.publicFunction(); // hello world
-console.log(lobby.privateVar); // undefined
+// Call init to setup view
+if (document.querySelectorAll('#lobby-page').length) {
+  lobby.init();
+}

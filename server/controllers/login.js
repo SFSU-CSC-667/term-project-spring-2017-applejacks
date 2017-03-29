@@ -24,7 +24,13 @@ router.post('/', (req, res) => {
 
         printlog(`${pwd}=${hash} -> ${resp}`);
         // redirect to lobby after user has logged in
-        res.redirect('/lobby');
+        res.redirect('/');
+
+        // allow page to render before emitting data that user joined
+        // this will be refactored once we attach sessions to socket
+        setTimeout(() => {
+          res.io.emit('news', { hello: `${req.session.name} joined.` });
+        }, 500);
       } else {
         printlog(`Password '${pwd}' does not match.`, 'error');
         res.redirect(401, '/signup');

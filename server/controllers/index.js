@@ -3,6 +3,7 @@ const printlog = require('./../../utils/helpers').printlog;
 
 // load all App routes
 router.use('/signup', require('./signup'));
+router.use('/game',  require('./game'));
 router.use('/login',  require('./login'));
 router.use('/admin',  require('./admin'));
 router.use('/lobby',  require('./lobby'));
@@ -14,7 +15,7 @@ router.use('/chat2',  require('./char2'));
 router.get('/', (req, res) => {
   printlog('GET /', 'route');
 
-  res.render('signup', {
+  res.render('game', {
     user: {
       isAdmin: req.session.isAdmin,
       username: req.session.name
