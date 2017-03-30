@@ -168,6 +168,7 @@ function DatabaseController () {
     return {};
   };
 
+/*
   this.createSessionTable = () => {
     const query = `CREATE TABLE IF NOT EXISTS "session" (
        "sid" varchar NOT NULL COLLATE "default",
@@ -179,6 +180,7 @@ function DatabaseController () {
 
      return _datab.none(query);
   };
+*/
 
   this.init = () => {
     // create instance of db, one per application

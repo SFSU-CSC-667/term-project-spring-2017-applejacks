@@ -45,10 +45,14 @@ ServerController.prototype.createServer = (routers, app) => {
   app.use(bodyParser.json());
   app.use(express.static(path.join(__dirname, '/../public')));
 
+/*
   db.createSessionTable()
   .catch((err) => {
     printlog(err);
   });
+*/
+
+  // start sessions
   sessionAuth.newSession({
     app: app
   });
