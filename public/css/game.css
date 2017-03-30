@@ -69,3 +69,16 @@
   top: 65px;
   right: 0;
 }
+
+#chat {
+  height: calc(100% - 120px);
+  width: 100%;
+  background-color: #FFF;
+  box-sizing: border-box;
+  border: 1px solid #aaa;
+  overflow: scroll;
+}
+
+#chat > li {
+  padding: 5px 0;
+}
