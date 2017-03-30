@@ -74,6 +74,27 @@ const Game = () => {
     return fetch(request).then((response) => response.json());
   };
 
+  const shuffle = (deck) => {
+    const getRandomInt = (min, max) => {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    };
+    const len = deck.length;
+
+    return deck.map((val, i) => {
+      if (i >= len - 2) {
+        return val;
+      }
+
+      let rand = getRandomInt(i,len);
+      let buffer = deck[rand];
+      deck[rand] = val;
+
+      return buffer;
+    });
+  };
+
   /**
    * Handler for when the user places bets on current blackjack game.
    * Will happen once per game (maybe more if we implement splitting)
