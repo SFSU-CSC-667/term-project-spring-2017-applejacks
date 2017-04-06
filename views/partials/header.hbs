@@ -6,11 +6,12 @@
     <span>{{user.username}}</span>
   </span>
 <!--  <span class="header-is-admin">isAdmin: {{user.isAdmin}}</span> -->
-  <ul class="header-links">
-    <li class="header-link"><a href="/signup">Sign Up</a></li>
+  <ul class="header-links">    
     <li class="header-link"><a href="/lobby">Lobby</a></li>
     {{#if user.username}}
       <li class="header-link"><a href="/logout">Log out</a></li>
+    {{else}}
+      <li class="header-link"><a href="/signup">Sign Up</a></li>
     {{/if}}
   </ul>
 

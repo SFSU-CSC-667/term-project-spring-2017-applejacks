@@ -15,7 +15,7 @@ router.use('/chat2',  require('./char2'));
 router.get('/', (req, res) => {
   printlog('GET /', 'route');
 
-  res.render('game', {
+  res.render('signup', {
     user: {
       isAdmin: req.session.isAdmin,
       username: req.session.name
