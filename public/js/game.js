@@ -94,6 +94,31 @@ function Game() {
     });
   };
 
+  const modifyWinnings = (newValue) => {
+      let added = Number(newValue);
+
+      if (isNaN(added) || !added) {
+        return;
+      }
+
+      let add = true;
+      if (added < 0) {
+        add = false;
+      }
+
+      const currAmount = Number(value.textContent);
+      const interval = 10;
+      added = Math.abs(added);
+      const intId = setInterval((t) => {
+        let winningsVal = Number(winnings.textContent)
+        winnings.textContent = add ? winningsVal + 1 : winningsVal - 1;
+        added -= 1;
+        if (added <= 0) {
+          clearInterval(intId);
+        }
+      }, interval);
+  };
+
   /**
    * Handler for when the user places bets on current blackjack game.
    * Will happen once per game (maybe more if we implement splitting)

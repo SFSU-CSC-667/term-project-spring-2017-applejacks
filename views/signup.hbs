@@ -1,41 +1,41 @@
 <p class="error-message">{{err}}</p>
-<main id="signup-page">
-  <h2>WELCOME TO APPLEJACKS! <br></h2>
-  <h2 class="log-in-title">Sign Up</h2>
+<main id="signup-page" style="display: flex; align-items: center; justify-content: space-around;">
 
-  <form action="/signup" method="post">
-    <label>
-      <span class="sr-only">User email</span>
-      <input type="email" class="user-input" placeholder="Email..." name="email" aria-required="true" required/>
-    </label>
+  <form action="/login" method="post" class="mui-form--inline mui--z1 login">
+    <div class="mui-textfield mui-textfield--float-label">
+      <input type="email" class="user-input" name="email" aria-required="true" required autofocus/>
+      <label>Email</label>
+    </div>
 
+    <div class="mui-textfield mui-textfield--float-label">
+      <input type="password" class="user-input" name="pwd" aria-required="true" required/>
+      <label>Password</label>
+    </div>
 
-    <label>
-      <span class="sr-only">User password</span>
-      <input type="password" class="user-input" placeholder="Password..." name="pwd" aria-required="true" required/>
-    </label>
-
-    <label>
-      <span class="sr-only">User password confirm</span>
-      <input type="password" class="user-input" placeholder="Confirm password..." name="pwdConfirm" aria-required="true" required/>
-    </label>
-
-    <input type="submit" class="login-submit-btn" />
+    <button type="submit" class="mui-btn mui-btn--raised form-submit">Log In</button>
   </form>
 
-  <h2 class="sign-up-title">Log In</h2>
-  <form action="/login" method="post">
-    <label>
-      <span class="sr-only">User email</span>
-      <input type="email" class="user-input" placeholder="Email..." name="email" aria-required="true" required autofocus/>
-    </label>
+  <div class="or">Or</div>
 
+  <form action="/signup" method="post" class="mui-form mui--z1">
+    <legend>Sign Up</legend>
 
-    <label>
-      <span class="sr-only">User password</span>
-      <input type="password" class="user-input" placeholder="Password..." name="pwd" aria-required="true" required/>
-    </label>
+    <div class="mui-textfield mui-textfield--float-label">
+      <input type="email" class="user-input" name="email" aria-required="true" required/>
+      <label>Email</label>
+    </div>
 
-    <input type="submit" class="login-submit-btn" />
+    <div class="mui-textfield mui-textfield--float-label">
+      <input type="password" class="user-input" name="pwd" aria-required="true" required/>
+      <label>Password</label>
+    </div>
+
+    <div class="mui-textfield mui-textfield--float-label">
+      <input type="password" class="user-input"  name="pwdConfirm" aria-required="true" required/>
+      <label>Confirm Password</label>
+    </div>
+
+    <button type="submit" class="mui-btn mui-btn--raised form-submit">Submit</button>
   </form>
+
 </main>
