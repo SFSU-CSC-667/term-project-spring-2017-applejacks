@@ -30,15 +30,12 @@ ul, ol {
   float: left;
 }
 
-.header-link a {
-  color: #333;
-  padding: 4px 8px;
-  border-radius: 3px;
-  margin: 0 4px;
+.logo h1 {
+  margin: 0;
 }
 
-.header-link a:hover {
-  background-color: #eee;
+.header-link a {
+  text-decoration: none;
 }
 
 .header-link a:visited,
