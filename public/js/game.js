@@ -1,8 +1,7 @@
 /**
  * Game View for handling UI interactions of game page
  */
-
-const Game = () => {
+function Game() {
   const PAGE_KEY = '#game-page';
   const page = document.querySelector(PAGE_KEY);
 
@@ -123,9 +122,9 @@ const Game = () => {
     console.log(`Stay for ${event.currentTarget.className}.`);
 
     // example API call
-    // add API routes to api/index.js
-    // then add the corresponding api file in api/
-    makeAPICall('/api/logmessage')
+    // - add API routes to api/index.js
+    // - then add the corresponding api file in api/
+    makeAPICall('/api/logmessage', {}) // pass in options { method: 'post' } for POST calls
     .then((data) => {
       console.log(data);
     });
@@ -165,10 +164,10 @@ const Game = () => {
       attachEventListeners();
     }
   };
-};
+}
 
 // Create Lobby view controller
-const game = Game();
+const game = new Game();
 
 // Call init to setup view
 if (document.querySelectorAll('#game-page').length) {
