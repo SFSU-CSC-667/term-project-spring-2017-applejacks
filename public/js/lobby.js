@@ -7,7 +7,9 @@ function Lobby() {
 
   // Ui hash
   let ui = {
-    hitBtn: '[data-app-hit]'
+    createGameBtn: '[data-action-create-game]',
+    joinGameBtn: '[data-action-join-game]',
+    gamesList: '.games-list'
   };
 
   /**
@@ -73,10 +75,26 @@ function Lobby() {
   const createGame = (e) => {
     console.log(`Create game ${e.currentTarget.className}.`);
 
-    makeAPICall('/api/game/1/createGame/123', { method: 'post' })
-    .then((data) => {
-      console.log(data);
-    });
+    // makeAPICall('/api/game/1/createGame/123', { method: 'post' })
+    // .then((data) => {
+    //   console.log(data);
+    // });
+  };
+
+  const joinGame = (e) => {
+    const { dataset } = e.target;
+
+    if (!dataset.hasOwnProperty('actionJoinGame')) {
+      console.log('nope.');
+      return;
+    }
+
+    console.log(`Join game ${e.currentTarget.className}.`);
+
+    // makeAPICall('/api/game/1/createGame/123', { method: 'post' })
+    // .then((data) => {
+    //   console.log(data);
+    // });
   };
 
   /**
@@ -84,9 +102,16 @@ function Lobby() {
    * Actions include bet, stay, and hit.
    */
   const addGameActionHandlers = () => {
-    const gameBtn = ui.createGameBtn;
-    gameBtn.addEventListener('click', createGame, false);
+    const create = ui.createGameBtn[0];
+    const list = ui.gamesList[0];
 
+    if (create) {
+      create.addEventListener('click', createGame, false);
+    }
+
+    if (list) {
+      list.addEventListener('click', joinGame, false);
+    }
   };
 
   // expose public functions here

@@ -1,6 +1,6 @@
 <main id="lobby-page">
   <div class="mui-container-fluid mui-panel">
-    <table class="mui-table mui-table--bordered">
+    <table class="mui-table mui-table--bordered games-list">
       <thead>
         <tr>
           <th>Game</th>
@@ -12,23 +12,23 @@
         <tr>
           <td>Game 1</td>
           <td>1/4</td>
-          <td><button type="button" class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
+          <td><button type="button" data-action-join-game class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
         </tr>
         <tr class="lobby-page--table-item__full">
           <td>Game 2</td>
           <td>4/4</td>
-          <td><button type="button" disabled class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
+          <td><button type="button" data-action-join-game disabled class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
         </tr>
         {{#each games}}
           <tr>
             <td>{{name}}</td>
             <td>{{count}}/{{maxCapacity}}</td>
-            <td><button type="button" class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
+            <td><button type="button" data-action-join-game class="mui-btn mui-btn--raised mui-btn--primary">Join Game</button></td>
           </tr>
         {{/each}}
       </tbody>
     </table>
 
-    <button type="button" class="mui-btn mui-btn--raised" id="create-game">Create Game</button>
+    <button type="button"data-action-create-game class="mui-btn mui-btn--raised">Create Game</button>
   </div>
 </main>
