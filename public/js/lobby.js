@@ -1,81 +1,111 @@
 /**
- * Lobby View for handling UI interactions of lobby page
+ * Game View for handling UI interactions of game page
  */
+function Lobby() {
+  const PAGE_KEY = '#lobby-page';
+  const page = document.querySelector(PAGE_KEY);
 
-const Lobby = () => {
-    const PAGE_KEY = '#lobby-page';
-    const page = document.querySelector(PAGE_KEY);
+  // Ui hash
+  let ui = {
+    hitBtn: '[data-app-hit]'
+  };
 
-    // Ui hash
-    let ui = {
-      page: '#lobby-page',
-      title: 'h1'
-    };
+  /**
+   * Helper function to complete a namespace look up of a
+   * specific Element using a query selector.
+   *
+   * @param {String} selector A string used to find an Element in the namespace
+   *
+   * @returns {Element} An Element object
+   */
+  const getElement = (selector) => {
+    // Use 'page' to ensure only page level elements are picked up
+    // do not want headers or footers to be included.
+    // Could use $(selector) if people prefer jQuery over vanilla
+    return page.querySelectorAll(selector);
+  };
 
-    // Helper function
-    const getNode = (selector) => {
-      // Use 'page' to ensure only page level elements are picked up
-      // do not want headers or footers to be included.
-      // Could use $(selector) if people prefer jQuery over vanilla
-      return page.querySelectorAll(selector);
-    };
+  // Creates DOM element from query string
+  const bindElementsToPage = () => {
+    // Loop through document query selectors specified in `ui`
+    for (key in ui) {
 
-    // creates DOM element from query string
-    const bindElementsToPage = () => {
-      const hashKeys = Object.keys(ui);
+      // Avoid any inherited properties
+      if (ui.hasOwnProperty(key)) {
+        let selector = ui[key];
 
-      for (let i = 0; i < hashKeys.length; i++) {
-        let key = hashKeys[i];
+        // Retrieve the documend Node associated with current selector
+        let element = getElement(selector);
 
-        if (ui.hasOwnProperty(key)) {
-          let selector = ui[key];
-          let node = getNode(selector);
-          ui[key] = node;
-        }
+        // Override reference to a string with a reference to an object Element
+        ui[key] = element;
       }
-    };
+    }
+  };
 
-    const attachEventListeners = () => {
-      // Add individual event listeners here
-      addTitleEventListener();
-    };
+  const attachEventListeners = () => {
+    // Add individual event listeners here
+    addGameActionHandlers();
+  };
 
-    // Example event listener
-    const addTitleEventListener = () => {
-      const title = ui.title[0];
+  /**
+   * A function to abstract away the native fetch()
+   *
+   * @param {String} url The url string being accessed
+   * @param {Object} data The options data used to create a Request
+   *
+   * @returns {Promise} A promise that resolves a server or api response as json
+   */
+ const makeAPICall = (url, data={}) => {
+    let options = {method, headers, mode, cache} = data;
 
-      // This listener stays alive while page is in view
-      // To remove an event listener, event listener function must have a name
-      // which then gets passed into removeEventListener()
-      title.addEventListener('mouseover', (event) => {
-        console.log('Your mouse is hovering over the title!');
-      });
+    if (options.headers === undefined) {
+      options.headers = new Headers();
+      options.headers.append("Content-type", "application/json");
+      options.headers.append("Accept", "application/json, text/plain");
+    }
 
-      // This listener gets remove after it fires once
-      title.addEventListener('click', (event) => {
-        console.log('One time click and then remove listener.');
-      }, {once: true}, false);
-    };
+    let request = new Request(url, options);
 
-    let privateVar = 'hello';
+    return fetch(request).then((response) => response.json());
+  };
 
-    return {
-      init: () => {
-        bindElementsToPage();
-        attachEventListeners();
-      },
+  const createGame = (e) => {
+    console.log(`Create game ${e.currentTarget.className}.`);
 
-      publicFunction: () => {
-        console.log(privateVar + ' world');
-      }
-    };
-};
+    makeAPICall('/api/game/1/createGame/123', { method: 'post' })
+    .then((data) => {
+      console.log(data);
+    });
+  };
+
+  /**
+   * Creating action handlers for all user action buttons.
+   * Actions include bet, stay, and hit.
+   */
+  const addGameActionHandlers = () => {
+    const gameBtn = ui.createGameBtn;
+    gameBtn.addEventListener('click', createGame, false);
+
+  };
+
+  // expose public functions here
+  return {
+    // init() is a public function that is called to initialize view
+    init: () => {
+      // private functions called from within context of view controller
+      bindElementsToPage();
+      attachEventListeners();
+    }
+  };
+}
 
 // Create Lobby view controller
-const lobby = Lobby();
-
+const lobby = new Lobby();
 
 // Call init to setup view
 if (document.querySelectorAll('#lobby-page').length) {
   lobby.init();
 }
+
+
