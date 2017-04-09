@@ -20,6 +20,10 @@
   height: var(--user-section-height);
   width: 90%;
   position: relative;
+  /* temporary */
+  bottom: 4px;
+  position: absolute;
+  width: 75%;
 }
 
 .clearfix:after {

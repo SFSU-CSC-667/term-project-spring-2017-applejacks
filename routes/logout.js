@@ -1,11 +1,11 @@
 /* log out routes */
-const express = require('express');
-const router = require('express').Router();
-const db = require('./../../database/database');
-const printlog = require('./../../utils/helpers').printlog;
+import express from 'express';
+import { printlog } from './../utils/helpers';
 
+const router = express.Router();
 
 router.get('/', (req, res) => {
+  const { db } = res;
   printlog('GET /logout', 'route');
 
   req.session.destroy((err) => {
@@ -17,4 +17,4 @@ router.get('/', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

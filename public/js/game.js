@@ -60,7 +60,7 @@ const Game = () => {
    *
    * @returns {Promise} A promise that resolves a server or api response as json
    */
- const makeAPICall = (url, data) => {
+ const makeAPICall = (url, data={}) => {
     let options = {method, headers, mode, cache} = data;
 
     if (options.headers === undefined) {
@@ -121,6 +121,14 @@ const Game = () => {
    */
   const stayHandler = (event) => {
     console.log(`Stay for ${event.currentTarget.className}.`);
+
+    // example API call
+    // add API routes to api/index.js
+    // then add the corresponding api file in api/
+    makeAPICall('/api/logmessage')
+    .then((data) => {
+      console.log(data);
+    });
   };
 
   /**

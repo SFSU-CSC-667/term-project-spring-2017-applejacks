@@ -2,18 +2,18 @@
   "name": "applejacks",
   "version": "1.0.0",
   "description": "Multiplayer Blackjack game with chat interface",
-  "main": "server/server.js",
+  "main": "server.js",
   "scripts": {
-    "start": "npm run buildTemplates && node server/server.js",
-    "app": "npm run verify && npm run buildTemplates && NODE_ENV=development MD=false nodemon --watch server --watch databse.js server/server.js",
-    "mock": "npm run build && NODE_ENV=development MD=true nodemon --watch server server/server.js",
+    "start": "yarn run buildTemplates && node server.js",
+    "app": "yarn run buildTemplates && NODE_ENV=development MD=false nodemon --watch routes --watch api --watch database/database.js --watch server.js server.js --exec babel-node --plugins syntax-export-extensions --presets es2015,stage-2",
+    "mock": "yarn run build && NODE_ENV=development MD=true nodemon --watch server server.js",
     "build": "echo \"minify and compress...\"",
     "buildTemplates": "handlebars -m views/clientPartials/*.hbs -f public/js/templates.min.js",
     "lint": "jshint server",
     "coverage": "istanbul cover test.js",
     "istanbul": "istanbul cover test.js",
     "verify": "npm-check -s --no-emoji || true",
-    "test": "mocha test"
+    "test": "mocha --compilers js:babel-core/register test/*.js"
   },
   "pre-push": [
     "lint",
@@ -26,6 +26,11 @@
   "engines": {
     "node": ">=7.2.1"
   },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "author": "srbecker",
   "license": "MIT",
   "bugs": {
@@ -33,6 +38,11 @@
   },
   "homepage": "https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks#readme",
   "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-plugin-syntax-export-extensions": "^6.13.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "babel-register": "^6.24.1",
     "bcrypt": "^1.0.2",
     "bluebird": "^3.5.0",
     "body-parser": "^1.17.1",
@@ -42,6 +52,7 @@
     "express-session": "^1.15.2",
     "handlebars": "^4.0.6",
     "jshint": "^2.9.4",
+    "moment": "^2.18.1",
     "nodemon": "^1.11.0",
     "npm-check": "^5.4.0",
     "path": "^0.12.7",

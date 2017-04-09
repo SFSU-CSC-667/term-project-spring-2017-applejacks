@@ -1,13 +1,15 @@
 /* signup routes */
-const router = require('express').Router();
-const bcrypt = require('bcrypt');
-const db = require('./../../database/database');
-const printlog = require('./../../utils/helpers').printlog;
+import express from 'express';
+import { printlog } from './../utils/helpers';
+import bcrypt from 'bcrypt';
+
+const router = express.Router();
 
 /*
  * GET - desktop route
  */
 router.get('/', (req, res) => {
+  const { db } = res;
   printlog('GET /signup', 'route');
   res.render('signup', {
     user: {
@@ -21,6 +23,7 @@ router.get('/', (req, res) => {
  * POST - API
  */
 router.post('/', (req, res) => {
+  const { db } = res;
   printlog('POST /signup', 'route');
 
   /*
@@ -67,4 +70,4 @@ router.post('/', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

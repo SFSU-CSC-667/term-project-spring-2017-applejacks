@@ -1,10 +1,12 @@
 /* login routes */
-const router = require('express').Router();
-const db = require('./../../database/database');
-const printlog = require('./../../utils/helpers').printlog;
-const bcrypt = require('bcrypt');
+import express from 'express';
+import { printlog } from './../utils/helpers';
+import bcrypt from 'bcrypt';
+
+const router = express.Router();
 
 router.post('/', (req, res) => {
+  const { db } = res;
   printlog('POST /login', 'route');
   const {pwd, email} = req.body;
 
@@ -41,9 +43,6 @@ router.post('/', (req, res) => {
     printlog(error, 'error');
     res.redirect(500, '/signup');
   });
-
-
-
 });
 
-module.exports = router;
+export default router;

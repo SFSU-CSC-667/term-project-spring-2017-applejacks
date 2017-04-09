@@ -1,9 +1,8 @@
 /* signup routes */
-const express = require('express');
-const router = require('express').Router();
-const db = require('./../../database/database');
-const printlog = require('./../../utils/helpers').printlog;
+import express from 'express';
+import { printlog } from './../utils/helpers';
 
+const router = express.Router();
 
 const outputDeck = () => {
   const values = [1,2,3,4,5,6,7,8,9,10,'J','Q','K','A'];
@@ -26,6 +25,7 @@ const outputDeck = () => {
 };
 
 router.get('/', (req, res) => {
+  const { db } = res;
   printlog('GET /lobby', 'route');
 
   res.render('lobby', {
@@ -37,4 +37,4 @@ router.get('/', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

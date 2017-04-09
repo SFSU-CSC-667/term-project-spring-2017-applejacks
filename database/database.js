@@ -1,6 +1,8 @@
-const url = require('url');
-const printlog = require('./../utils/helpers').printlog;
-const pgp = require('pg-promise')();
+import url from 'url';
+import { printlog } from './../utils/helpers';
+import pgPromise from 'pg-promise';
+
+const pgp = pgPromise();
 
 function DatabaseController () {
   // instance of the pg-promise library object
@@ -321,4 +323,4 @@ function DatabaseController () {
   };
 }
 
-module.exports = new DatabaseController();
+export default new DatabaseController();

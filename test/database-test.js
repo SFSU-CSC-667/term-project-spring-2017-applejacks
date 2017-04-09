@@ -1,5 +1,7 @@
-const db = require('./../database/database');
-const should = require('chai').should();
+import db from './../database/database';
+import chai from 'chai';
+
+const should = chai.should();
 // test vars
 const TEST_TABLE = 'testtable';
 

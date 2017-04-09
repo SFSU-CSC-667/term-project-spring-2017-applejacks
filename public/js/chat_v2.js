@@ -49,11 +49,20 @@
    console.log('DATA RECEIVED', data);
    let messageNode = document.createElement('LI');
    const d = new Date(Date.now());
+   const { fromNow } = data;
    const timeStamp = `${d.toDateString()} ${d.toLocaleTimeString('en-US')}`;
 
    messageNode.tabIndex = 1;
-   messageNode.textContent = `[${timeStamp}] ${data.hello}`;
+   messageNode.className = 'last-m';
+   const el = document.querySelector('.last-m');
+   if (el) {
+     el.classList.remove('last-m');
+   }
+
+   messageNode.textContent = `[${fromNow}] ${data.hello}`;
    chat.appendChild(messageNode);
    messageNode.focus();
+   document.querySelector('.last-m').removeAttribute('tabIndex');
+
    message.focus();
  });

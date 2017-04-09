@@ -1,8 +1,14 @@
 /* chat routes */
+/*
+
+
+      NO LONGER USED
+
+*/
 const express = require('express');
 const router = require('express').Router();
 const db = require('./../../database/database');
-const printlog = require('./../../utils/helpers').printlog;
+const printlog = require('./../utils/helpers').printlog;
 
 // socket.io setup
 const app = express();
@@ -25,4 +31,4 @@ app.io.sockets.on('connection', function(socket){
     });
 });
 
-module.exports = router;
+export default router;
