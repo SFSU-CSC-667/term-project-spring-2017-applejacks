@@ -1,6 +1,6 @@
 ## `applejacks`
 
-A multiplayer blackjack game with an integrated chat system.  
+A multiplayer blackjack game with an integrated chat system.
 **View the live heroku site** [here](https://applejacks.herokuapp.com)
 
 [![JavaScript Style Guide: Good Parts](https://img.shields.io/badge/code%20style-goodparts-brightgreen.svg?style=flat)](https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks "applejacks - blackjack game")
@@ -30,6 +30,7 @@ A multiplayer blackjack game with an integrated chat system.
 
 1. `git clone https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git`
 2. `cd term-project-spring-2017-applejacks`
-3. `npm install`
-4. `npm run app #this will listen for server changes and redeploy`
-5. visit [localhost:3000](http://localhost:3000/)
+3. `npm install yarn`
+4. `yarn` or `yarn install`
+5. `yarn run app #this will listen for server changes and redeploy`
+6. visit [localhost:3000](http://localhost:3000/)

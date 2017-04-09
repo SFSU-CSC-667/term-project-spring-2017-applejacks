@@ -2,9 +2,10 @@
 
 1. `git clone https://github.com/SFSU-CSC-667/term-project-spring-2017-applejacks.git`
 2. `cd term-project-spring-2017-applejacks`
-3. `npm install`
-4. `npm run app #this will listen for server changes and redeploy`
-5. visit [localhost:3000](http://localhost:3000/)
+3. `npm install yarn`
+4. `yarn` or `yarn install`
+5. `yarn run app #this will listen for server changes and redeploy`
+6. visit [localhost:3000](http://localhost:3000/)
 
 ### Upgrading to latest version of Node via NPM
 https://davidwalsh.name/upgrade-nodejs
@@ -17,7 +18,7 @@ https://davidwalsh.name/upgrade-nodejs
 
 
 ### How to install local Postgres
-- **For Ubuntu  - https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04**  
+- **For Ubuntu  - https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04**
 1. http://postgresapp.com/
     - install on website
     - move to apps folder
@@ -37,7 +38,7 @@ https://github.com/github/hub
 
 ## Git flow
 #### Formatting commit messages
-`[feature|architecture|bug|docs]["name_of_feature"] - short description of the change you made`  
+`[feature|architecture|bug|docs]["name_of_feature"] - short description of the change you made`
 **Example:** `git commit -m "[feature][chatSystem] - added basic socket.io publish and subscribing"`
 
 Get the latest code
