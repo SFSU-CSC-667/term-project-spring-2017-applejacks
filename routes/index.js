@@ -22,9 +22,11 @@ router.use('/chat2',  chatRoute);
 // index route
 router.get('/', (req, res) => {
   const { db } = res;
+  let pageToRender = req.session.name ? 'lobby' : 'signup';
+
   printlog('GET /', 'route');
 
-  res.render('game', {
+  res.render(pageToRender, {
     user: {
       isAdmin: req.session.isAdmin,
       username: req.session.name
