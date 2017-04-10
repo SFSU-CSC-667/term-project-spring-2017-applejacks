@@ -3,7 +3,7 @@ import express from 'express';
 import { printlog } from './../utils/helpers';
 
 const router = express.Router();
-const useMockData = (process.env.MD === 'true');
+const useMockData = true || (process.env.MD === 'true');
 
 const mockGameState = {
   dealerHand: [
