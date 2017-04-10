@@ -4,7 +4,7 @@ import signupRoute from './signup';
 import loginRoute from './login';
 import adminRoute from './admin';
 import lobbyRoute from './lobby';
-import gameRoute from './lobby';
+import gameRoute from './game';
 import logoutRoute from './logout';
 import chatRoute from './char2';
 
