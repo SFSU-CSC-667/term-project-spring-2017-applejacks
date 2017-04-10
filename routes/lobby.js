@@ -28,12 +28,22 @@ router.get('/', (req, res) => {
   const { db } = res;
   printlog('GET /lobby', 'route');
 
-  res.render('lobby', {
-    cards: outputDeck(),
-    user: {
-      isAdmin: req.session.isAdmin,
-      username: req.session.name
-    }
+  db.getGames()
+  .then((games) => {
+    console.log(games);
+
+    res.render('lobby', {
+      cards: outputDeck(),
+      games: games,
+      user: {
+        isAdmin: req.session.isAdmin,
+        username: req.session.name
+      }
+    });
+
+  })
+  .catch((err) => {
+    res.render('lobby');
   });
 });
 

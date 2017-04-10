@@ -37,3 +37,19 @@ button.form-submit:focus {
 .login-submit-btn {
   display: none;
 }
+
+@media (max-width:500px) {
+  #signup-page form {
+    width: 100%;
+  }
+
+  #signup-page form.login {
+    justify-content: center;
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  form.signup button {
+    width: 100%;
+  }
+}

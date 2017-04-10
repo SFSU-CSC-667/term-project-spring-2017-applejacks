@@ -1,19 +1,22 @@
 -- CREATE THE USER TABLE IF IT DOES NOT EXIST
-CREATE TABLE IF NOT EXISTS users 
+CREATE TABLE IF NOT EXISTS users
 (
-  email VARCHAR (60) UNIQUE NOT NULL PRIMARY KEY, 
+  email VARCHAR (60) UNIQUE NOT NULL PRIMARY KEY,
   password VARCHAR (100) NOT NULL,
   lastlogin BIGSERIAL,
   isadmin BOOLEAN
 );
 
 -- CREATE THE SESSION TABLE IF IT DOES NOT EXIST
-CREATE TABLE IF NOT EXISTS session 
+CREATE TABLE IF NOT EXISTS session
 (
   sid VARCHAR NOT NULL COLLATE "default" PRIMARY KEY,
   sess json NOT NULL,
   expire TIMESTAMP(6) NOT NULL
 );
+
+-- adding drop table for testing purposes
+drop table games;
 
 -- CREATE THE GAMES TABLE IF IT DOES NOT EXIST
 CREATE TABLE IF NOT EXISTS games
@@ -42,11 +45,18 @@ CREATE TABLE IF NOT EXISTS messages
   msg_timestamp TIMESTAMP(6)
 );
 
+
+-- adding drop table for testing purposes
+drop table game_cards;
+
 -- CREATE THE GAME_CARDS TABLE IF IT DOES NOT EXIST
 CREATE TABLE IF NOT EXISTS game_cards
 (
-  game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
-  user_id VARCHAR (60) REFERENCES users(email) ON DELETE CASCADE,
-  rank CHAR(1),
-  suit VARCHAR (8)
+  id SERIAL PRIMARY KEY,
+  game_id INTEGER,
+  user_id VARCHAR(60),
+  value VARCHAR(8),
+  suit VARCHAR(8),
+  orderr INTEGER,
+  in_play BOOLEAN
 );

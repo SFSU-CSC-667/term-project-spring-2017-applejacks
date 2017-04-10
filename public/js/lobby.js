@@ -75,23 +75,24 @@ function Lobby() {
   const createGame = (e) => {
     console.log(`Create game ${e.currentTarget.className}.`);
 
-    // makeAPICall('/api/game/1/createGame/123', { method: 'post' })
-    // .then((data) => {
-    //   console.log(data);
-    // });
+    makeAPICall('/api/lobby/15567/createGame', { method: 'post' })
+    .then((data) => {
+      console.log(data);
+    });
   };
 
   const joinGame = (e) => {
     const { dataset } = e.target;
+    const { gameId } = dataset;
 
     if (!dataset.hasOwnProperty('actionJoinGame')) {
       console.log('nope.');
       return;
     }
 
-    console.log(`Join game ${e.currentTarget.className}.`);
+    console.log(`Join game ${gameId} ?`);
 
-    // makeAPICall('/api/game/1/createGame/123', { method: 'post' })
+    // makeAPICall(`/api/lobby/123/joinGame/${gameId}`, { method: 'post' })
     // .then((data) => {
     //   console.log(data);
     // });
@@ -118,6 +119,21 @@ function Lobby() {
   return {
     // init() is a public function that is called to initialize view
     init: () => {
+      const socket = io('/my-namespace');
+      socket.on('game-created', (id) => {
+        template = Handlebars.templates['game-row.hbs'];
+        htmlOutput = template({
+          name: 'new game-' + (id*2 - 7),
+          id: id,
+          count: 2,
+          maxCapacity: 4
+        });
+
+        let t = document.createElement('template');
+        t.innerHTML = htmlOutput;
+        document.querySelector('.games-list tbody').appendChild(t.content.firstChild);
+      });
+
       // private functions called from within context of view controller
       bindElementsToPage();
       attachEventListeners();

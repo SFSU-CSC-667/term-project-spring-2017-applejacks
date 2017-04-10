@@ -3,6 +3,7 @@ import { printlog } from './../utils/helpers';
 import pgPromise from 'pg-promise';
 
 const pgp = pgPromise();
+const Inserts = pgp.helpers.insert;
 
 function DatabaseController () {
   // instance of the pg-promise library object
@@ -249,6 +250,10 @@ function DatabaseController () {
     return _datab.any(queryString);
   };
 
+  this.getGames = () => {
+    return _datab.any('select * from games');
+  };
+
   this.addUser = (data) => {
     printlog('Attempting insert user... ['+ data.key +']');
     // ****
@@ -293,6 +298,39 @@ function DatabaseController () {
       // will successfully resolve if each query resolves in succession
       return t.batch([q1,q2]);
     });
+  };
+
+  this.createGame = (uid) => {
+    const data = {
+      date: Date.now(),
+      act: true,
+      currTurn: uid
+    };
+
+    return _datab.one('SELECT COUNT(*) from games')
+    .then((result) => {
+      const gid = Number(result.count) + 1;
+      _datab.none('INSERT INTO games (create_date, is_active, current_player_turn) values (${date},${act},${currTurn})', data);
+      return this.createCardTable(gid, uid);
+    });
+  };
+
+  this.createCardTable = (gid, uid) => {
+    const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const cards_table_columns = ['game_id', 'user_id', 'value', 'suit', 'orderr', 'in_play'];
+    let cards = [];
+    let o = 1;
+
+    for (let i = 0; i < 13; i++) {
+      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'C', orderr: o++, in_play: false});
+      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'S', orderr: o++, in_play: false});
+      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'H', orderr: o++, in_play: false});
+      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'D', orderr: o++, in_play: false});
+    }
+
+    const batchInsertQuery = Inserts(cards, cards_table_columns, 'game_cards');
+    _datab.none(batchInsertQuery);
+    return gid;
   };
 
   this.deleteUser = (data) => {

@@ -2,28 +2,37 @@
   <div class="mui-container-fluid mui-panel">
     <table class="mui-table mui-table--bordered games-list">
       <thead>
-        <tr>
+        <tr class="game">
           <th>Game</th>
           <th>Capacity</th>
           <th>Join</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr class="game">
           <td>Game 1</td>
           <td>1/4</td>
-          <td><button type="button" data-action-join-game class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
+          <td>
+            <button type="button" data-action-join-game class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary d">Join Game</button>
+            <button type="button" data-action-join-game class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary m">Join</button>
+          </td>
         </tr>
-        <tr class="lobby-page--table-item__full">
+        <tr class="game lobby-page--table-item__full">
           <td>Game 2</td>
           <td>4/4</td>
-          <td><button type="button" data-action-join-game disabled class="mui-btn mui-btn--raised mui-btn--primary join-game">Join Game</button></td>
+          <td>
+            <button type="button" disabled data-action-join-game class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary d">Join Game</button>
+            <button type="button" disabled data-action-join-game class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary m">Join</button>
+          </td>
         </tr>
         {{#each games}}
-          <tr>
+          <tr class="game">
             <td>{{name}}</td>
             <td>{{count}}/{{maxCapacity}}</td>
-            <td><button type="button" data-action-join-game class="mui-btn mui-btn--raised mui-btn--primary">Join Game</button></td>
+            <td>
+              <button type="button" data-action-join-game data-game-id="{{id}}" class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary d">Join Game</button>
+              <button type="button" data-action-join-game data-game-id="{{id}}" class="mui-btn mui-btn--small mui-btn--raised mui-btn--primary m">Join</button>
+            </td>
           </tr>
         {{/each}}
       </tbody>

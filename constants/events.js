@@ -3,4 +3,4 @@ const LOBBY = 'lobby';
 const USER_JOINED = 'user-joined';
 const MESSAGE_SEND = 'message-send';
 
-export { LOBBY, USER_JOINED, MESSAGE_SEND };
+export default { LOBBY, USER_JOINED, MESSAGE_SEND };
