@@ -11,7 +11,6 @@ router.post('/', (req, res) => {
   const { pwd, email } = req.body;
 
   // TODO: add middleware auth here
-
   db.getPassword({tableName: 'users', key: 'email', val: email})
   .then((user) => {
     const {id, password, email, username } = user;
@@ -38,13 +37,17 @@ router.post('/', (req, res) => {
         }, 500);
       } else {
         printlog(`Password '${pwd}' does not match.`, 'error');
-        res.redirect(401, '/signup');
+        res.status(401).json({
+          error: 'Wrong password. Try again.'
+        });
       }
     });
   })
   .catch((error) => {
     printlog(error, 'error');
-    res.redirect(500, '/signup');
+    res.status(401).json({
+      error: 'Sorry, we do not recognize that email.'
+    });
   });
 });
 

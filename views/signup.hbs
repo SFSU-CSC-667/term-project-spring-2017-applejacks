@@ -1,7 +1,8 @@
 <p class="error-message">{{err}}</p>
 <main id="signup-page" style="display: flex; align-items: center; justify-content: space-around;">
 
-  <form action="/login" method="post" class="mui-form--inline mui--z1 login">
+<div class="mui--z1">
+  <form action="/login" method="post" class="mui-form--inline login" id="login-form">
     <div class="mui-textfield mui-textfield--float-label">
       <input type="email" class="user-input" name="email" aria-required="true" required autofocus/>
       <label>Email</label>
@@ -15,9 +16,12 @@
     <button type="submit" class="mui-btn mui-btn--raised form-submit">Log In</button>
   </form>
 
+  <p class="mui-container mui--text-danger login-error"></p>
+</div>
+
   <div class="or">Or</div>
 
-  <form action="/signup" method="post" class="mui-form mui--z1 signup">
+  <form action="/signup" method="post" class="mui-form mui--z1 signup" id="signup-form">
     <legend>Sign Up</legend>
 
     <div class="mui-textfield mui-textfield--float-label">

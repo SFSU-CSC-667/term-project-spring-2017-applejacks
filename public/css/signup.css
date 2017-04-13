@@ -24,6 +24,10 @@ button.form-submit:focus {
   font-weight: bold;
 }
 
+.login-error {
+  padding: 0 20px 20px 26px;
+}
+
 .or {
   padding: 25px 0;
   font-size: 20px;
