@@ -30,8 +30,6 @@ router.get('/', (req, res) => {
 
   db.getGames()
   .then((games) => {
-    console.log(games);
-
     res.render('lobby', {
       cards: outputDeck(),
       games: games,
@@ -43,6 +41,7 @@ router.get('/', (req, res) => {
 
   })
   .catch((err) => {
+    printlog(err, 'error');
     res.render('lobby');
   });
 });

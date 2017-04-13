@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
   let pageToRender = req.session.name ? 'lobby' : 'signup';
 
   printlog('GET /', 'route');
-
+console.log('session name is ' + req.session.name);
   res.render(pageToRender, {
     user: {
       isAdmin: req.session.isAdmin,

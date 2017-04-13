@@ -221,7 +221,7 @@ function DatabaseController () {
     printlog(`Attempting get... [${data.key}=${data.val}]`);
 
     // `postgresdb-# \d <name>` will display the created table
-    const query = `select password from ${data.tableName} where ${data.key}='${data.val}'`;
+    const query = `select * from ${data.tableName} where ${data.key}='${data.val}'`;
     printlog(query, 'db');
 
     return _datab.one(query);
@@ -250,7 +250,7 @@ function DatabaseController () {
     return _datab.any(queryString);
   };
 
-  this.getGames = () => {
+  this.getGames = () => {console.log('get Games.....');
     return _datab.any('select * from games');
   };
 

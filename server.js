@@ -9,6 +9,7 @@ import appRouter from './routes';
 import socketio from 'socket.io';
 import session from 'express-session';
 import connPgSimple from 'connect-pg-simple';
+// import authenticate from './authenticate'
 
 const app = express();
 
@@ -99,10 +100,12 @@ app.use((req, res, next) => {
   next();
 });
 
-// load desktop routes
-app.use(appRouter);
-
 // load API routes
 app.use('/api', apiRoutes);
 
+// load desktop routes
+app.use('/', (req, res, next) => {
+  // desktop route middleware
+  next();
+}, appRouter);
 

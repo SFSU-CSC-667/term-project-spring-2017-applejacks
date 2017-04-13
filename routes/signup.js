@@ -4,6 +4,7 @@ import { printlog } from './../utils/helpers';
 import bcrypt from 'bcrypt';
 
 const router = express.Router();
+const STARTING_BANK_VALUE = 10000; // $10,000
 
 /*
  * GET - desktop route
@@ -36,25 +37,26 @@ router.post('/', (req, res) => {
    */
   const saltRounds = 8;
   const body = req.body || {};
+  const { email, username, pwd, pwdConfirm } = body;
 
   if (!Object.keys(body).length) {
     printlog('Error --> POST data did not exist', 'error');
     return;
   }
 
-  if (body.pwd !== body.pwdConfirm) {
+  if (pwd !== pwdConfirm) {
     printlog('Error --> Confirm password did not match original', 'error');
     return;
   }
 
-  bcrypt.hash(body.pwd, saltRounds, (err, hash) => {
+  bcrypt.hash(pwd, saltRounds, (err, hash) => {
     printlog('bcrypt generated hash -> ' + hash);
 
     // Store hash in your password DB.
     db.addUser({
       tableName: 'users',
-      columns: ['email','password','lastlogin','isadmin'],
-      values: [body.email, hash, Date.now(), false],
+      columns: ['email','username', 'password','last_login','date_joined', 'bank_value', 'is_admin'],
+      values: [email, (username || '') ,hash, Date.now(), Date.now(), STARTING_BANK_VALUE, false],
       key: 'email'
     })
     .then(() => {

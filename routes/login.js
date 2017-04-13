@@ -8,21 +8,24 @@ const router = express.Router();
 router.post('/', (req, res) => {
   const { db } = res;
   printlog('POST /login', 'route');
-  const {pwd, email} = req.body;
+  const { pwd, email } = req.body;
 
   // TODO: add middleware auth here
 
   db.getPassword({tableName: 'users', key: 'email', val: email})
-  .then((hash) => {
-    hash = hash.password;
+  .then((user) => {
+    const {id, password, email, username } = user;
+    const hash = password;
 
     // Load hash from your password DB.
     bcrypt.compare(pwd, hash, (err, resp) => {
       if (resp) {
-        // if (!req.session.email) {
-          // req.session.id = 99;
-          req.session.name = email;
-        // }
+        if (typeof req.session.uid === 'undefined') {
+          req.session.uid = id;
+          req.session.name = username || email;
+          req.session.isAdmin = true;
+          req.session.save();
+        }
 
         printlog(`${pwd}=${hash} -> ${resp}`);
         // redirect to lobby after user has logged in
