@@ -15,6 +15,7 @@ https://davidwalsh.name/upgrade-nodejs
 - https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 - https://stackedit.io/editor
 - https://daringfireball.net/projects/markdown/syntax
+- http://dillinger.io/
 
 
 ### How to install local Postgres
