@@ -18,6 +18,10 @@ loginForm.addEventListener('submit', (event) => {
   .then((response) => response.json())
   .then((data) => {
     const { error } = data;
-    document.querySelector('.login-error').textContent = error;
+    if (error) {
+      document.querySelector('.login-error').textContent = error;
+    } else {
+      window.location = '/lobby';
+    }
   });
 });
