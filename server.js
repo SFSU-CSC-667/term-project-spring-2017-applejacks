@@ -9,7 +9,6 @@ import appRouter from './routes';
 import socketio from 'socket.io';
 import session from 'express-session';
 import connPgSimple from 'connect-pg-simple';
-// import authenticate from './authenticate'
 
 const app = express();
 
@@ -37,6 +36,8 @@ const getPort = (port=3000) => {
   return process.env.PORT;
 };
 
+// app.use(session({secret: 'I hope this doesn\'t end up on Github'}));
+
 // setting up server
 app.set('env', process.env.NODE_ENV || 'production');
 app.set('view engine', '.hbs');
@@ -46,6 +47,7 @@ app.engine('.hbs', exphbs({
   defaultLayout: 'main'
 }));
 
+// app.use(session({secret: 'ssshhhhh'}));
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
@@ -55,12 +57,16 @@ app.use(express.static(path.join(__dirname, './public')));
 // session setup
 const pgSessionStore = connPgSimple(session);
 app.use(session({
-  name: 'null',
+  name: 'notnull',
   store: new pgSessionStore(),
   secret: 'some other secret',
   resave: false,
   saveUninitialized: false, // only save a known session (login)
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+  cookie: {
+    secure: false,
+    httpOnly: false,
+    maxAge: 30 * 24 * 60 * 60 * 1000
+  }
 }));
 
 // start Express server

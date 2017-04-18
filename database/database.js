@@ -254,6 +254,10 @@ function DatabaseController () {
     return _datab.any('select * from games');
   };
 
+  this.getUser = (email='') => {
+    return _datab.any('select * from users where email=$1',email);
+  };
+
   this.addUser = (data) => {
     printlog('Attempting insert user... ['+ data.key +']');
     // ****

@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: space-around;
   flex-direction: column;
-  padding: 20px;
+  padding: 20px 20px 60px;
 }
 
 #signup-page form {

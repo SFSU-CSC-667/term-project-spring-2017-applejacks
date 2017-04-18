@@ -8,13 +8,17 @@ router.get('/', (req, res) => {
   const { db } = res;
   printlog('GET /logout', 'route');
 
-  req.session.destroy((err) => {
-    if (err) {
-      printlog(err);
-    } else {
-      res.redirect('/');
-    }
-  });
+  if (req.session) {
+    req.session.destroy((err) => {
+      if (err) {
+        printlog(err);
+      } else {
+        res.redirect('/');
+      }
+    });
+  } else {
+    printlog('session no instantiated', 'error');
+  }
 });
 
 export default router;

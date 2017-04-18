@@ -12,15 +12,21 @@ CREATE TABLE IF NOT EXISTS users
 );
 
 -- CREATE THE SESSION TABLE IF IT DOES NOT EXIST
-CREATE TABLE IF NOT EXISTS session
-(
-  sid VARCHAR NOT NULL COLLATE "default" PRIMARY KEY,
-  sess json NOT NULL,
-  expire TIMESTAMP(6) NOT NULL
-);
+-- CREATE TABLE IF NOT EXISTS session
+-- (
+--   sid VARCHAR NOT NULL COLLATE "default" PRIMARY KEY,
+--   sess json NOT NULL,
+--   expire TIMESTAMP(6) NOT NULL
+-- );
+
+CREATE TABLE IF NOT EXISTS session (
+ sid varchar NOT NULL,
+ sess json NOT NULL,
+ expire timestamp(6) NOT NULL
+) WITH (OIDS=FALSE);
 
 -- adding drop table for testing purposes
-drop table games;
+-- drop table games;
 
 -- CREATE THE GAMES TABLE IF IT DOES NOT EXIST
 CREATE TABLE IF NOT EXISTS games
@@ -51,7 +57,7 @@ CREATE TABLE IF NOT EXISTS messages
 
 
 -- adding drop table for testing purposes
-drop table game_cards;
+-- drop table game_cards;
 
 -- CREATE THE GAME_CARDS TABLE IF IT DOES NOT EXIST
 CREATE TABLE IF NOT EXISTS game_cards

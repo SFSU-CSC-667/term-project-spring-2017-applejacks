@@ -28,6 +28,12 @@ router.get('/', (req, res) => {
   const { db } = res;
   printlog('GET /lobby', 'route');
 
+console.log('LOOOBBBBYYYYYY');
+console.log(req.session);
+
+console.log('------------------');
+
+
   db.getGames()
   .then((games) => {
     res.render('lobby', {

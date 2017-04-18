@@ -2,10 +2,11 @@
 import express from 'express';
 import { printlog } from './../utils/helpers';
 import bcrypt from 'bcrypt';
+import session from 'express-session';
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
   const { db } = res;
   printlog('POST /login', 'route');
   const { pwd, email } = req.body;
@@ -19,11 +20,11 @@ router.post('/', (req, res) => {
     // Load hash from your password DB.
     bcrypt.compare(pwd, hash, (err, resp) => {
       if (resp) {
+
         if (typeof req.session.uid === 'undefined') {
           req.session.uid = id;
           req.session.name = username || email;
           req.session.isAdmin = true;
-          req.session.save();
         }
 
         printlog(`${pwd}=${hash} -> ${resp}`);
@@ -34,11 +35,10 @@ router.post('/', (req, res) => {
           res.io.emit('news', { hello: `${req.session.name} joined.` });
         }, 500);
 
-        // redirect to lobby after user has logged in
-        res.status(200).json(true);
+        return res.status(200).json(true);
       } else {
         printlog(`Password '${pwd}' does not match.`, 'error');
-        res.status(401).json({
+        return res.status(401).json({
           error: 'Wrong password. Try again.'
         });
       }
@@ -46,7 +46,7 @@ router.post('/', (req, res) => {
   })
   .catch((error) => {
     printlog(error, 'error');
-    res.status(401).json({
+    return res.status(401).json({
       error: 'Sorry, we do not recognize that email.'
     });
   });

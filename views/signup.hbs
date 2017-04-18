@@ -21,7 +21,8 @@
 
   <div class="or">Or</div>
 
-  <form action="/signup" method="post" class="mui-form mui--z1 signup" id="signup-form">
+<div class="mui--z1">
+  <form action="/signup" method="post" class="mui-form signup" id="signup-form">
     <legend>Sign Up</legend>
 
     <div class="mui-textfield mui-textfield--float-label">
@@ -31,20 +32,23 @@
 
     <div class="mui-textfield mui-textfield--float-label">
       <input type="email" class="user-input" name="email" aria-required="true" required/>
-      <label>Email</label>
+      <label>*Email</label>
     </div>
 
     <div class="mui-textfield mui-textfield--float-label">
       <input type="password" class="user-input" name="pwd" aria-required="true" required/>
-      <label>Password</label>
+      <label>*Password</label>
     </div>
 
     <div class="mui-textfield mui-textfield--float-label">
       <input type="password" class="user-input"  name="pwdConfirm" aria-required="true" required/>
-      <label>Confirm Password</label>
+      <label>*Confirm Password</label>
     </div>
 
     <button type="submit" class="mui-btn mui-btn--raised form-submit">Submit</button>
   </form>
+
+  <p class="mui-container mui--text-danger signup-error"></p>
+</div>
 
 </main>
