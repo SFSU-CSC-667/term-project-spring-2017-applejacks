@@ -3,12 +3,12 @@
     <a href="/" style="text-decoration: none; color: #333;">
       <h1>Blackjack</h1>
     </a>
-    <span>{{user.username}}</span>
+    <span class="{{#if user.username}}username{{/if}}">{{user.username}}</span>
   </span>
 <!--  <span class="header-is-admin">isAdmin: {{user.isAdmin}}</span> -->
   <ul class="header-links">
-    <li class="header-link"><a class="mui-btn mui-btn--small mui-btn--primary mui-btn--flat" href="/lobby">Lobby</a></li>
     {{#if user.username}}
+      <li class="header-link"><a class="mui-btn mui-btn--small mui-btn--primary mui-btn--flat" href="/lobby">Lobby</a></li>
       <li class="header-link"><a class="mui-btn mui-btn--small mui-btn--primary mui-btn--flat" href="/logout">Log out</a></li>
     {{else}}
       <li class="header-link"><a class="mui-btn mui-btn--small mui-btn--primary mui-btn--flat" href="/signup">Sign Up</a></li>

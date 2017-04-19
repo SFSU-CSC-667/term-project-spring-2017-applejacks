@@ -30,6 +30,21 @@ ul, ol {
   float: left;
 }
 
+.logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.username {
+  margin-left: 15px;
+  padding: 2px 10px;
+  border-radius: 3px;
+  background-color: #5531a5;
+  color: #fff;
+  font-size: 16px;
+}
+
 .logo h1 {
   margin: 0;
 }
