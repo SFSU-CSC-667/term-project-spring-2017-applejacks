@@ -2,6 +2,15 @@
   padding: 20px 24px 0;
 }
 
+#user-info {
+  display: hidden;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  top: 0;
+  left: 0;
+}
+
 .lobby-page--table {
   margin: 20px;
   border: 1px solid #aaa;

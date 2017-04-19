@@ -10,10 +10,12 @@ import chatRoute from './char2';
 
 const router = express.Router();
 
+
+
 // load all App routes
 router.use('/login',  loginRoute);
 
-router.use('/signup', signupRoute);
+router.use('/signup',  signupRoute);
 router.use('/game',  gameRoute);
 router.use('/admin',  adminRoute);
 router.use('/lobby',  lobbyRoute);
@@ -26,13 +28,8 @@ router.get('/', (req, res) => {
   let pageToRender = req.session.name ? 'lobby' : 'signup';
 
   printlog('GET /', 'route');
-console.log('session name is ' + req.session.name);
-  res.render(pageToRender, {
-    user: {
-      isAdmin: req.session.isAdmin,
-      username: req.session.name
-    }
-  });
+
+  res.redirect(301, pageToRender);
 });
 
 // module.exports = router;

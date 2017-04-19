@@ -9,7 +9,9 @@ function Lobby() {
   let ui = {
     createGameBtn: '[data-action-create-game]',
     joinGameBtn: '[data-action-join-game]',
-    gamesList: '.games-list'
+    gamesList: '.games-list',
+    userId: '#user-info .id',
+    isAdmin: '#user-info .isAdmin'
   };
 
   /**
@@ -74,8 +76,9 @@ function Lobby() {
 
   const createGame = (e) => {
     console.log(`Create game ${e.currentTarget.className}.`);
+    const uid = ui.userId[0].textContent;
 
-    makeAPICall('/api/lobby/15567/createGame', { method: 'post' })
+    makeAPICall(`/api/lobby/${uid}/createGame`, { method: 'post' })
     .then((data) => {
       console.log(data);
     });

@@ -1,6 +1,7 @@
 /* admin routes */
 import express from 'express';
 import { printlog } from './../utils/helpers';
+import auth from './../utils/auth';
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.get('/drop/:table', (req, res) => {
   });
 });
 
-router.get('/', (req, res) => {
+router.get('/', auth, (req, res) => {
   const { db } = res;
   printlog('GET /admin', 'route');
 

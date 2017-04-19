@@ -40,4 +40,9 @@
 
     <button type="button"data-action-create-game class="mui-btn mui-btn--raised">Create Game</button>
   </div>
+
+  <div id="user-info">
+    {{#each user}}
+      <span class="{{@key}}">{{.}}</span>
+    {{/each}}
 </main>

@@ -3,6 +3,7 @@ import express from 'express';
 import { printlog } from './../utils/helpers';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
+import shortid from 'shortid';
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.post('/', (req, res, next) => {
       if (resp) {
 
         if (typeof req.session.uid === 'undefined') {
-          req.session.uid = id;
+          req.session.uid = id; //shortid.generate();
           req.session.name = username || email;
           req.session.isAdmin = true;
         }
@@ -35,7 +36,8 @@ router.post('/', (req, res, next) => {
           res.io.emit('news', { hello: `${req.session.name} joined.` });
         }, 500);
 
-        return res.status(200).json(true);
+        let idHash = `${req.session.uid}`;
+        return res.status(200).json(idHash);
       } else {
         printlog(`Password '${pwd}' does not match.`, 'error');
         return res.status(401).json({

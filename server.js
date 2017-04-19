@@ -109,8 +109,13 @@ app.use((req, res, next) => {
 // load API routes
 app.use('/api', apiRoutes);
 
+// app.use((req, res, next) => {
+
+// });
+
 // load desktop routes
 app.use('/', (req, res, next) => {
+
   // desktop route middleware
   next();
 }, appRouter);
