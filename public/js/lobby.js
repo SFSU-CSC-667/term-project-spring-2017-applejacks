@@ -79,8 +79,18 @@ function Lobby() {
     const uid = ui.userId[0].textContent;
 
     makeAPICall(`/api/lobby/${uid}/createGame`, { method: 'post' })
-    .then((data) => {
-      console.log(data);
+    .then((id) => {
+      const template = Handlebars.templates['game-row.hbs'];
+      const htmlOutput = template({
+        name: 'new game-' + (id*2 - 7),
+        id: id,
+        count: 2,
+        maxCapacity: 4
+      });
+
+      let t = document.createElement('template');
+      t.innerHTML = htmlOutput;
+      document.querySelector('.games-list tbody').appendChild(t.content.firstChild);
     });
   };
 
@@ -124,8 +134,10 @@ function Lobby() {
   return {
     // init() is a public function that is called to initialize view
     init: () => {
+      console.log('LOB INIT');
       const socket = io('/my-namespace');
       socket.on('game-created', (id) => {
+        console.log('Socket channel found');
         template = Handlebars.templates['game-row.hbs'];
         htmlOutput = template({
           name: 'new game-' + (id*2 - 7),

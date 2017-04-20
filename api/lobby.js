@@ -16,11 +16,12 @@ router.post('/:playerId/createGame', (req, res) => {
       nsp.on('connection', function(socket){
         console.log('someone connected');
       });
-      nsp.emit('game-created', gameId);
+      console.log('EMIT');
+      // nsp.emit('game-created', gameId);
 
 
       // return the new game state here
-      res.json({})
+      res.json(gameId)
    })
    .catch((error) => {
     console.log(error);
