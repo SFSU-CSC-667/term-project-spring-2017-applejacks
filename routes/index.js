@@ -10,6 +10,39 @@ import chatRoute from './char2';
 
 const router = express.Router();
 
+// const useMockData = true || (process.env.MD === 'true');
+
+// const mockGameState = {
+//   dealerHand: [
+//     {value: 'K', clubs: true},
+//     {value: 'A', diamonds: true}
+//   ],
+//   userHand: [
+//     {value: '10', clubs: true},
+//     {value: '4', clubs: true}
+//   ],
+//   card: {
+//     value: '2',
+//     clubs: true
+//   }
+// };
+
+// router.get('/game/:gameId', (req, res) => {
+//   const { db } = res;
+//   const { gameId }  = req.params;
+
+//   printlog(`GET /game/${gameId}`, 'route');
+
+//   if (useMockData) {
+//     res.render('game', mockGameState);
+//   } else {
+//     res.render('game', {});
+//   }
+
+//   setTimeout(() => {
+//     res.io.emit('news', { hello: 'User joined' });
+//   }, 500);
+// });
 
 
 // load all App routes
@@ -29,7 +62,7 @@ router.get('/', (req, res) => {
 
   printlog('GET /', 'route');
 
-  res.redirect(301, pageToRender);
+  res.redirect(302, pageToRender);
 });
 
 // module.exports = router;

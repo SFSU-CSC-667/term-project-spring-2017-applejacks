@@ -36,7 +36,8 @@ router.post('/:playerId/joinGame', (req, res) => {
   const { db, io } = res;
 
   // return the new game state here
-  res.json({})
+  // res.json({})
+  res.redirect(302, '/game');
 });
 
 export default router;

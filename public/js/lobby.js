@@ -87,6 +87,7 @@ function Lobby() {
   const joinGame = (e) => {
     const { dataset } = e.target;
     const { gameId } = dataset;
+    const uid = ui.userId[0].textContent;
 
     if (!dataset.hasOwnProperty('actionJoinGame')) {
       console.log('nope.');
@@ -94,8 +95,9 @@ function Lobby() {
     }
 
     console.log(`Join game ${gameId} ?`);
+    window.location = `/game/${gameId}`;
 
-    // makeAPICall(`/api/lobby/123/joinGame/${gameId}`, { method: 'post' })
+    // makeAPICall(`/game/${gameId}`, { method: 'get' })
     // .then((data) => {
     //   console.log(data);
     // });

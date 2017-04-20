@@ -26,6 +26,9 @@ router.post('/', (req, res, next) => {
           req.session.uid = id; //shortid.generate();
           req.session.name = username || email;
           req.session.isAdmin = true;
+
+          // async update last login date
+          db.updateLoginDate(id);
         }
 
         printlog(`${pwd}=${hash} -> ${resp}`);
