@@ -85,6 +85,7 @@ router.post('/', (req, res) => {
       });
     })
     .catch((err) => {
+      printlog(err, 'error');
       // if user sign up fails, send user the error
       res.status(401).json({
         error: 'You already have an account. Please try logging in.'

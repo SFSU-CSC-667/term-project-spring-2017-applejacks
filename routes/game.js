@@ -61,7 +61,7 @@ router.get('/:gameId', auth, (req, res) => {
     }
 
     setTimeout(() => {
-      res.io.emit('news', { hello: 'User joined' });
+      res.io.emit('news', { hello: 'User joined.' });
     }, 500);
 
   })

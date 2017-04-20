@@ -4,7 +4,7 @@
   "description": "Multiplayer Blackjack game with chat interface",
   "main": "server.js",
   "scripts": {
-    "start": "npm run buildTemplates && babel-node server.js",
+    "start": "yarn buildTemplates && babel-node server.js",
     "app": "yarn run buildTemplates && NODE_ENV=development MD=true nodemon --watch routes --watch api --watch database/database.js --watch server.js server.js --exec babel-node --plugins syntax-export-extensions --presets es2015,stage-2",
     "mock": "yarn run build && NODE_ENV=development MD=true nodemon --watch server server.js",
     "build": "echo \"minify and compress...\"",
@@ -53,6 +53,7 @@
     "handlebars": "^4.0.6",
     "jshint": "^2.9.4",
     "moment": "^2.18.1",
+    "node-gyp": "^3.6.0",
     "nodemon": "^1.11.0",
     "npm-check": "^5.4.0",
     "path": "^0.12.7",

@@ -24,6 +24,7 @@ signupForm.addEventListener('submit', (event) => {
     if (error) {
       document.querySelector('.signup-error').textContent = error;
     } else {
+      console.log('routing');
       window.location = '/lobby';
     }
   });
@@ -50,6 +51,7 @@ loginForm.addEventListener('submit', (event) => {
     if (error) {
       document.querySelector('.login-error').textContent = error;
     } else {
+      console.log('routing');
       window.location = '/lobby';
     }
   });
