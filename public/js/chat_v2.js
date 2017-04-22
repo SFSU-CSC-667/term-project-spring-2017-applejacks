@@ -1,6 +1,6 @@
 
  function Chat() {
-   const socket = io.connect('http://localhost:3000/');
+   const socket = io.connect('/');
 
    /**
     * A function to abstract away the native fetch()

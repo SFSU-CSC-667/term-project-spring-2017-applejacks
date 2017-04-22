@@ -184,6 +184,12 @@ function Game() {
   return {
     // init() is a public function that is called to initialize view
     init: () => {
+
+      const socket = io('/game/${id}');
+      socket.on('game-created', (id) => {
+
+      });
+
       // private functions called from within context of view controller
       bindElementsToPage();
       attachEventListeners();
