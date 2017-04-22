@@ -315,7 +315,7 @@ function DatabaseController () {
       return t.batch([q1,q2]);
     });
   };
-
+  // stuf for lobby
   this.createGame = (uid) => {
     const data = {
       date: Date.now(),
@@ -326,10 +326,31 @@ function DatabaseController () {
     return _datab.one('SELECT COUNT(*) from games')
     .then((result) => {
       const gid = Number(result.count) + 1;
-      _datab.none('INSERT INTO games (create_date, is_active, current_player_turn) values (${date},${act},${currTurn})', data);
+      _datab.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
       return this.createCardTable(gid, uid);
     });
   };
+
+  this.addPlayer = (gid,uid) => {
+    console.log('ADD PLAYER');
+    _datab.task((task) => {
+      const t1 = task.none('INSERT INTO players (game_id,user_id,bank_buyin) values ($1,$2,$3)', [gid, uid, 1000]);
+      const t2 = task.none('update games set p_count=((select count(*) from players where game_id=$1)) where id=$1', [gid]);
+      task.batch([t1, t2]);
+    });
+    
+    // .then((data) => {
+    //   console.log(data);
+    // })
+    // .catch((err) => {
+    //   console.log(err);
+    // });
+  };
+
+  this.getActivePlayers = (gid) => {
+    return _datab.one('SELECT COUNT(*) FROM players where game_id=$1', [gid]);
+  };
+
 
   const shuffle = (deck) => {
     const getRandomInt = (min, max) => {
@@ -368,17 +389,17 @@ function DatabaseController () {
   };
 
   this.createCardTable = (gid, uid) => {
-    const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+    const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     const cards_table_columns = ['game_id', 'user_id', 'value', 'suit', 'orderr', 'in_play'];
     const orderArray = shuffle(getNumbers());
     let cards = [];
-    let o = 1;
+    let o = 0;
 
     for (let i = 0; i < 13; i++) {
-      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'C', orderr: orderArray[o++], in_play: false});
-      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'S', orderr: orderArray[o++], in_play: false});
-      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'H', orderr: orderArray[o++], in_play: false});
-      cards.push({game_id: gid, user_id: uid, value: values[i], suit: 'D', orderr: orderArray[o++], in_play: false});
+      cards.push({game_id: gid, user_id: null , value: values[i], suit: 'C', orderr: orderArray[o++], in_play: false});
+      cards.push({game_id: gid, user_id: null , value: values[i], suit: 'S', orderr: orderArray[o++], in_play: false});
+      cards.push({game_id: gid, user_id: null , value: values[i], suit: 'H', orderr: orderArray[o++], in_play: false});
+      cards.push({game_id: gid, user_id: null , value: values[i], suit: 'D', orderr: orderArray[o++], in_play: false});
     }
 
     const batchInsertQuery = Inserts(cards, cards_table_columns, 'game_cards');

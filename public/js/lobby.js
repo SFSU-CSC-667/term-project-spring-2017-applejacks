@@ -84,7 +84,7 @@ function Lobby() {
       const htmlOutput = template({
         name: 'new game-' + (id*2 - 7),
         id: id,
-        count: 2,
+        count: 0,
         maxCapacity: 4
       });
 
@@ -142,7 +142,7 @@ function Lobby() {
         htmlOutput = template({
           name: 'new game-' + (id*2 - 7),
           id: id,
-          count: 2,
+          count: 0,
           maxCapacity: 4
         });
 

@@ -34,14 +34,16 @@ CREATE TABLE IF NOT EXISTS games
   id SERIAL PRIMARY KEY,
   create_date BIGINT,
   is_active BOOLEAN,
-  current_player_turn INT
+  current_player_turn INT,
+  p_count INT
 );
 
 -- CREATE THE PLAYERS TABLE IF IT DOES NOT EXIST
 CREATE TABLE IF NOT EXISTS players
 (
+  id SERIAL PRIMARY KEY,
   game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
-  user_id VARCHAR (60) REFERENCES users(email) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   bet_placed BIGINT,
   bank_buyin BIGINT
 );
