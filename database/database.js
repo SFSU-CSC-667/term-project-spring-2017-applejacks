@@ -334,15 +334,18 @@ function DatabaseController () {
   this.addPlayer = (gid,uid) => {
     console.log('ADD PLAYER');
 
-    // switched back to .tx() instead of .task(). Getting errors. Will look into later
-    _datab.tx((task) => {
-      const t1 = task.any('INSERT INTO players (game_id, user_id, bank_buyin) values ($1, $2, $3)', [gid, uid, 1000]);
-      const t2 = task.any('update games set p_count=((select count(*) from players where game_id=$1)) where id=$1', [gid]);
-      task.batch([t1, t2]);
+    // There has got to be a better way to nest queries like this
+    _datab.none('SELECT * FROM players WHERE user_id=$1', [uid])
+    .then((nodata) => {
+      _datab.task((task) => {
+        const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 1000]);
+        const t3 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
+        task.batch([t1, t2])
+        .catch((err) => printlog('addPlayer inner' + err, 'error'));
+      })
+      .catch((err) => printlog('addPlayer outer' + err, 'error'));
     })
-    .catch((err) => {
-      printlog(err, 'error');
-    });
+    .catch((err) => printlog('Player already exists in game. ' + err, 'error'))
   };
 
   this.getActivePlayers = (gid) => {
