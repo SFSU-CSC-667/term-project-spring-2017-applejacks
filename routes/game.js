@@ -21,20 +21,15 @@ const mockGameState = {
   }
 };
 
-const suit = (ch) => {
-  switch (ch) {
-    case 'C':
-
-  }
-
-};
-
 // /game/gameid
 router.get('/:gameId', auth, (req, res) => {
   const { db } = res;
   const { gameId }  = req.params;
+  const userId = req.session.uid;
 
-  db.addPlayer(gameId,req.session.uid)
+  if (userId) {
+    db.addPlayer(gameId, userId);
+  }
 
   printlog(`GET /game/${gameId}`, 'route');
   mockGameState.user = {

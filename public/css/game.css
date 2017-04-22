@@ -26,6 +26,10 @@
   width: 75%;
 }
 
+.place-bet {
+  margin-bottom: 100px;
+}
+
 .clearfix:after {
   display: block;
   width: 0;

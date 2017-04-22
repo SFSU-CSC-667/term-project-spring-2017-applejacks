@@ -333,18 +333,16 @@ function DatabaseController () {
 
   this.addPlayer = (gid,uid) => {
     console.log('ADD PLAYER');
-    _datab.task((task) => {
-      const t1 = task.none('INSERT INTO players (game_id,user_id,bank_buyin) values ($1,$2,$3)', [gid, uid, 1000]);
-      const t2 = task.none('update games set p_count=((select count(*) from players where game_id=$1)) where id=$1', [gid]);
+
+    // switched back to .tx() instead of .task(). Getting errors. Will look into later
+    _datab.tx((task) => {
+      const t1 = task.any('INSERT INTO players (game_id, user_id, bank_buyin) values ($1, $2, $3)', [gid, uid, 1000]);
+      const t2 = task.any('update games set p_count=((select count(*) from players where game_id=$1)) where id=$1', [gid]);
       task.batch([t1, t2]);
+    })
+    .catch((err) => {
+      printlog(err, 'error');
     });
-    
-    // .then((data) => {
-    //   console.log(data);
-    // })
-    // .catch((err) => {
-    //   console.log(err);
-    // });
   };
 
   this.getActivePlayers = (gid) => {

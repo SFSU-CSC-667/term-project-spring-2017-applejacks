@@ -10,8 +10,15 @@
    {{!-- {{mock.card.value}} --}}
   <div>
     {{#each dealerHand}}
-      <span style="float:left;">{{> card card=this}}</span>
+      <span style="float:left;box-sizing: content-box;">{{> card card=this}}</span>
     {{/each}}
+  </div>
+
+  <div class="place-bet">
+    <label>
+      <span>Place your bet</span>
+      <input type="text" value="50" data-bet/>
+    </label>
   </div>
 
   <div class="user-section">
