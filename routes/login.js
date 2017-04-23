@@ -4,6 +4,7 @@ import { printlog } from './../utils/helpers';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import shortid from 'shortid';
+import randomColor from 'randomColor';
 
 const router = express.Router();
 
@@ -26,6 +27,12 @@ router.post('/', (req, res, next) => {
           req.session.uid = id; //shortid.generate();
           req.session.name = username || email;
           req.session.isAdmin = true;
+          const hexcolor = randomColor({
+            luminosity: 'dark',
+            hue: 'random'
+          });
+          console.log(`'${hexcolor}'`)
+          req.session.color = `${hexcolor}`;
 
           // async update last login date
           db.updateLoginDate(id);

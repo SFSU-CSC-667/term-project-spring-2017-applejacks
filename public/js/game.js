@@ -77,6 +77,11 @@ function Game() {
     }
     // data passed to server must be sent as a string. Checking if data has been strigified yet.
 
+    if (!options.method || options.method.toLowerCase() !== 'get') {
+      delete options.body;
+    }
+
+    options.credentials = 'same-origin';
 
     if (options.headers === undefined) {
       options.headers = new Headers();

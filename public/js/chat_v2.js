@@ -40,8 +40,9 @@
      }
 
      makeAPICall('/chat2', {
-       "method": "post",
-       "body": JSON.stringify(form)
+       method: 'post',
+       credentials: 'same-origin',
+       body: JSON.stringify(form)
      }).then(() => message.value = '');
 
    });
@@ -61,6 +62,8 @@
      }
 
      messageNode.textContent = `[${fromNow}] ${data.hello}`;
+     messageNode.style.color = data.color;
+     messageNode.style.fontWeight = 'bold';
      chat.appendChild(messageNode);
      messageNode.focus();
      document.querySelector('.last-m').removeAttribute('tabIndex');
