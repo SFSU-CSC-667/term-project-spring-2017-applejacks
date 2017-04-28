@@ -335,7 +335,7 @@ function DatabaseController () {
     console.log('ADD PLAYER');
 
     // There has got to be a better way to nest queries like this
-    _datab.none('SELECT * FROM players WHERE user_id=$1', [uid])
+    _datab.none('SELECT * FROM players WHERE user_id=$1 and game_id=$2', [uid,gid])
     .then((nodata) => {
       _datab.task((task) => {
         let t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
