@@ -4,7 +4,7 @@ import { printlog } from './../utils/helpers';
 import bcrypt from 'bcrypt';
 
 const router = express.Router();
-const STARTING_BANK_VALUE = 10000; // $10,000
+const STARTING_BANK_VALUE = 10000000; // $1,000,000
 
 /*
  * GET - desktop route

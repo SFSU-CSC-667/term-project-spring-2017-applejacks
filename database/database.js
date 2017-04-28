@@ -338,9 +338,11 @@ function DatabaseController () {
     _datab.none('SELECT * FROM players WHERE user_id=$1', [uid])
     .then((nodata) => {
       _datab.task((task) => {
-        const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 1000]);
-        const t3 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
-        task.batch([t1, t2])
+        let t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
+        let t3 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
+        let t4 = task.none('UPDATE users SET bank_value=bank_value-10000 WHERE id=$1', [uid]);
+        task.batch([t2, t3, t4])
+        //task.batch([t1, t2])
         .catch((err) => printlog('addPlayer inner' + err, 'error'));
       })
       .catch((err) => printlog('addPlayer outer' + err, 'error'));
