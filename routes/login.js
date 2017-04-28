@@ -4,7 +4,7 @@ import { printlog } from './../utils/helpers';
 import bcrypt from 'bcrypt';
 import session from 'express-session';
 import shortid from 'shortid';
-import randomColor from 'randomColor';
+import randomColor from 'randomcolor';
 
 const router = express.Router();
 
