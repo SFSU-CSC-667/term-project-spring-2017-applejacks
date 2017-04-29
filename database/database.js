@@ -326,7 +326,16 @@ function DatabaseController () {
     return _datab.one('SELECT COUNT(*) from games')
     .then((result) => {
       const gid = Number(result.count) + 1;
-      _datab.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
+     // _datab.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
+
+       _datab.task((task) => {
+          // this inserts the dealer into the game as the game is created, dealer is always uid '1'
+          const t1 = task.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
+          const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, 1, 10000]);
+
+          task.batch([t1, t2])
+          .catch((err) => printlog('addPlayer inner' + err, 'error'));
+      })
       return this.createCardTable(gid, uid);
     });
   };
@@ -338,10 +347,10 @@ function DatabaseController () {
     _datab.none('SELECT * FROM players WHERE user_id=$1 and game_id=$2', [uid,gid])
     .then((nodata) => {
       _datab.task((task) => {
-        let t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
-        let t3 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
-        let t4 = task.none('UPDATE users SET bank_value=bank_value-10000 WHERE id=$1', [uid]);
-        task.batch([t2, t3, t4])
+        const t1 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
+        const t2 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
+        const t3 = task.none('UPDATE users SET bank_value=bank_value-10000 WHERE id=$1', [uid]);
+        task.batch([t1, t2, t3])
         //task.batch([t1, t2])
         .catch((err) => printlog('addPlayer inner' + err, 'error'));
       })
