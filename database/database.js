@@ -328,7 +328,7 @@ function DatabaseController () {
       const gid = Number(result.count) + 1;
      // _datab.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
 
-       _datab.task((task) => {
+       _datab.tx((task) => {
           // this inserts the dealer into the game as the game is created, dealer is always uid '1'
           const t1 = task.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
           const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, 1, 10000]);
@@ -346,7 +346,7 @@ function DatabaseController () {
     // There has got to be a better way to nest queries like this
     _datab.none('SELECT * FROM players WHERE user_id=$1 and game_id=$2', [uid,gid])
     .then((nodata) => {
-      _datab.task((task) => {
+      _datab.tx((task) => {
         const t1 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
         const t2 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
         const t3 = task.none('UPDATE users SET bank_value=bank_value-10000 WHERE id=$1', [uid]);
@@ -401,10 +401,15 @@ function DatabaseController () {
   };
 
  this.dealCard = (gid, uid) => {
- 	return _datab.any('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT 1', [gid])
-       .catch((err) => {
-        console.log(`dealCard() => ${err}`, 'error');
-      });
+ 	_datab.tx((t) => {
+ 	   //batch queries
+ 	   let q1 = ('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT 1', [gid])
+ 	   let q2 = ('UPDATE game_cards SET user_id = $1 WHERE id = $2', [uid,q1])
+
+ 	   t.batch([q1, q2])
+       .catch((err) => console.log(`dealCard() => ${err}`, 'error')); 
+   });
+  
   };	
 
   this.createCardTable = (gid, uid) => {
