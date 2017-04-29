@@ -400,6 +400,13 @@ function DatabaseController () {
       });
   };
 
+ this.dealCard = (gid, uid) => {
+ 	return _datab.any('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT 1', [gid])
+       .catch((err) => {
+        console.log(`dealCard() => ${err}`, 'error');
+      });
+  };	
+
   this.createCardTable = (gid, uid) => {
     const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
     const cards_table_columns = ['game_id', 'user_id', 'value', 'suit', 'orderr', 'in_play'];
