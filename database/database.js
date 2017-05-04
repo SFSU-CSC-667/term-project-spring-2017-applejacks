@@ -400,6 +400,19 @@ function DatabaseController () {
       });
   };
 
+  this.makeBet = (betVal,pid) => {
+    printlog('Placing bet of:'+ betVal);
+
+    _datab.tx((task) => {
+      const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2', [betVal, pid])
+      const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2', [betVal, pid])
+      task.batch([t1, t2])
+    })
+    .catch((err) => {
+        console.log(`makeBet() => ${err}`, 'error');
+      });
+  };
+
  this.dealCard = (gid, uid) => {
  	_datab.tx((t) => {
  	   //batch queries
