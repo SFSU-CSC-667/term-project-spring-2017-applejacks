@@ -39,6 +39,15 @@ router.get('/:gameId', auth, (req, res) => {
         id: req.session.uid
       };
 
+
+  db.dealCards(gameId,userId, 4)
+  .then((err) => {
+    console.log(err);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
   db.getCards(gameId)
   .then((deck) => {
     mockGameState.userHand = [

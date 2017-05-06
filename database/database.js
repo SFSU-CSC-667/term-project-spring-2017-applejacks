@@ -400,17 +400,23 @@ function DatabaseController () {
       });
   };
 
- this.dealCard = (gid, uid) => {
- 	_datab.tx((t) => {
- 	   //batch queries
- 	   let q1 = ('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT 1', [gid])
- 	   let q2 = ('UPDATE game_cards SET user_id = $1 WHERE id = $2', [uid,q1])
+ this.dealCards = (gid, uid, numCards) => {
+    return _datab.any('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
+      .then((cards) => {
+        //console.log(cards[0], typeof cards[0].id);
+        cards.forEach((card) => {
+            _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2', [uid,card.id])
+          .catch((err) => {
+             console.log(`getCardsa() => ${err}`, 'error');
+          });
+        });
+      
+      })
+      .catch((err) => {
+        console.log(`getCards() => ${err}`, 'error');
+      });
+  };
 
- 	   t.batch([q1, q2])
-       .catch((err) => console.log(`dealCard() => ${err}`, 'error')); 
-   });
-  
-  };	
 
   this.createCardTable = (gid, uid) => {
     const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
