@@ -63,7 +63,7 @@ function Game() {
    * @returns {Promise} A promise that resolves a server or api response as json
    */
  const makeAPICall = (url, data={}) => {
-    let options = {method, headers, mode, cache, body} = data;
+    let options = {method, headers, mode, cache} = data;
     let body = {};
 
     try {
@@ -165,7 +165,7 @@ function Game() {
     // - use makeAPICall(<api url>, options)
     // - add method property ('post') on options object
     // - add body property on options object. Assign it a bet value object.
-    makeAPICall(`/api/game/${gameId}/bet/${uid}`, { method: 'post'})
+    makeAPICall(`/api/game/${gameId}/bet/${userId}`, { method: 'post'})
     .then((data) =>{
       body = betVal;
     });
