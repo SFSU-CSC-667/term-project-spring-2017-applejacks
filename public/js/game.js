@@ -11,6 +11,7 @@ function Game() {
     stayBtn: '[data-app-stay]',
     betBtn: '[data-app-place-bet]',
     userSectionActions: '.user-section--actions button',
+
     userId: '#user-info .id',
     betValue: '[data-bet]'
   };
@@ -62,7 +63,7 @@ function Game() {
    * @returns {Promise} A promise that resolves a server or api response as json
    */
  const makeAPICall = (url, data={}) => {
-    let options = {method, headers, mode, cache} = data;
+    let options = {method, headers, mode, cache, body} = data;
     let body = {};
 
     try {
@@ -151,8 +152,10 @@ function Game() {
     console.log(`Bet placed for ${event.currentTarget.className}.`);
     const betVal = ui.betValue[0].value;
     const gameId = location.href.split('/').pop();
+
     const userId = document.querySelector("#user-info .id").textContent;
     console.log(userId);
+
     // To get userId, look at how I pass down a user object on the lobby page. Rendering it in the page, and then
     // using the ui hash to get the values
 
@@ -162,6 +165,10 @@ function Game() {
     // - use makeAPICall(<api url>, options)
     // - add method property ('post') on options object
     // - add body property on options object. Assign it a bet value object.
+    makeAPICall(`/api/game/${gameId}/bet/${uid}`, { method: 'post'})
+    .then((data) =>{
+      body = betVal;
+    });
   };
 
   /**

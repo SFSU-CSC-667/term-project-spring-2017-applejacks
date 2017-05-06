@@ -33,11 +33,13 @@ router.get('/:gameId', auth, (req, res) => {
 
   printlog(`GET /game/${gameId}`, 'route');
   mockGameState.user = {
+
         isAdmin: req.session.isAdmin,
         username: req.session.name,
         name: req.session.name,
         id: req.session.uid
       };
+
 
   db.getCards(gameId)
   .then((deck) => {
@@ -55,7 +57,8 @@ router.get('/:gameId', auth, (req, res) => {
       res.render('game', {
         user: {
           isAdmin: req.session.isAdmin,
-          username: req.session.name
+          username: req.session.name,
+          id: req.session.uid
         }
       });
     }
