@@ -39,3 +39,9 @@
 <aside id="chat-section" class="chat-section">
   {{> chat_v2}}
 </aside>
+
+<div id="user-info">
+    {{#each user}}
+      <span class="{{@key}}">{{.}}</span>
+    {{/each}}
+</div>

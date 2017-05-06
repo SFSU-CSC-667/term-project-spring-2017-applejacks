@@ -11,8 +11,9 @@ function Game() {
     stayBtn: '[data-app-stay]',
     betBtn: '[data-app-place-bet]',
     userSectionActions: '.user-section--actions button',
-    betValue: '[data-bet]',
-    userId: '#user-info .id'
+
+    userId: '#user-info .id',
+    betValue: '[data-bet]'
   };
 
   /**
@@ -151,11 +152,14 @@ function Game() {
     console.log(`Bet placed for ${event.currentTarget.className}.`);
     const betVal = ui.betValue[0].value;
     const gameId = location.href.split('/').pop();
-    const uid = ui.userId[0].textContent;
+
+    const userId = document.querySelector("#user-info .id").textContent;
+    console.log(userId);
+
     // To get userId, look at how I pass down a user object on the lobby page. Rendering it in the page, and then
     // using the ui hash to get the values
 
-    console.log(betVal);
+    console.log(ui.userId);
 
     // ToDO:
     // - use makeAPICall(<api url>, options)
