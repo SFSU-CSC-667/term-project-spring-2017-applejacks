@@ -40,8 +40,6 @@ router.get('/:gameId', auth, (req, res) => {
         id: req.session.uid
       };
 
-
-<<<<<<< HEAD
   db.dealCards(gameId,userId, 4)
   .then((err) => {
     console.log(err);
@@ -50,8 +48,6 @@ router.get('/:gameId', auth, (req, res) => {
     console.log(err);
   });
 
-=======
->>>>>>> a9cbf4d128cde906d3055c9730ef9d9072cd38e6
   db.getCards(gameId)
   .then((deck) => {
     mockGameState.userHand = [
