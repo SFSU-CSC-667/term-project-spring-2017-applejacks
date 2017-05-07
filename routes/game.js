@@ -33,6 +33,7 @@ router.get('/:gameId', auth, (req, res) => {
 
   printlog(`GET /game/${gameId}`, 'route');
   mockGameState.user = {
+
         isAdmin: req.session.isAdmin,
         username: req.session.name,
         name: req.session.name,
@@ -40,6 +41,7 @@ router.get('/:gameId', auth, (req, res) => {
       };
 
 
+<<<<<<< HEAD
   db.dealCards(gameId,userId, 4)
   .then((err) => {
     console.log(err);
@@ -48,6 +50,8 @@ router.get('/:gameId', auth, (req, res) => {
     console.log(err);
   });
 
+=======
+>>>>>>> a9cbf4d128cde906d3055c9730ef9d9072cd38e6
   db.getCards(gameId)
   .then((deck) => {
     mockGameState.userHand = [
@@ -64,7 +68,8 @@ router.get('/:gameId', auth, (req, res) => {
       res.render('game', {
         user: {
           isAdmin: req.session.isAdmin,
-          username: req.session.name
+          username: req.session.name,
+          id: req.session.uid
         }
       });
     }

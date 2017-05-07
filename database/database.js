@@ -400,6 +400,7 @@ function DatabaseController () {
       });
   };
 
+<<<<<<< HEAD
  this.dealCards = (gid, uid, numCards) => {
     return _datab.any('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
       .then((cards) => {
@@ -417,6 +418,32 @@ function DatabaseController () {
       });
   };
 
+=======
+  this.makeBet = (betVal,pid) => {
+    printlog('Placing bet of:'+ betVal);
+
+    _datab.tx((task) => {
+      const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2', [betVal, pid])
+      const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2', [betVal, pid])
+      task.batch([t1, t2])
+    })
+    .catch((err) => {
+        console.log(`makeBet() => ${err}`, 'error');
+      });
+  };
+
+ this.dealCard = (gid, uid) => {
+ 	_datab.tx((t) => {
+ 	   //batch queries
+ 	   let q1 = ('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT 1', [gid])
+ 	   let q2 = ('UPDATE game_cards SET user_id = $1 WHERE id = $2', [uid,q1])
+
+ 	   t.batch([q1, q2])
+       .catch((err) => console.log(`dealCard() => ${err}`, 'error')); 
+   });
+  
+  };	
+>>>>>>> a9cbf4d128cde906d3055c9730ef9d9072cd38e6
 
   this.createCardTable = (gid, uid) => {
     const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
