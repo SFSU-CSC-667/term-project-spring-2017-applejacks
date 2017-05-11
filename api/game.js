@@ -30,8 +30,9 @@ router.post('/:id/bet/:playerId', (req, res) => {
   const { db, io } = res;
   const {bet = 50} = req.body;
 
+  console.log('req body is:' + JSON.stringify(req.body));
   console.log('Placing Bet of:' + bet);
-  db.makeBet(bet);
+  db.makeBet(bet, playerId, id);
   // return the new game state here
   res.json({})
 });

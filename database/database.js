@@ -417,12 +417,12 @@ function DatabaseController () {
       });
   };
 
-  this.makeBet = (betVal,pid) => {
+  this.makeBet = (betVal,pid,gid) => {
     printlog('Placing bet of:'+ betVal);
 
     _datab.tx((task) => {
-      const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2', [betVal, pid])
-      const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2', [betVal, pid])
+      const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE user_id =$2 AND game_id=$3', [betVal, pid, gid])
+      const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE user_id =$2 AND game_id=$3', [betVal, pid, gid])
       task.batch([t1, t2])
     })
     .catch((err) => {

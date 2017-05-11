@@ -66,6 +66,8 @@ function Game() {
     let options = {method, headers, mode, cache} = data;
     let body = {};
 
+    console.log('API Body is: ' + JSON.stringify(options.body));
+
     try {
       if (typeof options.body === 'object') {
         options.body = JSON.stringify(options.body)
@@ -155,20 +157,18 @@ function Game() {
 
     const userId = document.querySelector("#user-info .id").textContent;
     console.log(userId);
+    console.log('Bet Placed:' + JSON.stringify(betVal));
 
     // To get userId, look at how I pass down a user object on the lobby page. Rendering it in the page, and then
     // using the ui hash to get the values
 
-    console.log(ui.userId);
 
     // ToDO:
     // - use makeAPICall(<api url>, options)
     // - add method property ('post') on options object
     // - add body property on options object. Assign it a bet value object.
-    makeAPICall(`/api/game/${gameId}/bet/${userId}`, { method: 'post'})
-    .then((data) =>{
-      body = betVal;
-    });
+    makeAPICall(`/api/game/${gameId}/bet/${userId}`, { method: 'post', body: betVal})
+    
   };
 
   /**
