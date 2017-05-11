@@ -28,10 +28,9 @@ router.post('/:id/stay/:playerId', (req, res) => {
 router.post('/:id/bet/:playerId', (req, res) => {
   const { id, playerId } = req.params;
   const { db, io } = res;
-  const {bet = 50} = req.body;
+  const {body} = req.body;
+  const bet = body;
 
-  console.log('req body is:' + JSON.stringify(req.body));
-  console.log('Placing Bet of:' + bet);
   db.makeBet(bet, playerId, id);
   // return the new game state here
   res.json({})

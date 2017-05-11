@@ -66,7 +66,7 @@ function Game() {
     let options = {method, headers, mode, cache} = data;
     let body = {};
 
-    console.log('API Body is: ' + JSON.stringify(options.body));
+    console.log('API Body 1 is: ' + JSON.stringify(options.body));
 
     try {
       if (typeof options.body === 'object') {
@@ -81,9 +81,9 @@ function Game() {
     }
     // data passed to server must be sent as a string. Checking if data has been strigified yet.
 
-    if (!options.method || options.method.toLowerCase() !== 'get') {
+    /*if (!options.method || options.method.toLowerCase() !== 'get') {//////////////////////is this necessary?
       delete options.body;
-    }
+    }*/
 
     options.credentials = 'same-origin';
 
@@ -94,6 +94,7 @@ function Game() {
     }
 
     let request = new Request(url, options);
+    console.log('API Body 2 is: ' + JSON.stringify(options.body));
 
     return fetch(request).then((response) => response.json());
   };
