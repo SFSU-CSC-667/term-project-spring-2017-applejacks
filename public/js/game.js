@@ -257,8 +257,10 @@ function Game() {
       });
 
       socket.on('PLAYER_BET', (result) => {
-        const { gameState } = result;
+        let { gameState } = result;
         console.log(gameState);
+
+        gameState = gameState[`${gameId}`];
         console.log(userId);
 
         const dealFrag = document.createDocumentFragment();
@@ -282,7 +284,7 @@ function Game() {
       });
 
       socket.on('PLAYER_HIT', (result) => {
-        const { bust } = result.gameState;
+        const { bust } = result.gameState[`${gameId}`];
 
         if (bust) {
           console.log('~~~ BUST ~~~');

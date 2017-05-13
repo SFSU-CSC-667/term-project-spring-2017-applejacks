@@ -9,7 +9,7 @@ const isArray = (obj) => {
   return obj && obj.constructor.name === 'Array';
 };
 
-const normalizeForGameState = (cardObject) => {
+const normalizeForGameState = (cardObject, gameId) => {
   const userId = cardObject['user_id'];
   const card = {
     value: cardObject.value,
@@ -20,10 +20,14 @@ const normalizeForGameState = (cardObject) => {
     spades: 'S' === cardObject.suit
   };
 
-  if (isArray(gameState[userId]) && gameState[userId].length) {
-    gameState[userId].push(card);
+  if (!gameState[gameId]) {
+    gameState[gameId] = {};
+  }
+
+  if (isArray(gameState[gameId][userId]) && gameState[gameId][userId].length) {
+    gameState[gameId][userId].push(card);
   } else {
-    gameState[userId] = [card];
+    gameState[gameId][userId] = [card];
   }
 };
 
@@ -49,15 +53,15 @@ router.get('/:id/hit/:userId', (req, res) => {
       value = Number(value);
     }
 
-    gameState.total += value;
+    gameState[id].total += value;
 
-    if (gameState.total > 21) {
-      gameState.bust = true;
+    if (gameState[id].total > 21) {
+      gameState[id].bust = true;
     } else {
-      gameState.bust = false;
+      gameState[id].bust = false;
     }
 
-    normalizeForGameState(card[0]);
+    normalizeForGameState(card[0], id);
     io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
     io.in('game-' + id).emit('PLAYER_HIT', {gameState: gameState});
   });
@@ -95,6 +99,8 @@ router.post('/:id/bet/:userId', (req, res) => {
     cards.forEach((card) => {
       let { value } = card;
 
+      normalizeForGameState(card, id);
+
       if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
         value = 10;
       } else {
@@ -102,8 +108,8 @@ router.post('/:id/bet/:userId', (req, res) => {
       }
 
       total += value;
-      gameState.total = total;
-      normalizeForGameState(card);
+      gameState[id].total = total;
+
     });
 
     // get dealer cards
@@ -112,7 +118,7 @@ router.post('/:id/bet/:userId', (req, res) => {
 
       // dealer
       cards.forEach((card) => {
-        normalizeForGameState(card);
+        normalizeForGameState(card, id);
       });
 
       io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
