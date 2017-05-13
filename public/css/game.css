@@ -24,6 +24,9 @@
   bottom: 4px;
   position: absolute;
   width: 75%;
+
+  display: flex;
+    justify-content: space-between;
 }
 
 .place-bet {
@@ -44,11 +47,14 @@
   justify-content: space-between;
   width: 50%;
   height: var(--user-section-height);
+
+  width: 30%;
 }
 
 .user-section--hand {
   display: inline-block;
   height: 100%;
+  width: 70%;
 }
 
 .user-section--card {

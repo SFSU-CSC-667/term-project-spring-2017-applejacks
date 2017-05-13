@@ -9,11 +9,13 @@
   box-sizing: border-box;
   font-size: 18pt;
   font-family: sans-serif;
-  position: relative;  
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
+
+  display: inline-flex;
 }
 
 .card.red {
@@ -21,7 +23,7 @@
 }
 
 .card .top {
-  align-self: flex-start;    
+  align-self: flex-start;
 }
 
 .card .suit {
@@ -29,6 +31,6 @@
 }
 
 .card .bottom {
-  align-self: flex-end;  
+  align-self: flex-end;
   transform: rotate(180deg);
 }

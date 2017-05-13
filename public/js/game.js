@@ -11,7 +11,6 @@ function Game() {
     stayBtn: '[data-app-stay]',
     betBtn: '[data-app-place-bet]',
     userSectionActions: '.user-section--actions button',
-
     userId: '#user-info .id',
     betValue: '[data-bet]'
   };
@@ -63,29 +62,27 @@ function Game() {
    * @returns {Promise} A promise that resolves a server or api response as json
    */
  const makeAPICall = (url, data={}) => {
+    let body = data.body;
     let options = {method, headers, mode, cache} = data;
-    let body = {};
 
-    console.log('API Body 1 is: ' + JSON.stringify(options.body));
+    // try {
+    //   if (typeof options.body === 'object') {
+    //     options.body = JSON.stringify(options.body)
+    //   } else {
+    //     body = JSON.parse(options.body);
+    //     options.body = JSON.stringify({body:options.body});
+    //   }
+    // } catch(err) {
+    //   console.log('Error with the data you are passing', err);
+    //   options.body = '{}';
+    // }
 
-    try {
-      if (typeof options.body === 'object') {
-        options.body = JSON.stringify(options.body)
-      } else {
-        body = JSON.parse(options.body);
-        options.body = JSON.stringify({body:options.body});
-      }
-    } catch(err) {
-      console.log('Error with the data you are passing', err);
-      options.body = '{}';
-    }
-    // data passed to server must be sent as a string. Checking if data has been strigified yet.
-
-    /*if (!options.method || options.method.toLowerCase() !== 'get') {//////////////////////is this necessary?
+    if (!options.method || options.method.toLowerCase() !== 'get') {
       delete options.body;
-    }*/
+    }
 
     options.credentials = 'same-origin';
+    options.body = body;
 
     if (options.headers === undefined) {
       options.headers = new Headers();
@@ -94,7 +91,6 @@ function Game() {
     }
 
     let request = new Request(url, options);
-    console.log('API Body 2 is: ' + JSON.stringify(options.body));
 
     return fetch(request).then((response) => response.json());
   };
@@ -160,16 +156,16 @@ function Game() {
     console.log(userId);
     console.log('Bet Placed:' + JSON.stringify(betVal));
 
-    // To get userId, look at how I pass down a user object on the lobby page. Rendering it in the page, and then
-    // using the ui hash to get the values
-
+    const bet = {bet: betVal};
 
     // ToDO:
     // - use makeAPICall(<api url>, options)
     // - add method property ('post') on options object
     // - add body property on options object. Assign it a bet value object.
-    makeAPICall(`/api/game/${gameId}/bet/${userId}`, { method: 'post', body: betVal})
-    
+    makeAPICall(`/api/game/${gameId}/bet/${userId}`, {
+      method: 'post',
+      body: JSON.stringify(bet)
+    });
   };
 
   /**
@@ -223,14 +219,35 @@ function Game() {
     });
   };
 
+  const addCard = (card) => {
+    const template = Handlebars.templates['card.hbs'];
+    const htmlOutput = template(card);
+
+    let t = document.createElement('template');
+    t.innerHTML = htmlOutput;
+    document.querySelector('.user-section--hand').appendChild(t.content.firstChild);
+  };
+
   // expose public functions here
   return {
     // init() is a public function that is called to initialize view
     init: () => {
+      const gameId = location.href.split('/').pop();
+      const userId = document.querySelector("#user-info .id").textContent;
+      const socket = io.connect();
 
-      const socket = io('/game/${id}');
-      socket.on('game-created', (id) => {
+      socket.on('connect', function() {
+         socket.emit('room', 'game-' + gameId);
+      });
 
+      socket.on('PLAYER_BET', (result) => {
+        const { gameState } = result;
+        console.log(gameState);
+        console.log(userId);
+
+        gameState[`${userId}`].forEach((card) => {
+          addCard(card);
+        });
       });
 
       // private functions called from within context of view controller

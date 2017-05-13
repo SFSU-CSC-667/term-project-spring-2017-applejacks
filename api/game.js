@@ -23,17 +23,55 @@ router.post('/:id/stay/:playerId', (req, res) => {
   res.json({})
 });
 
-// bet
-// POST /api/game/:id/bet/:playerId
-router.post('/:id/bet/:playerId', (req, res) => {
-  const { id, playerId } = req.params;
-  const { db, io } = res;
-  const {body} = req.body;
-  const bet = body;
 
-  db.makeBet(bet, playerId, id);
+
+let gameState = {};
+
+const isArray = (obj) => {
+  return obj && obj.constructor.name === 'Array';
+};
+
+const normalizeForGameState = (cardObject) => {
+  const userId = cardObject['user_id'];
+  const card = {
+    value: cardObject.value,
+    suit: cardObject.suit,
+    clubs: 'C' === cardObject.suit,
+    hearts: 'H' === cardObject.suit,
+    diamonds: 'D' === cardObject.suit,
+    spades: 'S' === cardObject.suit
+  };
+
+  if (isArray(gameState[userId]) && gameState[userId].length) {
+    gameState[userId].push(card);
+  } else {
+    gameState[userId] = [card];
+  }
+};
+
+
+// bet
+// POST /api/game/:id/bet/:userId
+router.post('/:id/bet/:userId', (req, res) => {
+  const { id, userId } = req.params;
+  const { db, io } = res;
+  const { bet } = req.body;
+
+  db.dealUpdate(id, userId, 2)
+  .then((cards) => {
+
+    cards.forEach((card) => {
+      normalizeForGameState(card);
+    });
+
+    io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
+  })
+  .catch((err) => console.log('dealUpdate err', err));
+
+  db.makeBet(bet, userId);
+
   // return the new game state here
-  res.json({})
+  res.json({});
 });
 
 

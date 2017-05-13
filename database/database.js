@@ -4,6 +4,7 @@ import pgPromise from 'pg-promise';
 
 const pgp = pgPromise();
 const Inserts = pgp.helpers.insert;
+const Updates = pgp.helpers.update;
 
 function DatabaseController () {
   // instance of the pg-promise library object
@@ -400,34 +401,58 @@ function DatabaseController () {
       });
   };
 
- this.dealCards = (gid, uid, numCards) => {
-    return _datab.any('SELECT id FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
-      .then((cards) => {
-        //console.log(cards[0], typeof cards[0].id);
-        cards.forEach((card) => {
-            _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2', [uid,card.id])
-          .catch((err) => {
-             console.log(`getCardsa() => ${err}`, 'error');
-          });
-        });
-      
-      })
-      .catch((err) => {
-        console.log(`getCards() => ${err}`, 'error');
-      });
+  this.updateCard = (userId, cardId) => {
+    _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2', [userId, cardId])
+    .catch((err) => {
+       console.log(`updateCard() => ${err}`, 'error');
+    });
   };
 
-  this.makeBet = (betVal,pid,gid) => {
-    printlog('Placing bet of:'+ betVal);
+ this.dealCards = (gid, uid, numCards) => {printlog(gid, uid, numCards);
+    return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
+    .catch((err) => {
+      console.log(`dealCards() => ${err}`, 'error');
+    });
+  };
 
-    _datab.tx((task) => {
-      const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE user_id =$2 AND game_id=$3', [betVal, pid, gid])
-      const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE user_id =$2 AND game_id=$3', [betVal, pid, gid])
-      task.batch([t1, t2])
+
+  this.dealUpdate = (gid, uid, numCards) => {
+
+    return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
+    .then((cards) => {
+
+      _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[0].id, gid])
+        .catch((err) => console.log(`Update batch deal cards 1 => ${err}`, 'error'));
+      _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[1].id, gid])
+        .catch((err) => console.log(`Update batch deal cards 2 => ${err}`, 'error'));
+
+        // console.log(`user id is ${uid}`);
+      cards[0]['user_id'] = uid;
+      cards[1]['user_id'] = uid;
+      console.log(cards);
+      return cards;
     })
     .catch((err) => {
-        console.log(`makeBet() => ${err}`, 'error');
-      });
+      console.log(`dealUpdate() => ${err}`, 'error');
+    });
+  };
+
+  this.makeBet = (betVal, uid) => {
+    printlog('Placing bet of:'+ betVal);
+
+    _datab.one('SELECT id FROM players WHERE user_id=$1', [uid])
+    .then((res) => {
+      const playerId = res.id;
+
+      _datab.tx((task) => {
+        const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2', [betVal, playerId])
+        const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2', [betVal, playerId])
+        task.batch([t1, t2])
+      })
+      .catch((err) => console.log(`getPLayerId() => ${err}`, 'error'));
+    })
+    .catch((err) => console.log(`makeBet() => ${err}`, 'error'));
+
   };
 
   this.createCardTable = (gid, uid) => {

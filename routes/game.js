@@ -21,9 +21,43 @@ const mockGameState = {
   }
 };
 
+let gameState = {};
+
+const isArray = (obj) => {
+  return obj && obj.constructor.name === 'Array';
+};
+
+const normalizeForGameState = (cardObject, userId) => {
+  const card = {
+    value: cardObject.value,
+    suit: cardObject.suit,
+    clubs: 'C' === cardObject.suit,
+    hearts: 'H' === cardObject.suit,
+    diamonds: 'D' === cardObject.suit,
+    spades: 'S' === cardObject.suit
+  };
+
+  // console.log(typeof gameState[userId]);
+  if (isArray(gameState[userId]) && gameState[userId].length) {
+    gameState[userId].push(card);
+  } else {
+    gameState[userId] = [card];
+  }
+
+
+  // mockGameState.userHand = [
+  //   {value: deck[0].value, suit: deck[0].suit, clubs: 'C' === deck[0].suit, hearts: 'H' === deck[0].suit, 'diamonds': 'D' === deck[0].suit, 'spades': 'S' === deck[0].suit},
+  //   {value: deck[1].value, suit: deck[1].suit, clubs: 'C' === deck[1].suit, hearts: 'H' === deck[1].suit, 'diamonds': 'D' === deck[1].suit, 'spades': 'S' === deck[1].suit}
+  // ];
+  //  mockGameState.dealerHand = [
+  //   {value: deck[2].value, suit: deck[2].suit, clubs: 'C' === deck[2].suit, hearts: 'H' === deck[2].suit, 'diamonds': 'D' === deck[2].suit, 'spades': 'S' === deck[2].suit},
+  //   {value: deck[3].value, suit: deck[3].suit, clubs: 'C' === deck[3].suit, hearts: 'H' === deck[3].suit, 'diamonds': 'D' === deck[3].suit, 'spades': 'S' === deck[3].suit}
+  // ];
+};
+
 // /game/gameid
 router.get('/:gameId', auth, (req, res) => {
-  const { db } = res;
+  const { db, io } = res;
   const { gameId }  = req.params;
   const userId = req.session.uid;
 
@@ -31,70 +65,78 @@ router.get('/:gameId', auth, (req, res) => {
     db.addPlayer(gameId, userId);
   }
 
+  // listen for client and then create a room and join
+  // Ex. game-3
+  io.sockets.on('connection', function (socket) {
+    socket.on('room', function (room) {
+      socket.join(room);
+    });
+  });
+
   printlog(`GET /game/${gameId}`, 'route');
-  mockGameState.user = {
 
-        isAdmin: req.session.isAdmin,
-        username: req.session.name,
-        name: req.session.name,
-        id: req.session.uid
-      };
+  gameState.user = {
+    isAdmin: req.session.isAdmin,
+    username: req.session.name,
+    name: req.session.name,
+    id: req.session.uid
+  };
 
-  db.dealCards(gameId,userId, 4)
-  .then((err) => {
-    console.log(err);
-  })
-  .catch((err) => {
-    console.log(err);
+  // db.dealCards(gameId, userId, 4)
+  // .then((cards) => {
+  //   cards.forEach((card) => {
+  //     normalizeForGameState(card, userId);
+  //     db.updateCard(userId, card.id);
+  //   });
+  //   console.log('card 0 is ---> ', cards[0]);
+  // })
+  // .catch((err) => {
+  //   console.log(err);
+  // });
+
+  res.render('game', {
+    user: {
+    isAdmin: req.session.isAdmin,
+    username: req.session.name,
+    name: req.session.name,
+    id: req.session.uid
+  }
   });
 
-  db.getCards(gameId)
-  .then((deck) => {
-    mockGameState.userHand = [
-      {value: deck[0].value, suit: deck[0].suit, clubs: 'C' === deck[0].suit, hearts: 'H' === deck[0].suit, 'diamonds': 'D' === deck[0].suit, 'spades': 'S' === deck[0].suit},
-      {value: deck[1].value, suit: deck[1].suit, clubs: 'C' === deck[1].suit, hearts: 'H' === deck[1].suit, 'diamonds': 'D' === deck[1].suit, 'spades': 'S' === deck[1].suit}
-    ];
-     mockGameState.dealerHand = [
-      {value: deck[2].value, suit: deck[2].suit, clubs: 'C' === deck[2].suit, hearts: 'H' === deck[2].suit, 'diamonds': 'D' === deck[2].suit, 'spades': 'S' === deck[2].suit},
-      {value: deck[3].value, suit: deck[3].suit, clubs: 'C' === deck[3].suit, hearts: 'H' === deck[3].suit, 'diamonds': 'D' === deck[3].suit, 'spades': 'S' === deck[3].suit}
-    ];
-    if (useMockData) {
-      res.render('game', mockGameState);
-    } else {
-      res.render('game', {
-        user: {
-          isAdmin: req.session.isAdmin,
-          username: req.session.name,
-          id: req.session.uid
-        }
-      });
-    }
+  // db.getCards(gameId)
+  // .then((deck) => {
+  //   mockGameState.userHand = [
+  //     {value: deck[0].value, suit: deck[0].suit, clubs: 'C' === deck[0].suit, hearts: 'H' === deck[0].suit, 'diamonds': 'D' === deck[0].suit, 'spades': 'S' === deck[0].suit},
+  //     {value: deck[1].value, suit: deck[1].suit, clubs: 'C' === deck[1].suit, hearts: 'H' === deck[1].suit, 'diamonds': 'D' === deck[1].suit, 'spades': 'S' === deck[1].suit}
+  //   ];
+  //    mockGameState.dealerHand = [
+  //     {value: deck[2].value, suit: deck[2].suit, clubs: 'C' === deck[2].suit, hearts: 'H' === deck[2].suit, 'diamonds': 'D' === deck[2].suit, 'spades': 'S' === deck[2].suit},
+  //     {value: deck[3].value, suit: deck[3].suit, clubs: 'C' === deck[3].suit, hearts: 'H' === deck[3].suit, 'diamonds': 'D' === deck[3].suit, 'spades': 'S' === deck[3].suit}
+  //   ];
+  //   if (useMockData) {
+  //     res.render('game', mockGameState);
+  //   } else {
+  //     res.render('game', {
+  //       user: {
+  //         isAdmin: req.session.isAdmin,
+  //         username: req.session.name,
+  //         id: req.session.uid
+  //       }
+  //     });
+  //   }
 
-    setTimeout(() => {
-      res.io.emit('news', { hello: 'User joined.' });
-    }, 500);
+  //   setTimeout(() => {
+  //     res.io.emit('news', { hello: 'User joined.' });
+  //   }, 500);
 
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+  // })
+  // .catch((err) => {
+  //   console.log(err);
+  // });
 });
 
 router.get('/', (req, res) => {
-  // const { db } = res;
-  // printlog('GET /game', 'route');
-
-  // if (useMockData) {
-  //   res.render('game', mockGameState);
-  // } else {
-  //   res.render('game', {});
-  // }
-
-  // setTimeout(() => {
-  //   res.io.emit('news', { hello: 'User joined' });
-  // }, 500);
   res.redirect(302, '/');
-
 });
 
 export default router;
