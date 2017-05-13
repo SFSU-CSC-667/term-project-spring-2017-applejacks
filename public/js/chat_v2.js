@@ -47,7 +47,16 @@
 
    });
 
-   socket.on('news', (data) => {
+
+  // const socket = io.connect('/');
+
+  // socket.on('connect', function() {
+  //   socket.emit('room', 'chat-' + gameId);
+  // });
+
+
+
+   socket.on('message', (data) => {
      console.log('DATA RECEIVED', data);
      let messageNode = document.createElement('LI');
      const d = new Date(Date.now());

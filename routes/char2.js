@@ -16,7 +16,7 @@ router.post('/', (req, res) => {
   const { db } = res;
 
   console.log('POST body -> ', body);
-  res.io.emit('news', {
+  res.io.emit('message', {
     hello: body.message,
     color: req.session.color,
     fromNow: moment('2017-04-08 17:40').fromNow() // time since 4/8/17, 5:40pm

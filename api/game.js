@@ -41,8 +41,25 @@ router.get('/:id/hit/:userId', (req, res) => {
 
   db.dealUpdate(id, userId, 1)
   .then((card) => {
+    let { value } = card[0];
+
+    if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+      value = 10;
+    } else {
+      value = Number(value);
+    }
+
+    gameState.total += value;
+
+    if (gameState.total > 21) {
+      gameState.bust = true;
+    } else {
+      gameState.bust = false;
+    }
+
     normalizeForGameState(card[0]);
     io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
+    io.in('game-' + id).emit('PLAYER_HIT', {gameState: gameState});
   });
 
   // return the new game state here
@@ -72,9 +89,20 @@ router.post('/:id/bet/:userId', (req, res) => {
   // get player cards
   db.dealUpdate(id, userId, 2)
   .then((cards) => {
+    let total = 0;
 
     // player
     cards.forEach((card) => {
+      let { value } = card;
+
+      if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+        value = 10;
+      } else {
+        value = Number(value);
+      }
+
+      total += value;
+      gameState.total = total;
       normalizeForGameState(card);
     });
 

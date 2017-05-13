@@ -281,6 +281,17 @@ function Game() {
         ui.betBtn[0].setAttribute('disabled', true);
       });
 
+      socket.on('PLAYER_HIT', (result) => {
+        const { bust } = result.gameState;
+
+        if (bust) {
+          console.log('~~~ BUST ~~~');
+          document.querySelector('.bust').style.display = 'inline-block';
+        } else {
+          document.querySelector('.bust').style.display = 'none';
+        }
+      });
+
       // private functions called from within context of view controller
       bindElementsToPage();
       attachEventListeners();

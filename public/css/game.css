@@ -13,6 +13,18 @@
   align-items: center;
 }
 
+.bust {
+  font-size: 42px;
+  font-weight: bold;
+  color: #ff3333;
+  opacity: .9;
+  font-family: sans-serif;
+  display: none;
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 0 4px;
+}
+
 .user-section {
   display: block;
   clear: both;
