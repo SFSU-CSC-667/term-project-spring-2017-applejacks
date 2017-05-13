@@ -332,7 +332,9 @@ function DatabaseController () {
        _datab.tx((task) => {
           // this inserts the dealer into the game as the game is created, dealer is always uid '1'
           const t1 = task.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
-          const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, 1, 10000]);
+          const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
+          // add dealer when creating game
+          const t3 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, -1, 10000]);
 
           task.batch([t1, t2])
           .catch((err) => printlog('addPlayer inner' + err, 'error'));
@@ -421,14 +423,20 @@ function DatabaseController () {
     return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
     .then((cards) => {
 
-      _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[0].id, gid])
-        .catch((err) => console.log(`Update batch deal cards 1 => ${err}`, 'error'));
-      _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[1].id, gid])
-        .catch((err) => console.log(`Update batch deal cards 2 => ${err}`, 'error'));
+      if (cards.length > 1) {
+        _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[0].id, gid])
+          .catch((err) => console.log(`Update batch deal cards 1 => ${err}`, 'error'));
+        _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[1].id, gid])
+          .catch((err) => console.log(`Update batch deal cards 2 => ${err}`, 'error'));
 
-        // console.log(`user id is ${uid}`);
+        cards[1]['user_id'] = uid;
+      } else {
+         _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[0].id, gid])
+          .catch((err) => console.log(`Update batch deal cards 1 => ${err}`, 'error'));
+      }
+
       cards[0]['user_id'] = uid;
-      cards[1]['user_id'] = uid;
+
       console.log(cards);
       return cards;
     })

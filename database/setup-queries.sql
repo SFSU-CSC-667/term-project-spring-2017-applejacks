@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users
   is_admin BOOLEAN
 );
 
-INSERT INTO users (email, password, username, last_login, date_joined, bank_value, is_admin) VALUES ('dealer@blackjack.com', '$2a$08$5YDJhS1Y/GfcXovay0RQ/OBPh3k1NXVjX3oDsZy7.0GJux2Cc0Zd6', 'DEALER', '1493489382384', '1493489382384', '1000000000', 'TRUE');
+INSERT INTO users (id, email, password, username, last_login, date_joined, bank_value, is_admin) VALUES ('-1', 'dealer@blackjack.com', '$2a$08$5YDJhS1Y/GfcXovay0RQ/OBPh3k1NXVjX3oDsZy7.0GJux2Cc0Zd6', 'DEALER', '1493489382384', '1493489382384', '1000000000', 'TRUE');
 
 -- CREATE THE SESSION TABLE IF IT DOES NOT EXIST
 -- CREATE TABLE IF NOT EXISTS session

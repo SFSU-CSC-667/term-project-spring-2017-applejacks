@@ -175,6 +175,11 @@ function Game() {
    */
   const hitHandler = (event) => {
     console.log(`Hit for ${event.currentTarget.className}.`);
+
+    const gameId = location.href.split('/').pop();
+    const userId = document.querySelector('#user-info .id').textContent;
+
+    makeAPICall(`/api/game/${gameId}/hit/${userId}`, {}); // pass in options { method: 'post' } for POST calls
   };
 
   /**
@@ -225,7 +230,18 @@ function Game() {
 
     let t = document.createElement('template');
     t.innerHTML = htmlOutput;
-    document.querySelector('.user-section--hand').appendChild(t.content.firstChild);
+    return t.content.firstChild;
+    // document.querySelector('.user-section--hand').appendChild(t.content.firstChild);
+  };
+
+  const addDealerCard = (card) => {
+    const template = Handlebars.templates['card.hbs'];
+    const htmlOutput = template(card);
+
+    let t = document.createElement('template');
+    t.innerHTML = htmlOutput;
+    return t.content.firstChild;
+    // document.querySelector('.dealer-hand').appendChild(t.content.firstChild);
   };
 
   // expose public functions here
@@ -245,9 +261,20 @@ function Game() {
         console.log(gameState);
         console.log(userId);
 
+        const dealFrag = document.createDocumentFragment();
+        const playerFrag = document.createDocumentFragment();
+
         gameState[`${userId}`].forEach((card) => {
-          addCard(card);
+          playerFrag.appendChild(addCard(card));
         });
+        document.querySelector('.user-section--hand').innerHTML = '';
+        document.querySelector('.user-section--hand').appendChild(playerFrag);
+
+        gameState[`-1`].forEach((card) => {
+          dealFrag.appendChild(addDealerCard(card));
+        });
+        document.querySelector('.dealer-hand').innerHTML = '';
+        document.querySelector('.dealer-hand').appendChild(dealFrag);
 
         ui.stayBtn[0].removeAttribute('disabled');
         ui.hitBtn[0].removeAttribute('disabled');
