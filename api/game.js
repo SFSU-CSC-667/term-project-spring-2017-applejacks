@@ -68,7 +68,7 @@ router.post('/:id/bet/:userId', (req, res) => {
   })
   .catch((err) => console.log('dealUpdate err', err));
 
-  db.makeBet(bet, userId);
+  db.makeBet(bet, userId, id);
 
   // return the new game state here
   res.json({});

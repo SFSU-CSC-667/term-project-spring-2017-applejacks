@@ -437,16 +437,16 @@ function DatabaseController () {
     });
   };
 
-  this.makeBet = (betVal, uid) => {
+  this.makeBet = (betVal, uid, gid) => {
     printlog('Placing bet of:'+ betVal);
 
-    _datab.one('SELECT id FROM players WHERE user_id=$1', [uid])
+    _datab.one('SELECT id FROM players WHERE user_id=$1 AND game_id=$2', [uid,gid])
     .then((res) => {
       const playerId = res.id;
 
       _datab.tx((task) => {
-        const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2', [betVal, playerId])
-        const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2', [betVal, playerId])
+        const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2 AND game_id=$3', [betVal, playerId, gid])
+        const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2 AND game_id=$3', [betVal, playerId, gid])
         task.batch([t1, t2])
       })
       .catch((err) => console.log(`getPLayerId() => ${err}`, 'error'));

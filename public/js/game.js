@@ -7,9 +7,9 @@ function Game() {
 
   // Ui hash
   let ui = {
-    hitBtn: '[data-app-hit]',
-    stayBtn: '[data-app-stay]',
-    betBtn: '[data-app-place-bet]',
+    hitBtn: '[data-action-hit]',
+    stayBtn: '[data-action-stay]',
+    betBtn: '[data-action-place-bet]',
     userSectionActions: '.user-section--actions button',
     userId: '#user-info .id',
     betValue: '[data-bet]'
@@ -152,7 +152,7 @@ function Game() {
     const betVal = ui.betValue[0].value;
     const gameId = location.href.split('/').pop();
 
-    const userId = document.querySelector("#user-info .id").textContent;
+    const userId = document.querySelector('#user-info .id').textContent;
     console.log(userId);
     console.log('Bet Placed:' + JSON.stringify(betVal));
 
@@ -248,6 +248,10 @@ function Game() {
         gameState[`${userId}`].forEach((card) => {
           addCard(card);
         });
+
+        ui.stayBtn[0].removeAttribute('disabled');
+        ui.hitBtn[0].removeAttribute('disabled');
+        ui.betBtn[0].setAttribute('disabled', true);
       });
 
       // private functions called from within context of view controller
