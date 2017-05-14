@@ -1,10 +1,14 @@
-<div class="card{{#if hearts}} red{{/if}}{{#if diamonds}} red{{/if}}{{#if class}} {{class}}{{/if}}" value="{{value}}">
-  <span class="top">{{value}}</span>
-  <span class="suit">
-    {{#if clubs}}&clubs;{{/if}}
-    {{#if hearts}}&hearts;{{/if}}
-    {{#if diamonds}}&diams;{{/if}}
-    {{#if spades}}&spades;{{/if}}
-  </span>
-  <span class="bottom">{{value}}</span>
+<div class="card{{#if hidden}} back{{/if}}{{#if hearts}} red{{/if}}{{#if diamonds}} red{{/if}}{{#if class}} {{class}}{{/if}}" value="{{value}}">
+  {{#if hidden}}
+  {{else}}
+    <span class="top">{{value}}</span>
+    <span class="suit">
+      {{#if clubs}}&clubs;{{/if}}
+      {{#if hearts}}&hearts;{{/if}}
+      {{#if diamonds}}&diams;{{/if}}
+      {{#if spades}}&spades;{{/if}}
+    </span>
+    <span class="bottom">{{value}}</span>
+  {{/if}}
 </div>
+

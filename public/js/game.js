@@ -322,7 +322,17 @@ function Game() {
       socket.on('PLAYER_HIT', (result) => {
         const { bust } = result.gameState[`${gameId}`];
 
+
         if (bust) {
+          let gameState = result.gameState[`${gameId}`];
+          const dealFrag = document.createDocumentFragment();
+          gameState[`-1`].forEach((card) => {
+            dealFrag.appendChild(addDealerCard(card));
+          });
+          document.querySelector('.dealer-hand').innerHTML = '';
+          document.querySelector('.dealer-hand').appendChild(dealFrag);
+
+
           console.log('~~~ BUST ~~~');
           document.querySelector('.bust').style.display = 'inline-block';
           // reset
@@ -339,6 +349,14 @@ function Game() {
       socket.on('PLAYER_STAY', (result) => {
         const { playerWin, again } = result.gameState[`${gameId}`];
         console.log(result);
+
+        let gameState = result.gameState[`${gameId}`];
+        const dealFrag = document.createDocumentFragment();
+        gameState[`-1`].forEach((card) => {
+          dealFrag.appendChild(addDealerCard(card));
+        });
+        document.querySelector('.dealer-hand').innerHTML = '';
+        document.querySelector('.dealer-hand').appendChild(dealFrag);
 
         if (again) {
           makeAPICall(`/api/game/${gameId}/stay/${userId}`, {});

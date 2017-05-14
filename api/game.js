@@ -20,6 +20,10 @@ const normalizeForGameState = (cardObject, gameId) => {
     spades: 'S' === cardObject.suit
   };
 
+  if (cardObject.hide) {
+    card.hidden = true;
+  }
+
   if (!gameState[gameId]) {
     gameState[gameId] = {};
   }
@@ -61,8 +65,10 @@ router.get('/:id/hit/:userId', (req, res) => {
   .then((card) => {
     let { value } = card[0];
 
-    if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+    if (value === 'J' || value === 'Q' || value === 'K') {
       value = 10;
+    } else if (value === 'A') {
+      value = 11;
     } else {
       value = Number(value);
     }
@@ -71,6 +77,8 @@ router.get('/:id/hit/:userId', (req, res) => {
 
     if (gameState[id].total > 21) {
       gameState[id].bust = true;
+      gameState[id][-1][0].hidden = false;
+      gameState[id][-1][1].hidden = false;
     } else {
       gameState[id].bust = false;
     }
@@ -95,6 +103,10 @@ router.get('/:id/stay/:playerId', (req, res) => {
   gameState[id].again = false;
   let dealerTotal = Number(gameState[id].dealerTotal);
   console.log('Current dealer todal is ---->>>' + dealerTotal);
+  console.log(gameState[id][-1]);
+
+  gameState[id][-1][0].hidden = false;
+  gameState[id][-1][1].hidden = false;
 
    if (dealerTotal >= 17) {
       console.log('inside');
@@ -116,8 +128,10 @@ router.get('/:id/stay/:playerId', (req, res) => {
 
         normalizeForGameState(card[0], id);
 
-        if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+        if (value === 'J' || value === 'Q' || value === 'K') {
           value = 10;
+        } else if (value === 'A') {
+          value = 11;
         } else {
           value = Number(value);
         }
@@ -157,8 +171,10 @@ router.post('/:id/bet/:userId', (req, res) => {
 
       normalizeForGameState(card, id);
 
-      if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+      if (value === 'J' || value === 'Q' || value === 'K') {
         value = 10;
+      } else if (value === 'A') {
+        value = 11;
       } else {
         value = Number(value);
       }
@@ -174,8 +190,13 @@ router.post('/:id/bet/:userId', (req, res) => {
       let total = 0;
 
       // dealer
-      cards.forEach((card) => {
+      cards.forEach((card, i) => {
         let { value } = card;
+
+        if (i === 0) {
+          card.hide = true;
+        }
+
         normalizeForGameState(card, id);
 
         if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {

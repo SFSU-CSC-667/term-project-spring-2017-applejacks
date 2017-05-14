@@ -18,6 +18,11 @@
   display: inline-flex;
 }
 
+.card.back {
+  background-color: #5cc3d1;
+  border: 1px solid #5cc3d1;
+}
+
 .card.red {
   color: #e60000;
 }

@@ -94,6 +94,10 @@
   width: 30%;
 }
 
+.dealer-hand {
+  display: flex;
+}
+
 .user-section--hand {
   display: inline-block;
   height: 100%;
