@@ -12,7 +12,8 @@ function Game() {
     betBtn: '[data-action-place-bet]',
     userSectionActions: '.user-section--actions button',
     userId: '#user-info .id',
-    betValue: '[data-bet]'
+    betValue: '[data-bet]',
+    yourTurn: '.your-turn'
   };
 
   /**
@@ -190,13 +191,11 @@ function Game() {
   const stayHandler = (event) => {
     console.log(`Stay for ${event.currentTarget.className}.`);
 
-    // example API call
-    // - add API routes to api/index.js
-    // - then add the corresponding api file in api/
-    makeAPICall('/api/logmessage', {}) // pass in options { method: 'post' } for POST calls
-    .then((data) => {
-      console.log(data);
-    });
+    const gameId = location.href.split('/').pop();
+    const userId = document.querySelector('#user-info .id').textContent;
+
+    ui.yourTurn[0].textContent = 'It\'s the dealer\'s turn';
+    makeAPICall(`/api/game/${gameId}/stay/${userId}`, {});
   };
 
   /**
@@ -281,6 +280,9 @@ function Game() {
         ui.stayBtn[0].removeAttribute('disabled');
         ui.hitBtn[0].removeAttribute('disabled');
         ui.betBtn[0].setAttribute('disabled', true);
+        ui.betBtn[0].style.opacity = '0.2';
+        document.querySelector('[data-bet]').style.border = 'none';
+        document.querySelector('[data-bet]').style.fontWeight = 'bold';
       });
 
       socket.on('PLAYER_HIT', (result) => {
@@ -292,6 +294,27 @@ function Game() {
         } else {
           document.querySelector('.bust').style.display = 'none';
         }
+      });
+
+      socket.on('PLAYER_STAY', (result) => {
+        const { playerWin, again } = result.gameState[`${gameId}`];
+        console.log(result);
+
+        if (again) {
+          makeAPICall(`/api/game/${gameId}/stay/${userId}`, {});
+        } else {
+          if (playerWin) {
+            console.log('~~~ WIN ~~~');
+            document.querySelector('.bust').textContent = 'You won!';
+            document.querySelector('.bust').style.color = '#00cc66';
+            document.querySelector('.bust').style.display = 'inline-block';
+          } else {
+            document.querySelector('.bust').textContent = 'You lose';
+            // document.querySelector('.bust').style.color = '#00cc66';
+            document.querySelector('.bust').style.display = 'inline-block';
+          }
+        }
+
       });
 
       // private functions called from within context of view controller

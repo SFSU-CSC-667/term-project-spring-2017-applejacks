@@ -25,6 +25,29 @@
     padding: 0 4px;
 }
 
+.your-turn {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 16px;
+  opacity: .8;
+  float: left;
+  color: #0080ff;
+}
+
+.your-turn:after {
+   content: '';
+   position: relative;
+   left: 9px;
+   top: 13px;
+   width: 0;
+   height: 0;
+   border-left: 6px solid transparent;
+   border-right: 6px solid transparent;
+   border-top: 8px solid #005ab3;
+   clear: both;
+
+}
+
 .user-section {
   display: block;
   clear: both;
@@ -43,6 +66,14 @@
 
 .place-bet {
   margin-bottom: 100px;
+
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+      align-items: flex-end;
+
 }
 
 .clearfix:after {
@@ -67,6 +98,8 @@
   display: inline-block;
   height: 100%;
   width: 70%;
+      display: inline-flex;
+
 }
 
 .user-section--card {

@@ -53,7 +53,7 @@ router.get('/:id/hit/:userId', (req, res) => {
       value = Number(value);
     }
 
-    gameState[id].total += value;
+    gameState[id].total = Number(gameState[id].total) + Number(value);
 
     if (gameState[id].total > 21) {
       gameState[id].bust = true;
@@ -77,6 +77,48 @@ router.get('/:id/hit/:userId', (req, res) => {
 router.get('/:id/stay/:playerId', (req, res) => {
   const { id, playerId } = req.params;
   const { db, io } = res;
+
+  gameState[id].again = false;
+  let dealerTotal = Number(gameState[id].dealerTotal);
+  console.log('Current dealer todal is ---->>>' + dealerTotal);
+
+   if (dealerTotal >= 17) {
+      console.log('inside');
+
+      if (dealerTotal > 21) {
+        gameState[id].playerWin = true;
+      } else if (dealerTotal <= Number(gameState[id].total)) {
+        gameState[id].playerWin = true;
+      } else {
+        gameState[id].playerWin = false;
+      }
+
+      io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
+    } else  {
+      console.log('GRAB ANOTHERRRR');
+      db.dealUpdate(id, -1, 1)
+      .then((card) => {
+        let { value } = card[0];
+
+        normalizeForGameState(card[0], id);
+
+        if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+          value = 10;
+        } else {
+          value = Number(value);
+        }
+
+        gameState[id].dealerTotal = Number(gameState[id].dealerTotal) + Number(value);
+
+        io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
+        io.in('game-' + id).emit('PLAYER_HIT', {gameState: gameState});
+
+        gameState[id].again = true;
+        io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
+      });
+
+    }
+
 
   // return the new game state here
   res.json({})
@@ -115,10 +157,23 @@ router.post('/:id/bet/:userId', (req, res) => {
     // get dealer cards
     db.dealUpdate(id, -1, 2)
     .then((cards) => {
+      let total = 0;
 
       // dealer
       cards.forEach((card) => {
+        let { value } = card;
         normalizeForGameState(card, id);
+
+        if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
+          value = 10;
+        } else {
+          value = Number(value);
+        }
+
+        console.log('total ' + total);
+        total = Number(total) + Number(value);
+        gameState[id].dealerTotal = Number(total);
+        console.log('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
       });
 
       io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
