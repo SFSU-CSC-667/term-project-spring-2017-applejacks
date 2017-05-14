@@ -14,7 +14,8 @@ function Game() {
     userSectionActions: '.user-section--actions button',
     userId: '#user-info .id',
     betValue: '[data-bet]',
-    yourTurn: '.your-turn'
+    yourTurn: '.your-turn',
+    bank: '.bank-value'
   };
 
   /**
@@ -94,7 +95,9 @@ function Game() {
 
     let request = new Request(url, options);
 
-    return fetch(request).then((response) => response.json());
+    return fetch(request)
+    .then((response) => response.json())
+    .catch(err => console.log(err));
   };
 
   const shuffle = (deck) => {
@@ -130,11 +133,13 @@ function Game() {
         add = false;
       }
 
-      const currAmount = Number(value.textContent);
+      let winnings = document.querySelector('.bank-value');
+
+      const currAmount = Number(winnings.textContent.replace('$',''));
       const interval = 10;
       added = Math.abs(added);
       const intId = setInterval((t) => {
-        let winningsVal = Number(winnings.textContent)
+        let winningsVal = Number(winnings.textContent.replace('$',''))
         winnings.textContent = add ? winningsVal + 1 : winningsVal - 1;
         added -= 1;
         if (added <= 0) {
@@ -284,14 +289,20 @@ function Game() {
       const gameId = location.href.split('/').pop();
       const userId = document.querySelector("#user-info .id").textContent;
       const socket = io.connect();
+      let once = true;
 
       socket.on('connect', function() {
          socket.emit('room', 'game-' + gameId);
       });
 
       socket.on('PLAYER_BET', (result) => {
-        let { gameState } = result;
-        console.log(gameState);
+        console.log(result);
+        let { gameState, bankValue } = result;
+
+        if (once) {
+          modifyWinnings(ui.betValue[0].value);
+          once = false;
+        }
 
         gameState = gameState[`${gameId}`];
         console.log(userId);
@@ -383,6 +394,7 @@ function Game() {
 
       socket.on('PLAYER_PLAY_AGAIN', (result) => {
         reset();
+        once = true;
 
       });
 

@@ -26,14 +26,32 @@ router.get('/:gameId', auth, (req, res) => {
 
   printlog(`GET /game/${gameId}`, 'route');
 
-  res.render('game', {
-    user: {
-      isAdmin: req.session.isAdmin,
-      username: req.session.name,
-      name: req.session.name,
-      id: req.session.uid
+
+  db.getPlayerBank(userId, gameId)
+  .then((result) => {
+    console.log(result);
+    let bankValue = Number(result['bank_buyin']);
+    let debt = false;
+
+    if (bankValue < 0 ) {
+      debt = true;
     }
+
+    bankValue = Math.abs(bankValue);
+
+    res.render('game', {
+      user: {
+        isAdmin: req.session.isAdmin,
+        username: req.session.name,
+        name: req.session.name,
+        id: req.session.uid,
+        bankValue,
+        debt
+      }
+    });
+
   });
+
 
 });
 

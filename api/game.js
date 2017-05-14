@@ -9,6 +9,7 @@ const isArray = (obj) => {
   return obj && obj.constructor.name === 'Array';
 };
 
+
 const normalizeForGameState = (cardObject, gameId) => {
   const userId = cardObject['user_id'];
   const card = {
@@ -48,6 +49,8 @@ router.get('/:id/playAgain/:userId', (req, res) => {
   delete gameState[id].total;
   delete gameState[id].again;
   delete gameState[id].playerWin;
+
+  db.resetGameCards(id);
 
   io.in('game-' + id).emit('PLAYER_PLAY_AGAIN', {});
 });
@@ -160,6 +163,8 @@ router.post('/:id/bet/:userId', (req, res) => {
   const { db, io } = res;
   const { bet } = req.body;
 
+  db.makeBet(bet, userId, id);
+
   // get player cards
   db.dealUpdate(id, userId, 2)
   .then((cards) => {
@@ -184,41 +189,64 @@ router.post('/:id/bet/:userId', (req, res) => {
 
     });
 
-    // get dealer cards
-    db.dealUpdate(id, -1, 2)
-    .then((cards) => {
-      let total = 0;
 
-      // dealer
-      cards.forEach((card, i) => {
-        let { value } = card;
+    setTimeout(() => {
+      // get dealer cards
+      db.dealUpdate(id, -1, 2)
+      .then((cardsD) => {
+        let total = 0;
 
-        if (i === 0) {
-          card.hide = true;
-        }
+        // dealer
+        cardsD.forEach((cardD, i) => {
+          let { value } = cardD;
 
-        normalizeForGameState(card, id);
+          if (i === 0) {
+            cardD.hide = true;
+          }
 
-        if (value === 'J' || value === 'Q' || value === 'K' || value === 'A') {
-          value = 10;
-        } else {
-          value = Number(value);
-        }
+          normalizeForGameState(cardD, id);
 
-        console.log('total ' + total);
-        total = Number(total) + Number(value);
-        gameState[id].dealerTotal = Number(total);
-        console.log('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
-      });
+          if (value === 'J' || value === 'Q' || value === 'K') {
+            value = 10;
+          } else if (value === 'A') {
+            value = 11;
+          } else {
+            value = Number(value);
+          }
 
-      io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
-    })
-    .catch((err) => console.log('dealUpdate err', err));
+          console.log('total ' + total);
+          total = Number(total) + Number(value);
+          gameState[id].dealerTotal = Number(total);
+          console.log('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
+        });
+
+
+
+        // lastly, get bank account
+        db.getPlayerBank(userId, id)
+        .then((result) => {
+          console.log(result);
+          let bankValue = Number(result['bank_buyin']);
+          let debt = false;
+
+          if (bankValue < 0 ) {
+            debt = true;
+          }
+
+          bankValue = Math.abs(bankValue);
+          io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState, bankValue: bankValue});
+        });
+
+
+
+      })
+      .catch((err) => console.log('dealUpdate err', err));
+    }, 220); // need to add a timeout so that the update card query does not
+      // overlap with the select new cards of the next query.
+
 
   })
   .catch((err) => console.log('dealUpdate err', err));
-
-  db.makeBet(bet, userId, id);
 
   // return the new game state here
   res.json({});

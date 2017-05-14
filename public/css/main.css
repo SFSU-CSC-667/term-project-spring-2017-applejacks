@@ -21,6 +21,17 @@ ul, ol {
   align-items: center;
 }
 
+.bank-value {
+  color: #4fb937;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 16px;
+}
+
+.bank-value.debt {
+  color: #b9374f;
+}
+
 .header-links {
   position: absolute;
   right: 24px;

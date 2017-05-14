@@ -403,6 +403,15 @@ function DatabaseController () {
       });
   };
 
+  this.getPlayerBank = (uid, gid) => {
+    return _datab.one('SELECT id FROM players WHERE user_id=$1 AND game_id=$2', [uid, gid])
+    .then((res) => {
+      const playerId = res.id;
+
+      return _datab.one('SELECT bank_buyin FROM players WHERE user_id=$1 AND game_id=$2', [uid, gid]);
+    });
+  }
+
   this.updateCard = (userId, cardId) => {
     _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2', [userId, cardId])
     .catch((err) => {
@@ -417,8 +426,16 @@ function DatabaseController () {
     });
   };
 
+  this.resetGameCards = (gameId) => {
+    _datab.none('DELETE FROM game_cards WHERE game_id=$1', [gameId])
+    .catch(err => console.log('resetCard' + err));
+    this.createCardTable(gameId);
+  };
+
 
   this.dealUpdate = (gid, uid, numCards) => {
+
+    console.log(`Deal update ===> [${gid}, ${uid}, ${numCards}]`)
 
     return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
     .then((cards) => {
