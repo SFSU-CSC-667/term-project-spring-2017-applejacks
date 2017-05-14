@@ -32,7 +32,21 @@ const normalizeForGameState = (cardObject, gameId) => {
 };
 
 
+// play again
+// GET /api/game/:id/playAgain/:playerId
+router.get('/:id/playAgain/:userId', (req, res) => {
+  const { db, io } = res;
+  const { id, userId } = req.params;
 
+  gameState[id] = {};
+  delete gameState[id].bust;
+  delete gameState[id].dealerTotal;
+  delete gameState[id].total;
+  delete gameState[id].again;
+  delete gameState[id].playerWin;
+
+  io.in('game-' + id).emit('PLAYER_PLAY_AGAIN', {});
+});
 
 
 // hit

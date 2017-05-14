@@ -99,7 +99,14 @@
   height: 100%;
   width: 70%;
       display: inline-flex;
+}
 
+.play-again-btn {
+
+}
+
+.hidden {
+  display: none;
 }
 
 .user-section--card {

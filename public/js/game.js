@@ -10,6 +10,7 @@ function Game() {
     hitBtn: '[data-action-hit]',
     stayBtn: '[data-action-stay]',
     betBtn: '[data-action-place-bet]',
+    playAgainBtn: '[data-action-play-again]',
     userSectionActions: '.user-section--actions button',
     userId: '#user-info .id',
     betValue: '[data-bet]',
@@ -198,6 +199,12 @@ function Game() {
     makeAPICall(`/api/game/${gameId}/stay/${userId}`, {});
   };
 
+  const againHandler = (event) => {
+    const gameId = location.href.split('/').pop();
+    const userId = document.querySelector('#user-info .id').textContent;
+    makeAPICall(`/api/game/${gameId}/playAgain/${userId}`, {});
+  };
+
   /**
    * Creating action handlers for all user action buttons.
    * Actions include bet, stay, and hit.
@@ -209,6 +216,8 @@ function Game() {
       const bet = btnEl.hasAttribute('data-action-place-bet');
       const stay = btnEl.hasAttribute('data-action-stay');
       const hit = btnEl.hasAttribute('data-action-hit');
+      const again = btnEl.hasAttribute('data-action-play-again');
+
       let handler = {};
 
       if (bet) {
@@ -217,6 +226,8 @@ function Game() {
         handler = stayHandler;
       } else if (hit) {
         handler = hitHandler;
+      } else if (again) {
+        handler = againHandler;
       }
 
       btnEl.addEventListener('click', handler, false);
@@ -241,6 +252,29 @@ function Game() {
     t.innerHTML = htmlOutput;
     return t.content.firstChild;
     // document.querySelector('.dealer-hand').appendChild(t.content.firstChild);
+  };
+
+  const reset = () => {
+    ui.stayBtn[0].classList.toggle('hidden');
+    ui.hitBtn[0].classList.toggle('hidden');
+    ui.betBtn[0].classList.toggle('hidden');
+    ui.playAgainBtn[0].classList.toggle('hidden');
+
+    ui.betBtn[0].removeAttribute('disabled');
+    ui.betBtn[0].style.opacity = 1;
+    ui.hitBtn[0].setAttribute('disabled', true);
+    ui.stayBtn[0].setAttribute('disabled', true);
+
+    document.querySelector('.dealer-hand').innerHTML = '';
+    document.querySelector('.user-section--hand').innerHTML = '';
+    document.querySelector('.bust').style.display = 'none';
+    document.querySelector('.bust').textContent = 'Bust';
+    document.querySelector('.bust').style.color = '#ff3333';
+
+    ui.yourTurn[0].textContent = 'It\'s your turn';
+
+    document.querySelector('[data-bet]').style.border = '1px solid #aaa';
+    document.querySelector('[data-bet]').style.fontWeight = 'normal';
   };
 
   // expose public functions here
@@ -291,6 +325,12 @@ function Game() {
         if (bust) {
           console.log('~~~ BUST ~~~');
           document.querySelector('.bust').style.display = 'inline-block';
+          // reset
+          // reset();
+          ui.stayBtn[0].classList.toggle('hidden');
+          ui.hitBtn[0].classList.toggle('hidden');
+          ui.betBtn[0].classList.toggle('hidden');
+          ui.playAgainBtn[0].classList.toggle('hidden');
         } else {
           document.querySelector('.bust').style.display = 'none';
         }
@@ -313,7 +353,18 @@ function Game() {
             // document.querySelector('.bust').style.color = '#00cc66';
             document.querySelector('.bust').style.display = 'inline-block';
           }
+
+          ui.stayBtn[0].classList.toggle('hidden');
+          ui.hitBtn[0].classList.toggle('hidden');
+          ui.betBtn[0].classList.toggle('hidden');
+          ui.playAgainBtn[0].classList.toggle('hidden');
         }
+
+      });
+
+
+      socket.on('PLAYER_PLAY_AGAIN', (result) => {
+        reset();
 
       });
 
