@@ -210,7 +210,7 @@ function DatabaseController () {
 
     // `postgresdb-# \d <name>` will display the created table
     const query = _buildCreateQuery(data);
-    printlog(query, 'db');
+    // printlog(query, 'db');
 
     return _datab.none(query);
   };
@@ -224,7 +224,7 @@ function DatabaseController () {
 
     // `postgresdb-# \d <name>` will display the created table
     const query = `select * from ${data.tableName} where ${data.key}='${data.val}'`;
-    printlog(query, 'db');
+    // printlog(query, 'db');
 
     return _datab.one(query);
   };
@@ -256,14 +256,14 @@ function DatabaseController () {
     printlog('updateLoginDate() -> ', 'error');
     _datab.any('update users set last_login=$1 where id=$2', [Date.now(), uid])
     .then((data) => {
-      console.log(data);
+      // console.log(data);
     })
     .catch((err) => {
       console.log(err);
     })
   };
 
-  this.getGames = () => {console.log('get Games.....');
+  this.getGames = () => {
     return _datab.any('select * from games');
   };
 
@@ -332,11 +332,12 @@ function DatabaseController () {
        _datab.tx((task) => {
           // this inserts the dealer into the game as the game is created, dealer is always uid '1'
           const t1 = task.none('INSERT INTO games (create_date, is_active, current_player_turn, p_count) values (${date},${act},${currTurn}, 0)', data);
-          const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
+          // const t2 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
+
           // add dealer when creating game
           const t3 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, -1, 10000]);
 
-          task.batch([t1, t2])
+          task.batch([t1,t3])
           .catch((err) => printlog('addPlayer inner' + err, 'error'));
       })
       return this.createCardTable(gid, uid);
@@ -362,8 +363,23 @@ function DatabaseController () {
     .catch((err) => printlog('Player already exists in game. ' + err, 'error'))
   };
 
+  this.addPlayerToGame = (gid, uid) => {
+    return _datab.tx((task) => {
+      const t1 = task.none('INSERT INTO players (game_id, user_id, bank_buyin) VALUES ($1, $2, $3)', [gid, uid, 10000]);
+      const t2 = task.none('UPDATE games SET p_count=((SELECT COUNT(*) FROM players WHERE game_id=$1)) WHERE id=$1', [gid]);
+      const t3 = task.none('UPDATE users SET bank_value=bank_value-10000 WHERE id=$1', [uid]);
+      return task.batch([t1, t2, t3])
+      .catch(err => printlog('addPlayerToGame() inner' + err, 'error'));
+    })
+    .catch((err) => printlog('addPlayerToGame() outer' + err, 'error'));
+  };
+
   this.getActivePlayers = (gid) => {
-    return _datab.one('SELECT COUNT(*) FROM players where game_id=$1', [gid]);
+    return _datab.one('SELECT COUNT(*) FROM players WHERE game_id=$1 AND user_id != -1', [gid]);
+  };
+
+  this.getPlayer = (uid, gid) => {
+    return _datab.any('SELECT COUNT(*) FROM players WHERE game_id=$1 AND user_id=$2', [gid,uid]);
   };
 
 
@@ -415,14 +431,14 @@ function DatabaseController () {
   this.updateCard = (userId, cardId) => {
     _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2', [userId, cardId])
     .catch((err) => {
-       console.log(`updateCard() => ${err}`, 'error');
+       printlog(`updateCard() => ${err}`, 'error');
     });
   };
 
  this.dealCards = (gid, uid, numCards) => {printlog(gid, uid, numCards);
     return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
     .catch((err) => {
-      console.log(`dealCards() => ${err}`, 'error');
+      printlog(`dealCards() => ${err}`, 'error');
     });
   };
 
@@ -435,30 +451,30 @@ function DatabaseController () {
 
   this.dealUpdate = (gid, uid, numCards) => {
 
-    console.log(`Deal update ===> [${gid}, ${uid}, ${numCards}]`)
+    printlog(`Deal update ===> [${gid}, ${uid}, ${numCards}]`)
 
     return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 AND user_id IS null ORDER BY orderr LIMIT $2', [gid, numCards])
     .then((cards) => {
 
       if (cards.length > 1) {
         _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[0].id, gid])
-          .catch((err) => console.log(`Update batch deal cards 1 => ${err}`, 'error'));
+          .catch((err) => printlog(`Update batch deal cards 1 => ${err}`, 'error'));
         _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[1].id, gid])
-          .catch((err) => console.log(`Update batch deal cards 2 => ${err}`, 'error'));
+          .catch((err) => printlog(`Update batch deal cards 2 => ${err}`, 'error'));
 
         cards[1]['user_id'] = uid;
       } else {
          _datab.any('UPDATE game_cards SET user_id = $1 WHERE id = $2 AND game_id=$3', [uid, cards[0].id, gid])
-          .catch((err) => console.log(`Update batch deal cards 1 => ${err}`, 'error'));
+          .catch((err) => printlog(`Update batch deal cards 1 => ${err}`, 'error'));
       }
 
       cards[0]['user_id'] = uid;
 
-      console.log(cards);
+      // console.log(cards);
       return cards;
     })
     .catch((err) => {
-      console.log(`dealUpdate() => ${err}`, 'error');
+      printlog(`dealUpdate() => ${err}`, 'error');
     });
   };
 
@@ -474,9 +490,9 @@ function DatabaseController () {
         const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2 AND game_id=$3', [betVal, playerId, gid])
         task.batch([t1, t2])
       })
-      .catch((err) => console.log(`getPLayerId() => ${err}`, 'error'));
+      .catch((err) => printlog(`getPLayerId() => ${err}`, 'error'));
     })
-    .catch((err) => console.log(`makeBet() => ${err}`, 'error'));
+    .catch((err) => printlog(`makeBet() => ${err}`, 'error'));
 
   };
 

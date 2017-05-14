@@ -45,7 +45,7 @@
    border-right: 6px solid transparent;
    border-top: 8px solid #005ab3;
    clear: both;
-
+   display: none;
 }
 
 .user-section {
@@ -96,6 +96,12 @@
 
 .dealer-hand {
   display: flex;
+}
+
+.rest-of-table {
+  height: 150px;
+  border: 1px solid;
+  width: 90%;
 }
 
 .user-section--hand {

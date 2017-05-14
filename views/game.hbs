@@ -14,6 +14,12 @@
     {{/each}}
   </div>
 
+  <div class="rest-of-table">
+    {{#each userHand}}
+        <span>{{> card card=this class="user-section--card"}}</span>
+      {{/each}}
+  </div>
+
   <div class="place-bet">
     <div class="your-turn">It's your turn</div>
     <label>
@@ -26,9 +32,9 @@
 
   <div class="user-section">
     <div class="user-section--hand">
-      {{#each userHand}}
+      {{!-- {{#each userHand}}
         <span style="float:left;height:100%;margin-right:8px;">{{> card card=this class="user-section--card"}}</span>
-      {{/each}}
+      {{/each}} --}}
     </div>
 
     <div class="user-section--actions">
