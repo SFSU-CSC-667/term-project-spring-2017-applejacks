@@ -15,7 +15,8 @@ function Game() {
     userId: '#user-info .id',
     betValue: '[data-bet]',
     yourTurn: '.your-turn',
-    bank: '.bank-value'
+    bank: '.bank-value',
+    table: '.rest-of-table'
   };
 
   /**
@@ -259,6 +260,57 @@ function Game() {
     // document.querySelector('.dealer-hand').appendChild(t.content.firstChild);
   };
 
+  const addCardToTable = (hand, userId, currentUserId) => {
+    let handEl = document.createElement('DIV');
+    handEl.className = 'table-hand';
+    handEl.id = 'hand-'+userId;
+    const alreadyExists = document.querySelector(`#${handEl.id}`);
+
+    if (Number(currentUserId) === Number(userId)) {
+      handEl.classList.add('current-user');
+    }
+
+    hand.forEach((card) => {
+      const template = Handlebars.templates['card.hbs'];
+      const htmlOutput = template(card);
+
+      let t = document.createElement('template');
+      t.innerHTML = htmlOutput;
+
+      handEl.appendChild(t.content.firstChild);
+    });
+
+    if (alreadyExists) {
+      document.querySelector(`#${handEl.id}`).innerHTML = '';
+      document.querySelector(`#${handEl.id}`).appendChild(handEl);
+    } else {
+      document.querySelector('.rest-of-table').appendChild(handEl);
+    }
+
+
+  };
+
+  const showTableHands = (currentGameObject, currentUserId) => {
+    let table = ui.table[0];
+    const userIds = Object.keys(currentGameObject);
+
+    userIds.forEach((id) => {
+      try {
+        let userId = parseInt(id);
+
+        // if this is a user id render in player table
+        if (!isNaN(userId) && userId !== -1) {
+          let { cards } = currentGameObject[userId];
+          addCardToTable(cards, userId, currentUserId);
+        }
+
+      } catch (e) {
+        console.log(e);
+      }
+    });
+
+  };
+
   const reset = () => {
     ui.stayBtn[0].classList.toggle('hidden');
     ui.hitBtn[0].classList.toggle('hidden');
@@ -291,6 +343,7 @@ function Game() {
       const socket = io.connect();
       let once = true;
 
+      // debugger;
       socket.on('connect', function() {
          socket.emit('room', 'game-' + gameId);
       });
@@ -310,13 +363,17 @@ function Game() {
         const dealFrag = document.createDocumentFragment();
         const playerFrag = document.createDocumentFragment();
 
-        gameState[`${userId}`].forEach((card) => {
-          playerFrag.appendChild(addCard(card));
-        });
-        document.querySelector('.user-section--hand').innerHTML = '';
-        document.querySelector('.user-section--hand').appendChild(playerFrag);
+        // check to see if current user has cards dealt yet (basically if they have bet yet)
+        if (gameState[`${userId}`]) {
+          gameState[`${userId}`].cards.forEach((card) => {
+            playerFrag.appendChild(addCard(card));
+          });
+          document.querySelector('.user-section--hand').innerHTML = '';
+          document.querySelector('.user-section--hand').appendChild(playerFrag);
+        }
 
-        gameState[`-1`].forEach((card) => {
+
+        gameState[`-1`].cards.forEach((card) => {
           dealFrag.appendChild(addDealerCard(card));
         });
         document.querySelector('.dealer-hand').innerHTML = '';
@@ -328,16 +385,21 @@ function Game() {
         ui.betBtn[0].style.opacity = '0.2';
         document.querySelector('[data-bet]').style.border = 'none';
         document.querySelector('[data-bet]').style.fontWeight = 'bold';
+
+
+        showTableHands(gameState, userId);
+
       });
 
       socket.on('PLAYER_HIT', (result) => {
-        const { bust } = result.gameState[`${gameId}`];
+        const userId = document.querySelector("#user-info .id").textContent;
+        const { bust } = result.gameState[`${gameId}`][userId];
 
 
         if (bust) {
           let gameState = result.gameState[`${gameId}`];
           const dealFrag = document.createDocumentFragment();
-          gameState[`-1`].forEach((card) => {
+          gameState[`-1`].cards.forEach((card) => {
             dealFrag.appendChild(addDealerCard(card));
           });
           document.querySelector('.dealer-hand').innerHTML = '';
@@ -358,12 +420,15 @@ function Game() {
       });
 
       socket.on('PLAYER_STAY', (result) => {
-        const { playerWin, again } = result.gameState[`${gameId}`];
+        const userId = document.querySelector("#user-info .id").textContent;
+        const { again } = result.gameState[`${gameId}`];
+        const { playerWin } = result.gameState[`${gameId}`][userId];
+
         console.log(result);
 
         let gameState = result.gameState[`${gameId}`];
         const dealFrag = document.createDocumentFragment();
-        gameState[`-1`].forEach((card) => {
+        gameState[`-1`].cards.forEach((card) => {
           dealFrag.appendChild(addDealerCard(card));
         });
         document.querySelector('.dealer-hand').innerHTML = '';
@@ -405,7 +470,7 @@ function Game() {
   };
 }
 
-// Create Lobby view controller
+// Create Game view controller
 const game = new Game();
 
 // Call init to setup view

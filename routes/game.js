@@ -29,6 +29,10 @@ router.get('/:gameId', auth, (req, res) => {
           io.sockets.on('connection', function (socket) {
             socket.on('room', function (room) {
               socket.join(room);
+
+              console.log('Available sockets ==> ');
+              let rm = 'game-' + gameId;
+              console.log(io.sockets.adapter.rooms[room]);
             });
           });
 
@@ -92,6 +96,8 @@ router.get('/:gameId', auth, (req, res) => {
       }
     })
     .catch(err => printlog(err, 'error'));
+  } else {
+    res.redirect(302, '/');
   }
 
 

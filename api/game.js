@@ -25,14 +25,74 @@ const normalizeForGameState = (cardObject, gameId) => {
     card.hidden = true;
   }
 
+
+  /*
+    gameState: {
+      1: {
+        3: {
+          cards: [
+            {
+              value: 3,
+              suit: 'H',
+              hears: true
+            },
+            {
+              value: 'A,
+              suit: 'C',
+              hears: true
+            }
+          ],
+          total: 0,
+          bust: false,
+          playerWin: false
+        },
+        4: {
+          cards: [
+            {
+              value: 3,
+              suit: 'H',
+              hears: true
+            },
+            {
+              value: 'A,
+              suit: 'C',
+              hears: true
+            }
+          ],
+          total: 24,
+          bust: true,
+          playerWin: false
+        }
+      },
+      turns: [player2, player1, player3, player4],
+      turnIndex: 1
+    }
+
+
+
+  */
+
   if (!gameState[gameId]) {
     gameState[gameId] = {};
+
+    // [player1, player3, player4, player2]
+    gameState[gameId].turns = [];
   }
 
-  if (isArray(gameState[gameId][userId]) && gameState[gameId][userId].length) {
-    gameState[gameId][userId].push(card);
+  console.log(gameState);
+  if (!gameState[gameId][userId]) {
+    gameState[gameId][userId] = {
+      cards: [],
+      total: 0,
+      bust: false,
+      playerWin: false
+    }
+  }
+
+  if (isArray(gameState[gameId][userId].cards) && gameState[gameId][userId].cards.length) {
+    gameState[gameId][userId].cards.push(card);
   } else {
-    gameState[gameId][userId] = [card];
+    gameState[gameId][userId].cards = [card];
   }
 };
 
@@ -43,6 +103,8 @@ router.get('/:id/playAgain/:userId', (req, res) => {
   const { db, io } = res;
   const { id, userId } = req.params;
 
+  const cachedPlayers = gameState[id].turns.slice();
+
   gameState[id] = {};
   delete gameState[id].bust;
   delete gameState[id].dealerTotal;
@@ -50,6 +112,10 @@ router.get('/:id/playAgain/:userId', (req, res) => {
   delete gameState[id].again;
   delete gameState[id].playerWin;
 
+  gameState[id].turnIndex = 0;
+  gameState[id].turns = [];
+  gameState[id].turns.length = 0;
+  gameState[id].turns = cachedPlayers.slice();
   db.resetGameCards(id);
 
   io.in('game-' + id).emit('PLAYER_PLAY_AGAIN', {});
@@ -76,14 +142,14 @@ router.get('/:id/hit/:userId', (req, res) => {
       value = Number(value);
     }
 
-    gameState[id].total = Number(gameState[id].total) + Number(value);
+    gameState[id][userId].total = Number(gameState[id][userId].total) + Number(value);
 
-    if (gameState[id].total > 21) {
-      gameState[id].bust = true;
-      gameState[id][-1][0].hidden = false;
-      gameState[id][-1][1].hidden = false;
+    if (gameState[id][userId].total > 21) {
+      gameState[id][userId].bust = true;
+      gameState[id][-1].cards[0].hidden = false;
+      gameState[id][-1].cards[1].hidden = false;
     } else {
-      gameState[id].bust = false;
+      gameState[id][userId].bust = false;
     }
 
     normalizeForGameState(card[0], id);
@@ -108,18 +174,18 @@ router.get('/:id/stay/:playerId', (req, res) => {
   console.log('Current dealer todal is ---->>>' + dealerTotal);
   console.log(gameState[id][-1]);
 
-  gameState[id][-1][0].hidden = false;
-  gameState[id][-1][1].hidden = false;
+  gameState[id][-1].cards[0].hidden = false;
+  gameState[id][-1].cards[1].hidden = false;
 
    if (dealerTotal >= 17) {
       console.log('inside');
 
       if (dealerTotal > 21) {
-        gameState[id].playerWin = true;
-      } else if (dealerTotal <= Number(gameState[id].total)) {
-        gameState[id].playerWin = true;
+        gameState[id][playerId].playerWin = true;
+      } else if (dealerTotal <= Number(gameState[id][playerId].total)) {
+        gameState[id][playerId].playerWin = true;
       } else {
-        gameState[id].playerWin = false;
+        gameState[id][playerId].playerWin = false;
       }
 
       io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
@@ -155,6 +221,12 @@ router.get('/:id/stay/:playerId', (req, res) => {
   res.json({})
 });
 
+const idInTurns = (gid, uid) => {
+  return gameState[gid].turns.find((id) => {
+    return Number(id) === Number(uid);
+  });
+};
+
 
 // bet
 // POST /api/game/:id/bet/:userId
@@ -185,7 +257,7 @@ router.post('/:id/bet/:userId', (req, res) => {
       }
 
       total += value;
-      gameState[id].total = total;
+      gameState[id][userId].total = total;
 
     });
 
@@ -218,6 +290,26 @@ router.post('/:id/bet/:userId', (req, res) => {
           total = Number(total) + Number(value);
           gameState[id].dealerTotal = Number(total);
           console.log('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
+
+
+          console.log(gameState[id]);
+          if (gameState[id].turns && gameState[id].turns.length === 0) {
+            gameState[id].turns.push(userId);
+          } else if (gameState[id].turns && gameState[id].turns.length) {
+
+              // only push userId if turns does not have it anymore
+              if (!idInTurns(id, userId)) {
+                gameState[id].turns.push(userId);
+              }
+
+            // });
+          }
+
+          if (!gameState[id].turnIndex) {
+            gameState[id].turnIndex = 1;
+          } else {
+            gameState[id].turnIndex++;
+          }
         });
 
 
