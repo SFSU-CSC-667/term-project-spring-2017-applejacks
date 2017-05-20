@@ -45,17 +45,7 @@
        credentials: 'same-origin',
        body: JSON.stringify(form)
      }).then(() => message.value = '');
-
    });
-
-
-  // const socket = io.connect('/');
-
-  // socket.on('connect', function() {
-  //   socket.emit('room', 'chat-' + gameId);
-  // });
-
-
 
    socket.on('message', (data) => {
      console.log('DATA RECEIVED', data);
@@ -72,12 +62,12 @@
      }
 
      messageNode.innerHTML = `<span class="time">${fromNow}</span><br><span style="color: ${data.color};font-weight:bold;padding-right:2px;">${username}</span> ${data.msg}`;
-     // messageNode.style.color = data.color;
-     // messageNode.style.fontWeight = 'bold';
      chat.appendChild(messageNode);
+     // put focus on last message sent
      messageNode.focus();
      document.querySelector('.last-m').removeAttribute('tabIndex');
 
+     // refocus the message box
      message.focus();
    });
 }

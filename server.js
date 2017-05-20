@@ -36,7 +36,6 @@ const getPort = (port=3000) => {
   return process.env.PORT;
 };
 
-// app.use(session({secret: 'I hope this doesn\'t end up on Github'}));
 
 // setting up server
 app.set('env', process.env.NODE_ENV || 'production');

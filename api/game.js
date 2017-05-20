@@ -352,12 +352,12 @@ router.post('/:id/bet/:userId', (req, res) => {
           bankValue = Math.abs(bankValue);
 
           printlog("API SOCKETSSSS ------");
-          const socketLength = io.sockets.adapter.rooms[`game-${id}`].length;
-          const turnLength = gameState[id].turns.length;
-          let playersNum = socketLength > turnLength ? socketLength : turnLength;
+          // const socketLength = io.sockets.adapter.rooms[`game-${id}`] && io.sockets.adapter.rooms[`game-${id}`].length;
+          // const turnLength = gameState[id].turns.length;
+          // let playersNum = socketLength > turnLength ? socketLength : turnLength;
 
           // if (gameState[id].turnIndex === playersNum) {
-            io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState, bankValue: bankValue});
+          io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState, bankValue: bankValue});
           // } else {
           //   gameState[id].turnIndex++;
           // }
