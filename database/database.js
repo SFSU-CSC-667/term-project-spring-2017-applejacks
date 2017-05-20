@@ -263,11 +263,17 @@ function DatabaseController () {
     })
   };
 
+  // retreive all games from databse
   this.getGames = () => {
     return _datab.any('select * from games')
     .catch((err) => printlog(err, 'error'));
   };
 
+  /**
+   * Get user from "users" table based on email
+   *
+   * @param {String} email
+   */
   this.getUser = (email='') => {
     return _datab.any('select * from users where email=$1',email)
     .catch((err) => printlog(err, 'error'));

@@ -9,7 +9,9 @@ const isArray = (obj) => {
   return obj && obj.constructor.name === 'Array';
 };
 
-
+// Takes a cardObject and normalize it so the values
+//   can be used in Handlebars template
+// This is also where the gameState gets initialized
 const normalizeForGameState = (cardObject, gameId) => {
   const userId = cardObject['user_id'];
   const card = {
@@ -67,11 +69,9 @@ const normalizeForGameState = (cardObject, gameId) => {
       turns: [player2, player1, player3, player4],
       turnIndex: 1
     }
-
-
-
   */
 
+  // initialize gameState logic
   if (!gameState[gameId]) {
     gameState[gameId] = {};
 
@@ -130,6 +130,7 @@ router.get('/:id/hit/:userId', (req, res) => {
 
   printlog('HIT');
 
+  // deal 1 card for the given userId
   db.dealUpdate(id, userId, 1)
   .then((card) => {
     let { value } = card[0];
@@ -144,6 +145,7 @@ router.get('/:id/hit/:userId', (req, res) => {
 
     gameState[id][userId].total = Number(gameState[id][userId].total) + Number(value);
 
+    // if the new card puts the user value > 21, that player loses via bust
     if (gameState[id][userId].total > 21) {
       gameState[id][userId].bust = true;
       gameState[id][-1].cards[0].hidden = false;
@@ -186,56 +188,58 @@ router.get('/:id/stay/:playerId', (req, res) => {
   gameState[id][-1].cards[0].hidden = false;
   gameState[id][-1].cards[1].hidden = false;
 
-   if (dealerTotal >= 17) {
-      let { bet } = gameState[id][playerId];
+  // After the user has clicked "stay", we need to check if the dealer needs to "hit"
+  // The dealer "hits" on an value under 17
+  // If the dealer value is < 17, a new card will be dealt to the dealer
+  if (dealerTotal >= 17) {
+    let { bet } = gameState[id][playerId];
 
-      if (dealerTotal > 21) {
-        gameState[id][playerId].playerWin = true;
-        db.makeBet(bet, playerId, id);
-        io.in('game-' + id).emit('PLAYER_BANK', {bet: bet});
-      } else if (dealerTotal <= Number(gameState[id][playerId].total)) {
-        gameState[id][playerId].playerWin = true;
-        db.makeBet(bet, playerId, id);
-        io.in('game-' + id).emit('PLAYER_BANK', {bet: bet});
-      } else {
-        gameState[id][playerId].playerWin = false;
-        db.makeBet(0 - bet, playerId, id);
-        io.in('game-' + id).emit('PLAYER_BANK', {bet: (0 - bet)});
-      }
-
-      io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
-    } else  {
-      printlog('GRAB ANOTHERRRR');
-      db.dealUpdate(id, -1, 1)
-      .then((card) => {
-        let { value } = card[0];
-
-        normalizeForGameState(card[0], id);
-
-        if (value === 'J' || value === 'Q' || value === 'K') {
-          value = 10;
-        } else if (value === 'A') {
-          value = 11;
-        } else {
-          value = Number(value);
-        }
-
-        gameState[id].dealerTotal = Number(gameState[id].dealerTotal) + Number(value);
-
-        io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
-        io.in('game-' + id).emit('PLAYER_HIT', {gameState: gameState});
-
-        gameState[id].again = true;
-        io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
-      });
-
+    if (dealerTotal > 21) {
+      gameState[id][playerId].playerWin = true;
+      db.makeBet(bet, playerId, id);
+      io.in('game-' + id).emit('PLAYER_BANK', {bet: bet});
+    } else if (dealerTotal <= Number(gameState[id][playerId].total)) {
+      gameState[id][playerId].playerWin = true;
+      db.makeBet(bet, playerId, id);
+      io.in('game-' + id).emit('PLAYER_BANK', {bet: bet});
+    } else {
+      gameState[id][playerId].playerWin = false;
+      db.makeBet(0 - bet, playerId, id);
+      io.in('game-' + id).emit('PLAYER_BANK', {bet: (0 - bet)});
     }
 
+    io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
+  } else  {
+    printlog('GRAB ANOTHERRRR');
+    db.dealUpdate(id, -1, 1)
+    .then((card) => {
+      let { value } = card[0];
+
+      normalizeForGameState(card[0], id);
+
+      if (value === 'J' || value === 'Q' || value === 'K') {
+        value = 10;
+      } else if (value === 'A') {
+        value = 11;
+      } else {
+        value = Number(value);
+      }
+
+      gameState[id].dealerTotal = Number(gameState[id].dealerTotal) + Number(value);
+
+      io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState});
+      io.in('game-' + id).emit('PLAYER_HIT', {gameState: gameState});
+
+      gameState[id].again = true;
+      io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
+    });
+  }
 
   // return the new game state here
   res.json({})
 });
 
+// check if userId is already in the turns array
 const idInTurns = (gid, uid) => {
   return gameState[gid].turns.find((id) => {
     return Number(id) === Number(uid);
@@ -250,11 +254,9 @@ router.post('/:id/bet/:userId', (req, res) => {
   const { db, io } = res;
   const { bet } = req.body;
 
-
   printlog('BETtting...');
-  // db.makeBet(bet, userId, id);
 
-  // get player cards
+  // get 2 player cards from database and assign those cards userId
   db.dealUpdate(id, userId, 2)
   .then((cards) => {
     let total = 0;
@@ -275,10 +277,9 @@ router.post('/:id/bet/:userId', (req, res) => {
 
       total += value;
       gameState[id][userId].total = total;
-
     });
 
-
+    // using set timeout() here to avoid database race conditions
     setTimeout(() => {
       // get dealer cards
       db.dealUpdate(id, -1, 2)
@@ -308,18 +309,15 @@ router.post('/:id/bet/:userId', (req, res) => {
           gameState[id].dealerTotal = Number(total);
           printlog('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
 
-
           printlog(gameState[id]);
           if (gameState[id].turns && gameState[id].turns.length === 0) {
             gameState[id].turns.push(userId);
           } else if (gameState[id].turns && gameState[id].turns.length) {
 
-              // only push userId if turns does not have it anymore
-              if (!idInTurns(id, userId)) {
-                gameState[id].turns.push(userId);
-              }
-
-            // });
+            // only push userId if turns does not have it anymore
+            if (!idInTurns(id, userId)) {
+              gameState[id].turns.push(userId);
+            }
           }
 
           // cache bet on user game state until they click "stay"
@@ -338,7 +336,6 @@ router.post('/:id/bet/:userId', (req, res) => {
         });
 
 
-
         // lastly, get bank account
         db.getPlayerBank(userId, id)
         .then((result) => {
@@ -346,6 +343,8 @@ router.post('/:id/bet/:userId', (req, res) => {
           let bankValue = Number(result['bank_buyin']);
           let debt = false;
 
+          // check if bank account is less than zero
+          // You are in debt!
           if (bankValue < 0 ) {
             debt = true;
           }
@@ -362,17 +361,11 @@ router.post('/:id/bet/:userId', (req, res) => {
           // } else {
           //   gameState[id].turnIndex++;
           // }
-
         });
-
-
-
       })
       .catch((err) => printlog('dealUpdate err' + err));
     }, 220); // need to add a timeout so that the update card query does not
       // overlap with the select new cards of the next query.
-
-
   })
   .catch((err) => printlog('dealUpdate err' + err));
 

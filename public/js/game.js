@@ -70,18 +70,6 @@ function Game() {
     let body = data.body;
     let options = {method, headers, mode, cache} = data;
 
-    // try {
-    //   if (typeof options.body === 'object') {
-    //     options.body = JSON.stringify(options.body)
-    //   } else {
-    //     body = JSON.parse(options.body);
-    //     options.body = JSON.stringify({body:options.body});
-    //   }
-    // } catch(err) {
-    //   console.log('Error with the data you are passing', err);
-    //   options.body = '{}';
-    // }
-
     if (!options.method || options.method.toLowerCase() !== 'get') {
       delete options.body;
     }
@@ -350,11 +338,13 @@ function Game() {
       const socket = io.connect();
       let once = true;
 
-      // debugger;
+      // sets up initial socket connection to game socket room
       socket.on('connect', function() {
          socket.emit('room', 'game-' + gameId);
       });
 
+      // socket message when player's bank account needs to be updated
+      // For better or for worse...
       socket.on('PLAYER_BANK', (result) => {
         console.log('FROM PLAYER BANK => ', result);
 
@@ -365,7 +355,7 @@ function Game() {
         let { gameState } = result;
         let { turns, turnIndex } = gameState[`${gameId}`];
 
-console.log('player turnnnnn: ', gameState);
+        console.log('player turnnnnn: ', gameState);
 
         // this can be written in one line
         if (turns[turnIndex] === userId) {
@@ -375,17 +365,10 @@ console.log('player turnnnnn: ', gameState);
         }
       });
 
-
-
-
+      // socket message once player has placed initial bet
       socket.on('PLAYER_BET', (result) => {
         console.log(result);
         let { gameState, bankValue } = result;
-
-        // if (once) {
-        //   modifyWinnings(ui.betValue[0].value);
-        //   once = false;
-        // }
 
         gameState = gameState[`${gameId}`];
         console.log(userId);
@@ -402,7 +385,6 @@ console.log('player turnnnnn: ', gameState);
           document.querySelector('.user-section--hand').appendChild(playerFrag);
         }
 
-
         gameState[`-1`].cards.forEach((card) => {
           dealFrag.appendChild(addDealerCard(card));
         });
@@ -418,13 +400,15 @@ console.log('player turnnnnn: ', gameState);
 
 
         showTableHands(gameState, userId);
-
       });
 
+      // socket message when user is dealt a new card
       socket.on('PLAYER_HIT', (result) => {
         const userId = document.querySelector("#user-info .id").textContent;
         const { bust } = result.gameState[`${gameId}`][userId];
 
+        // if player busts, show "bust" message
+        // update buttons and play again state
         if (bust) {
           let gameState = result.gameState[`${gameId}`];
           const dealFrag = document.createDocumentFragment();

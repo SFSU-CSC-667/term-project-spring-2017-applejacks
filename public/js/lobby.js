@@ -74,6 +74,7 @@ function Lobby() {
     return fetch(request).then((response) => response.json());
   };
 
+  // create game event click handler
   const createGame = (e) => {
     console.log(`Create game ${e.currentTarget.className}.`);
     const uid = ui.userId[0].textContent;
@@ -94,6 +95,7 @@ function Lobby() {
     });
   };
 
+  // join game event click handler
   const joinGame = (e) => {
     const { dataset } = e.target;
     const { gameId } = dataset;
@@ -106,11 +108,6 @@ function Lobby() {
 
     console.log(`Join game ${gameId} ?`);
     window.location = `/game/${gameId}`;
-
-    // makeAPICall(`/game/${gameId}`, { method: 'get' })
-    // .then((data) => {
-    //   console.log(data);
-    // });
   };
 
   /**
@@ -136,6 +133,8 @@ function Lobby() {
     init: () => {
       console.log('LOB INIT');
       const socket = io('/my-namespace');
+
+      // socket for showing game immediatley after it's created
       socket.on('game-created', (id) => {
         console.log('Socket channel found');
         template = Handlebars.templates['game-row.hbs'];
@@ -165,5 +164,3 @@ const lobby = new Lobby();
 if (document.querySelectorAll('#lobby-page').length) {
   lobby.init();
 }
-
-

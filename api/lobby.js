@@ -16,16 +16,12 @@ printlog('playerId = ' + playerId);
       nsp.on('connection', function(socket){
         printlog('someone connected');
       });
-      printlog('EMIT');
-      // nsp.emit('game-created', gameId);
-
 
       // return the new game state here
       res.json(gameId)
    })
    .catch((error) => {
-    printlog(error);
-      // Error, no records inserted
+      printlog(error);
    });
 
 });
