@@ -1,6 +1,7 @@
 
  function Chat() {
    const socket = io.connect('/');
+   const gameId = location.href.split('/').pop();
 
    /**
     * A function to abstract away the native fetch()
@@ -60,7 +61,7 @@
      console.log('DATA RECEIVED', data);
      let messageNode = document.createElement('LI');
      const d = new Date(Date.now());
-     const { fromNow } = data;
+     const { fromNow, username } = data;
      const timeStamp = `${d.toDateString()} ${d.toLocaleTimeString('en-US')}`;
 
      messageNode.tabIndex = 1;
@@ -70,9 +71,9 @@
        el.classList.remove('last-m');
      }
 
-     messageNode.textContent = `[${fromNow}] ${data.hello}`;
-     messageNode.style.color = data.color;
-     messageNode.style.fontWeight = 'bold';
+     messageNode.innerHTML = `<span class="time">${fromNow}</span><br><span style="color: ${data.color};font-weight:bold;padding-right:2px;">${username}</span> ${data.msg}`;
+     // messageNode.style.color = data.color;
+     // messageNode.style.fontWeight = 'bold';
      chat.appendChild(messageNode);
      messageNode.focus();
      document.querySelector('.last-m').removeAttribute('tabIndex');

@@ -2,6 +2,7 @@ import db from './../database/database';
 import chai from 'chai';
 
 const should = chai.should();
+
 // test vars
 const TEST_TABLE = 'testtable';
 
@@ -19,7 +20,7 @@ before(() => {
 
 describe('#addUser()', () => {
   // Testing addUser() function
-  it('add new user to database', () => {
+  it('Should add new user to database', () => {
     db.addUser({
       tableName: 'testtable',
       columns: ['email','password','lastlogin','isadmin'],
@@ -29,7 +30,7 @@ describe('#addUser()', () => {
   });
 
   // Testing updateUser() function
-  it('Update existing user in database', () => {
+  it('Should update existing user in database', () => {
     db.updateUser({
       tableName: 'testtable',
       col: 'email',

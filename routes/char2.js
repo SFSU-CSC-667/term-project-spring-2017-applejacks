@@ -15,11 +15,13 @@ router.post('/', (req, res) => {
   const { body } = req;
   const { db } = res;
 
+  console.log(req.session);
   console.log('POST body -> ', body);
   res.io.emit('message', {
-    hello: body.message,
+    msg: body.message,
+    username: req.session.name || 'guest-'+req.session.color,
     color: req.session.color,
-    fromNow: moment('2017-04-08 17:40').fromNow() // time since 4/8/17, 5:40pm
+    fromNow: moment().format("ddd, h:mma")
   });
   res.send(true);
 });

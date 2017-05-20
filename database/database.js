@@ -264,11 +264,13 @@ function DatabaseController () {
   };
 
   this.getGames = () => {
-    return _datab.any('select * from games');
+    return _datab.any('select * from games')
+    .catch((err) => printlog(err, 'error'));
   };
 
   this.getUser = (email='') => {
-    return _datab.any('select * from users where email=$1',email);
+    return _datab.any('select * from users where email=$1',email)
+    .catch((err) => printlog(err, 'error'));
   };
 
   this.addUser = (data) => {
@@ -442,7 +444,7 @@ function DatabaseController () {
     });
   };
 
-  this.resetGameCards = (gameId) => {
+  this.resetGameCards = (gameId) => {console.log('reset game cards');
     _datab.none('DELETE FROM game_cards WHERE game_id=$1', [gameId])
     .catch(err => console.log('resetCard' + err));
     this.createCardTable(gameId);
@@ -487,7 +489,7 @@ function DatabaseController () {
 
       _datab.tx((task) => {
         const t1 = task.none('UPDATE players SET bet_placed=$1 WHERE id =$2 AND game_id=$3', [betVal, playerId, gid])
-        const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin - $1 WHERE id =$2 AND game_id=$3', [betVal, playerId, gid])
+        const t2 = task.none('UPDATE players SET bank_buyin=bank_buyin + $1 WHERE id =$2 AND game_id=$3', [betVal, playerId, gid])
         task.batch([t1, t2])
       })
       .catch((err) => printlog(`getPLayerId() => ${err}`, 'error'));
@@ -511,7 +513,9 @@ function DatabaseController () {
     }
 
     const batchInsertQuery = Inserts(cards, cards_table_columns, 'game_cards');
-    _datab.none(batchInsertQuery);
+    _datab.none(batchInsertQuery)
+    .catch((err) => printlog(err, 'error'));
+
     return gid;
   };
 

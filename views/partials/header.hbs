@@ -5,7 +5,7 @@
     </a>
     <span class="{{#if user.username}}username{{/if}}">{{user.username}}</span>
     {{#if user.bankValue}}
-      <span class="bank-value{{#if user.debt}} debt{{/if}}">{{#if user.debt}}-{{/if}}${{user.bankValue}}</span>
+      <span class="outer-bank">$<span class="bank-value{{#if user.debt}} debt{{/if}}">{{#if user.debt}}-{{/if}}{{user.bankValue}}</span></span>
     {{/if}}
   </span>
 <!--  <span class="header-is-admin">isAdmin: {{user.isAdmin}}</span> -->

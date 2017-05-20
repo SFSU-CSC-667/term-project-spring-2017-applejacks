@@ -16,7 +16,8 @@ function Game() {
     betValue: '[data-bet]',
     yourTurn: '.your-turn',
     bank: '.bank-value',
-    table: '.rest-of-table'
+    table: '.rest-of-table',
+    userSection: '.user-section'
   };
 
   /**
@@ -205,7 +206,7 @@ function Game() {
     makeAPICall(`/api/game/${gameId}/stay/${userId}`, {});
   };
 
-  const againHandler = (event) => {
+  const againHandler = (event) => {console.log('here');
     const gameId = location.href.split('/').pop();
     const userId = document.querySelector('#user-info .id').textContent;
     makeAPICall(`/api/game/${gameId}/playAgain/${userId}`, {});
@@ -290,6 +291,10 @@ function Game() {
 
   };
 
+  const showUserSection = (shouldShow) => {
+    // ui.userSection[0].style.visibility = (shouldShow ? 'visible' : 'hidden');
+  };
+
   const showTableHands = (currentGameObject, currentUserId) => {
     let table = ui.table[0];
     const userIds = Object.keys(currentGameObject);
@@ -328,6 +333,8 @@ function Game() {
     document.querySelector('.bust').textContent = 'Bust';
     document.querySelector('.bust').style.color = '#ff3333';
 
+    document.querySelector('.rest-of-table').innerHTML = '';
+
     ui.yourTurn[0].textContent = 'It\'s your turn';
 
     document.querySelector('[data-bet]').style.border = '1px solid #aaa';
@@ -348,14 +355,37 @@ function Game() {
          socket.emit('room', 'game-' + gameId);
       });
 
+      socket.on('PLAYER_BANK', (result) => {
+        console.log('FROM PLAYER BANK => ', result);
+
+        modifyWinnings(result.bet);
+      });
+
+      socket.on('PLAYER_TURN', (result) => {
+        let { gameState } = result;
+        let { turns, turnIndex } = gameState[`${gameId}`];
+
+console.log('player turnnnnn: ', gameState);
+
+        // this can be written in one line
+        if (turns[turnIndex] === userId) {
+          showUserSection(true);
+        } else {
+          showUserSection(false);
+        }
+      });
+
+
+
+
       socket.on('PLAYER_BET', (result) => {
         console.log(result);
         let { gameState, bankValue } = result;
 
-        if (once) {
-          modifyWinnings(ui.betValue[0].value);
-          once = false;
-        }
+        // if (once) {
+        //   modifyWinnings(ui.betValue[0].value);
+        //   once = false;
+        // }
 
         gameState = gameState[`${gameId}`];
         console.log(userId);
@@ -395,13 +425,13 @@ function Game() {
         const userId = document.querySelector("#user-info .id").textContent;
         const { bust } = result.gameState[`${gameId}`][userId];
 
-
         if (bust) {
           let gameState = result.gameState[`${gameId}`];
           const dealFrag = document.createDocumentFragment();
           gameState[`-1`].cards.forEach((card) => {
             dealFrag.appendChild(addDealerCard(card));
           });
+
           document.querySelector('.dealer-hand').innerHTML = '';
           document.querySelector('.dealer-hand').appendChild(dealFrag);
 
@@ -419,6 +449,10 @@ function Game() {
         }
       });
 
+
+      // check if any player still has a turn
+      // if they have, do nothing
+      // else, move into the final "stay" logic and deal the Dealer cards
       socket.on('PLAYER_STAY', (result) => {
         const userId = document.querySelector("#user-info .id").textContent;
         const { again } = result.gameState[`${gameId}`];
@@ -460,7 +494,7 @@ function Game() {
       socket.on('PLAYER_PLAY_AGAIN', (result) => {
         reset();
         once = true;
-
+        document.querySelector('.rest-of-table').innerHTML = '';
       });
 
       // private functions called from within context of view controller

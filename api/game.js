@@ -148,6 +148,10 @@ router.get('/:id/hit/:userId', (req, res) => {
       gameState[id][userId].bust = true;
       gameState[id][-1].cards[0].hidden = false;
       gameState[id][-1].cards[1].hidden = false;
+
+      let { bet } = gameState[id][userId];
+      db.makeBet(0 - bet, userId, id);
+      io.in('game-' + id).emit('PLAYER_BANK', {bet: (0 - bet)});
     } else {
       gameState[id][userId].bust = false;
     }
@@ -160,6 +164,11 @@ router.get('/:id/hit/:userId', (req, res) => {
   // return the new game state here
   res.json({})
 });
+
+
+const updateBank = (bet, userId, gameId) => {
+  db.makeBet(bet, userId, id);
+};
 
 
 
@@ -178,14 +187,20 @@ router.get('/:id/stay/:playerId', (req, res) => {
   gameState[id][-1].cards[1].hidden = false;
 
    if (dealerTotal >= 17) {
-      console.log('inside');
+      let { bet } = gameState[id][playerId];
 
       if (dealerTotal > 21) {
         gameState[id][playerId].playerWin = true;
+        db.makeBet(bet, playerId, id);
+        io.in('game-' + id).emit('PLAYER_BANK', {bet: bet});
       } else if (dealerTotal <= Number(gameState[id][playerId].total)) {
         gameState[id][playerId].playerWin = true;
+        db.makeBet(bet, playerId, id);
+        io.in('game-' + id).emit('PLAYER_BANK', {bet: bet});
       } else {
         gameState[id][playerId].playerWin = false;
+        db.makeBet(0 - bet, playerId, id);
+        io.in('game-' + id).emit('PLAYER_BANK', {bet: (0 - bet)});
       }
 
       io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
@@ -235,7 +250,9 @@ router.post('/:id/bet/:userId', (req, res) => {
   const { db, io } = res;
   const { bet } = req.body;
 
-  db.makeBet(bet, userId, id);
+
+  console.log('BETtting...');
+  // db.makeBet(bet, userId, id);
 
   // get player cards
   db.dealUpdate(id, userId, 2)
@@ -305,11 +322,19 @@ router.post('/:id/bet/:userId', (req, res) => {
             // });
           }
 
-          if (!gameState[id].turnIndex) {
-            gameState[id].turnIndex = 1;
+          // cache bet on user game state until they click "stay"
+          // if win, add bet to bank
+          // if loss, subtract bet from bank
+          gameState[id][userId].bet = bet;
+
+          if (typeof gameState[id].turnIndex === 'undefined') {
+            printlog('undefinedddddddd');
+            gameState[id].turnIndex = 0;
           } else {
-            gameState[id].turnIndex++;
+            // gameState[id].turnIndex++;
           }
+
+          io.in('game-' + id).emit('PLAYER_TURN', {gameState: gameState});
         });
 
 
@@ -326,7 +351,18 @@ router.post('/:id/bet/:userId', (req, res) => {
           }
 
           bankValue = Math.abs(bankValue);
-          io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState, bankValue: bankValue});
+
+          console.log("API SOCKETSSSS ------");
+          const socketLength = io.sockets.adapter.rooms[`game-${id}`].length;
+          const turnLength = gameState[id].turns.length;
+          let playersNum = socketLength > turnLength ? socketLength : turnLength;
+
+          // if (gameState[id].turnIndex === playersNum) {
+            io.in('game-' + id).emit('PLAYER_BET', {gameState: gameState, bankValue: bankValue});
+          // } else {
+          //   gameState[id].turnIndex++;
+          // }
+
         });
 
 

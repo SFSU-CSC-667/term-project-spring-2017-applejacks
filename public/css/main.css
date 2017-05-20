@@ -21,7 +21,14 @@ ul, ol {
   align-items: center;
 }
 
-.bank-value {
+/*.bank-value {
+  color: #4fb937;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 16px;
+}*/
+
+.outer-bank {
   color: #4fb937;
   font-weight: bold;
   font-size: 20px;

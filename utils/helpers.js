@@ -32,8 +32,6 @@ var helpers = {
       pref = '->  ',
       dbPref = '    ';
 
-    // str = str.toString();
-
     if (true || isDevMode) {
       switch (type) {
         case 'route':
