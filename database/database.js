@@ -259,7 +259,7 @@ function DatabaseController () {
       // console.log(data);
     })
     .catch((err) => {
-      console.log(err);
+      printlog(err);
     })
   };
 
@@ -347,7 +347,7 @@ function DatabaseController () {
   };
 
   this.addPlayer = (gid,uid) => {
-    console.log('ADD PLAYER');
+    printlog('ADD PLAYER');
 
     // There has got to be a better way to nest queries like this
     _datab.none('SELECT * FROM players WHERE user_id=$1 and game_id=$2', [uid,gid])
@@ -417,7 +417,7 @@ function DatabaseController () {
   this.getCards = (gid) => {
     return _datab.any('SELECT * FROM game_cards WHERE game_id=$1 ORDER BY orderr', [gid])
       .catch((err) => {
-        console.log(`getCards() => ${err}`, 'error');
+        printlog(`getCards() => ${err}`, 'error');
       });
   };
 
@@ -444,9 +444,9 @@ function DatabaseController () {
     });
   };
 
-  this.resetGameCards = (gameId) => {console.log('reset game cards');
+  this.resetGameCards = (gameId) => {printlog('reset game cards');
     _datab.none('DELETE FROM game_cards WHERE game_id=$1', [gameId])
-    .catch(err => console.log('resetCard' + err));
+    .catch(err => printlog('resetCard' + err));
     this.createCardTable(gameId);
   };
 
@@ -541,7 +541,7 @@ function DatabaseController () {
     return _datab.one(loadedQuery)
     .catch(error=> {
       if (error instanceof pgp.errors.QueryFileError) {
-        console.log('Error in ' + file + '. Double check your queries');
+        printlog('Error in ' + file + '. Double check your queries');
       }
     });
   };

@@ -9,14 +9,14 @@ const router = express.Router();
 router.post('/:playerId/createGame', (req, res) => {
   const { playerId } = req.params;
   const { db, io } = res;
-console.log('playerId = ' + playerId);
+printlog('playerId = ' + playerId);
   db.createGame(playerId)
   .then((gameId) => {
       var nsp = io.of('/my-namespace');
       nsp.on('connection', function(socket){
-        console.log('someone connected');
+        printlog('someone connected');
       });
-      console.log('EMIT');
+      printlog('EMIT');
       // nsp.emit('game-created', gameId);
 
 
@@ -24,7 +24,7 @@ console.log('playerId = ' + playerId);
       res.json(gameId)
    })
    .catch((error) => {
-    console.log(error);
+    printlog(error);
       // Error, no records inserted
    });
 

@@ -88,9 +88,9 @@ io.on('connection', function (socket) {
   // chatSocket = chatSocket || socket;
   chatSocket = socket;
 
-  console.log('connected');
+  printlog('connected');
   chatSocket.on('my other event', function (data) {
-    console.log(data);
+    printlog(data);
   });
 });
 

@@ -6,7 +6,7 @@
       delBtn: '.record-delete'
     },
 
-    init: function () {      
+    init: function () {
       this._mapDOMElements();
       this._createEventListeners();
     },
@@ -53,11 +53,11 @@
         }
 
         if (target.className === 'record-edit-field') {
-          console.log('edit mode');
+          // console.log('edit mode');
           return;
         }
 
-        console.log(parent);
+        // console.log(parent);
 
         cellArr = Array.prototype.slice.call(parent.querySelectorAll('td'));
         for (i = 0; i < cellArr.length; i++) {
@@ -75,7 +75,7 @@
 
         delBtn = parent.querySelector('.record-delete');
         delBtn.classList.toggle('hidden');
-        btn.appendChild(delBtn);        
+        btn.appendChild(delBtn);
 
         docFrag = document.createDocumentFragment();
         for (i = 0; i < filteredArr.length; i++) {
@@ -105,10 +105,10 @@
         lastlogin: inputs[2].value,
         isadmin: inputs[3].value,
       };
-      
+
       // template system
       template = Handlebars.templates['display-record.hbs'];
-      htmlOutput = template(hash);      
+      htmlOutput = template(hash);
       node.innerHTML = htmlOutput;
       node.classList.toggle('record-edit');
     },
@@ -122,30 +122,30 @@
           record = target.parentNode.parentNode;
 
           if (target.classList.contains('record-update')) {
-            console.log('delete update');
+            // console.log('delete update');
             this._recordToInitState(record);
           } else if (target.classList.contains('record-delete')) {
-            console.log('delete record');
+            // console.log('delete record');
           } else if (target.classList.contains('mod-t-btn')) {
             var val = document.querySelector('.mod-t').value;
 
             if (!val) {
               return;
             }
-            
+
             $.get({
               url: '/admin/drop/' + val
             }).then(function () {
-              console.log('success');
+              // console.log('success');
             }).catch(function () {
-              console.log('err');
+              // console.log('err');
             });
           }
 
         }
-        
 
-      }.bind(this));      
+
+      }.bind(this));
     },
 
     _createEventListeners: function () {
@@ -153,11 +153,11 @@
         this._createTableListener();
         this._createButtonListener();
       } else {
-        console.log('UI hash error');
+        // console.log('UI hash error');
         return;
       }
 
-      
+
 
     }
   };

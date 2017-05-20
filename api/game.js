@@ -79,7 +79,7 @@ const normalizeForGameState = (cardObject, gameId) => {
     gameState[gameId].turns = [];
   }
 
-  console.log(gameState);
+  printlog(gameState);
   if (!gameState[gameId][userId]) {
     gameState[gameId][userId] = {
       cards: [],
@@ -128,7 +128,7 @@ router.get('/:id/hit/:userId', (req, res) => {
   const { id, userId } = req.params;
   const { db, io } = res;
 
-  console.log('HIT');
+  printlog('HIT');
 
   db.dealUpdate(id, userId, 1)
   .then((card) => {
@@ -180,8 +180,8 @@ router.get('/:id/stay/:playerId', (req, res) => {
 
   gameState[id].again = false;
   let dealerTotal = Number(gameState[id].dealerTotal);
-  console.log('Current dealer todal is ---->>>' + dealerTotal);
-  console.log(gameState[id][-1]);
+  printlog('Current dealer todal is ---->>>' + dealerTotal);
+  printlog(gameState[id][-1]);
 
   gameState[id][-1].cards[0].hidden = false;
   gameState[id][-1].cards[1].hidden = false;
@@ -205,7 +205,7 @@ router.get('/:id/stay/:playerId', (req, res) => {
 
       io.in('game-' + id).emit('PLAYER_STAY', {gameState: gameState});
     } else  {
-      console.log('GRAB ANOTHERRRR');
+      printlog('GRAB ANOTHERRRR');
       db.dealUpdate(id, -1, 1)
       .then((card) => {
         let { value } = card[0];
@@ -251,7 +251,7 @@ router.post('/:id/bet/:userId', (req, res) => {
   const { bet } = req.body;
 
 
-  console.log('BETtting...');
+  printlog('BETtting...');
   // db.makeBet(bet, userId, id);
 
   // get player cards
@@ -303,13 +303,13 @@ router.post('/:id/bet/:userId', (req, res) => {
             value = Number(value);
           }
 
-          console.log('total ' + total);
+          printlog('total ' + total);
           total = Number(total) + Number(value);
           gameState[id].dealerTotal = Number(total);
-          console.log('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
+          printlog('\nDEALER TOTAL -> ' + gameState[id].dealerTotal+ '\n');
 
 
-          console.log(gameState[id]);
+          printlog(gameState[id]);
           if (gameState[id].turns && gameState[id].turns.length === 0) {
             gameState[id].turns.push(userId);
           } else if (gameState[id].turns && gameState[id].turns.length) {
@@ -342,7 +342,7 @@ router.post('/:id/bet/:userId', (req, res) => {
         // lastly, get bank account
         db.getPlayerBank(userId, id)
         .then((result) => {
-          console.log(result);
+          printlog(result);
           let bankValue = Number(result['bank_buyin']);
           let debt = false;
 
@@ -352,7 +352,7 @@ router.post('/:id/bet/:userId', (req, res) => {
 
           bankValue = Math.abs(bankValue);
 
-          console.log("API SOCKETSSSS ------");
+          printlog("API SOCKETSSSS ------");
           const socketLength = io.sockets.adapter.rooms[`game-${id}`].length;
           const turnLength = gameState[id].turns.length;
           let playersNum = socketLength > turnLength ? socketLength : turnLength;
@@ -368,13 +368,13 @@ router.post('/:id/bet/:userId', (req, res) => {
 
 
       })
-      .catch((err) => console.log('dealUpdate err', err));
+      .catch((err) => printlog('dealUpdate err' + err));
     }, 220); // need to add a timeout so that the update card query does not
       // overlap with the select new cards of the next query.
 
 
   })
-  .catch((err) => console.log('dealUpdate err', err));
+  .catch((err) => printlog('dealUpdate err' + err));
 
   // return the new game state here
   res.json({});
