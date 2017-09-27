@@ -310,7 +310,7 @@ function DatabaseController () {
   this.updateUser = (data) => {
     printlog('Attempting update user... ['+ data.oldval +']');
 
-    return _datab.tx((t) => {
+    return _datab.task((t) => {
       // batch queries
       let q1Str = `SELECT * FROM ${data.tableName} WHERE ${data.col}='${data.oldval}'`;
       let q2Str = `UPDATE ${data.tableName} set ${data.col}='${data.newval}' where ${data.col}='${data.oldval}'`;
@@ -528,7 +528,7 @@ function DatabaseController () {
   this.deleteUser = (data) => {
     printlog('Attempting remove user... ['+ data.email +']');
 
-    return _datab.tx(function (t) {
+    return _datab.task(function (t) {
       // batch queries
       let q1 = t.one('SELECT * FROM ' + data.table + ' WHERE email=$1', [data.email]);
       let q2 = t.none('DELETE FROM ' + data.table + ' WHERE email=$1', [data.email]);
